@@ -29,7 +29,7 @@ async def send_picture(bot: Bot, event: Event):
     url = plugin_dir + f"/Output/Output_Serverstatus_{timestr}--{user_id}.png"
 
     # 获取minecraft状态, 并计算用时
-    mc = json.loads(requests.get("http://127.0.0.1:8000/mcstatus/", timeout=5).text)
+    mc = json.loads(requests.get("http://127.0.0.1:8000/mcstatus/").text)
     program_elapsed_time = round((datetime.now()-current_time).total_seconds()*1000, 2)
 
     # 要画的文本

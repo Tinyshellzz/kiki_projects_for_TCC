@@ -29,7 +29,7 @@ class ip:
         await bot.send_group_msg(group_id=group_id, message=Message(msg))
 
 
-class dns:
+class fly:
     async def handle(bot: Bot, event: Event):
         user_id = str(event.get_user_id())
 
@@ -37,7 +37,7 @@ class dns:
             "节假日开启飞行, 命令是\\fly")
         await bot.send(event, Message(msg))
 
-class fly:
+class dns:
     async def handle(bot: Bot, event: Event):
         user_id = str(event.get_user_id())
 
