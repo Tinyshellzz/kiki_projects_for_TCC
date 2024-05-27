@@ -13,9 +13,9 @@ Set  "anaconda_dir=E:\DevInstall\Anaconda"
 ```
 
 ## 修改kiki_backend配置文件
-serIP='127.0.0.1'  // mc服务器ip
-serPort=25565    // mc服务器端口
-rconPort=25575  // rcon端口
+serIP='127.0.0.1'  // mc服务器ip <br />
+serPort=25565    // mc服务器端口 <br />
+rconPort=25575  // rcon端口 <br />
 rconPw='8888'  // rcon密码
 
 ## 运行工程
