@@ -6,6 +6,7 @@ from PIL import Image, ImageDraw, ImageFont
 import requests
 import json
 from .authorization import *
+import os
 
 plugin_dir = str(Path(__file__).resolve().parents[1])
 background = Image.open(plugin_dir+"/resources/status.png")
@@ -72,3 +73,5 @@ async def send_picture(bot: Bot, event: Event):
 
     # 发送图片
     await bot.send(event, MessageSegment.image(url))
+
+    os.remove(url)

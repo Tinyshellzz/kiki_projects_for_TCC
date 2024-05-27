@@ -14,6 +14,7 @@ match_rules = [
     ['(ip|怎么进服|服务器地址|怎么玩)', replies.ip, 10],
     ['(未知主机|连接超时|dns|连不上|连接失败|连不了)', replies.dns, 10],
     ['(怎么飞|飞行|飞)', replies.fly, 10],
+    ['^test$', replies.test, 10],
 ]
 
 

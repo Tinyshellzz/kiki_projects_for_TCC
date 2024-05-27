@@ -1,13 +1,14 @@
 from nonebot.adapters.onebot.v11 import Bot, Event, GroupMessageEvent
 from nonebot.adapters.onebot.v11.message import Message
 from pathlib import Path
+from .tools import *
 
 plugin_dir = str(Path(__file__).resolve().parents[1])
 
 # 入口函数
 class ip:
     async def handle(bot: Bot, event: Event):
-        # 判断是否是群组事件
+        # 判断是否是群组事件, 不是就返回
         if not isinstance(event, GroupMessageEvent): return
 
         user_id = str(event.user_id)
@@ -45,6 +46,18 @@ class dns:
             "下面是教程\n" +
             f"[CQ:image,file={plugin_dir}/resources/status.png]")
         await bot.send(event, Message(msg))
+
+class test:
+    async def handle(bot: Bot, event: Event):
+        # 判断是否是群组事件, 不是就返回
+        if not isinstance(event, GroupMessageEvent): return
+
+        msgs = []
+        msgs.append(to_node("第一句话"))
+        msgs.append(to_node("第二句话"))
+        print(msgs)
+
+        await send_group_forword_msg(bot, event, msgs)
 
 
 
