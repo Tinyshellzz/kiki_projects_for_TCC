@@ -7,7 +7,7 @@ TCC 是一个国内的公益原版Minecraft服务器, 这个工程实现了群�
 conda env create -f environment.yml
 ```
 
-## 将 start_kiki_backend.bat 和 start_kiki_bot.bat 下面的部分，改为conda的安装位置
+## 将 start_kiki_backend.bat 和 start_kiki_bot.bat 中的anaconda_dir，改为conda的安装位置
 ```bash
 Set  "anaconda_dir=E:\DevInstall\Anaconda"
 ```
