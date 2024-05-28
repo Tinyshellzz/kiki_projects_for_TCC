@@ -21,5 +21,8 @@ rconPw='8888'  // rcon密码
 ## 运行工程
 双击start_all.bat即可运行
 
+## 登录你的QQ
+第一次运行, 需要扫Lagrange.OneBot文件夹里的qr.png
+
 ## 查看服务器 status
 输入网址 http://127.0.0.1:8000/status/
