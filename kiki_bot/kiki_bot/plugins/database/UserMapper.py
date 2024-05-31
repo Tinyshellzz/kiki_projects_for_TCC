@@ -40,7 +40,7 @@ class UserMapper:
         elif mc_user_name != None:
             c.execute("SELECT * FROM users WHERE mc_user_name=:mc_user_name", {'mc_user_name': mc_user_name})
         elif mc_user_id != None:
-            c.execute("SELECT * FROM users WHERE mc_user_id=:mc_user_id", {'mc_user_id': mc_user_id})
+            c.execute("SELECT * FROM users WHERE mc_user_id=?", (mc_user_id))
         
         res = c.fetchall()
         return User.create_users_from_db(res)
@@ -49,3 +49,5 @@ class UserMapper:
         c.execute("""UPDATE users 
                   SET mc_user_name=?, mc_user_id=?, mc_user_id=?, is_in_qq_group=?, banned_date=?
                   WHERE qq_user_id=?""", (user.mc_user_name, user.mc_user_id, user.is_in_qq_group, user.banned_date, user.qq_user_id))
+        
+        conn.commit()
