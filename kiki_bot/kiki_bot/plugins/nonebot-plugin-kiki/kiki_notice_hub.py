@@ -12,6 +12,7 @@ matcher=on_notice()
 async def _(bot: Bot, event: Event):
     # print(event)
     await GroupIncreaseNotice.handle(bot, event)
+    await GroupDecreaseNotice.handle(bot, event)
 
 # 新成员入群处理
 class GroupIncreaseNotice:
