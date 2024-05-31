@@ -9,8 +9,8 @@ from datetime import datetime, timedelta
 from threading import Timer
 import sched, time
 
-plugin_dir = str(Path(__file__).resolve().parents[1])
-excels_dir = plugin_dir + '/resources/excels/'
+plugin_dir = str(Path(__file__).resolve().parents[4])
+excels_dir = plugin_dir + '/excels/'
 
 def read_excel(fpath):
     xls = pd.read_excel(fpath)
@@ -27,7 +27,7 @@ def read_excels():
     for f in listdir(excels_dir):
         filename, file_extension = os.path.splitext(f)
         file = join(excels_dir, f)
-        if isfile(file) and (file_extension == '.xlsx' or file_extension == '.xls'):
+        if isfile(file) and (file_extension == '.xlsx' or file_extension == '.xls') and f != 'example.xlsx':
             excels.append(file)
 
     for e in excels:
@@ -60,7 +60,7 @@ def _read_excels(scheduler):
     scheduler.enter(60, 1, _read_excels, (scheduler,))
 # 每隔10s, 读取 excels
 my_scheduler.enter(10, 1, _read_excels, (my_scheduler,))
-# my_scheduler.run()
+my_scheduler.run()
 
 
 

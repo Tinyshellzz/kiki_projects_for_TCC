@@ -8,6 +8,7 @@ from .authorization import *
 
 def whitelist_get_players():
     players = None
+    rcon = mcrcon.MCRcon(serIP, rconPw, rconPort, timeout=2)
     try:
         rcon.connect()
         response = rcon.command('whitelist list')
@@ -25,11 +26,12 @@ def whitelist_get_players():
 
 def whitelist_add(user_name):
     if user_name == None: return
-
+    rcon = mcrcon.MCRcon(serIP, rconPw, rconPort, timeout=2)
     try:
         rcon.connect()
         response = rcon.command(f'whitelist add {user_name}')
         logger.info(response)
+        rcon.command(f'whitelist reload')
     except Exception as e:
         logger.warning(e)
     finally:
@@ -37,48 +39,51 @@ def whitelist_add(user_name):
 
 def whitelist_remove(user_name):
     if user_name == None: return
-
+    rcon = mcrcon.MCRcon(serIP, rconPw, rconPort, timeout=2)
     try:
         rcon.connect()
         response = rcon.command(f'whitelist remove {user_name}')
         logger.info(response)
-    except Exception as e:
-        logger.warning(e)
-    finally:
-        rcon.disconnect()
-
-def whitelist_reload():
-    try:
-        rcon.connect()
         rcon.command(f'whitelist reload')
     except Exception as e:
         logger.warning(e)
     finally:
         rcon.disconnect()
 
+
 # 检查列表里所有的QQ号, 已经数据库中的记录, 据此更改 whitelist
 def whitelist_update(qq_nums):
-    # 新的 whitelist
-    new_whitelist = set()
-    
-    for n in qq_nums:
-        user = UserMapper.get(n)
-        if user != None: new_whitelist.add(user.user_name)
-    
-    whitelist = whitelist_get_players()
-    # 移除不在数据库中的 QQ 号, 谨慎处理
-    # for p in whitelist:
-    #     if not (p in new_whitelist):
-    #         whitelist_remove(p)
+    rcon = mcrcon.MCRcon(serIP, rconPw, rconPort, timeout=2)
+    try:
+        rcon.connect()
+        # 新的 whitelist
+        new_whitelist = set()
+        
+        for n in qq_nums:
+            user = UserMapper.get(n)
+            if user != None: new_whitelist.add(user.user_name)
+        
+        whitelist = whitelist_get_players()
+        # 移除不在数据库中的 QQ 号, 谨慎处理
+        # for p in whitelist:
+        #     if not (p in new_whitelist):
+        #         whitelist_remove(p)
 
-    for p in new_whitelist: 
-        if not (p in whitelist):
-            whitelist_add(p)
-    
-    whitelist_reload()
+        # 将不在服务器白名单的QQ号, 加入白名单
+        for p in new_whitelist: 
+            if not (p in whitelist):
+                response = rcon.command(f'whitelist remove {p}')
+                logger.info(response)
+        
+        rcon.command(f'whitelist reload')
 
-# 添加白名单
-class add:
+    except Exception as e:
+        logger.warning(e)
+    finally:
+        rcon.disconnect()
+
+# 移除白名单
+class remove:
     async def handle(bot: Bot, event: Event):
         pass
 

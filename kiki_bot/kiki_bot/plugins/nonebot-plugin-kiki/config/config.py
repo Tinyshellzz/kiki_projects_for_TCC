@@ -16,6 +16,5 @@ serIP='127.0.0.1'
 serPort=25565
 rconPort=25575
 rconPw='8888'
-rcon = mcrcon.MCRcon(serIP, rconPw, rconPort, timeout=2)
 auth_group_list = {'536038559'}     # 部分命令允许的 qq群
 auth_qq_list = {'3478848836'}   # 部分命令允许的 qq号 (例如 update_whitelist)
