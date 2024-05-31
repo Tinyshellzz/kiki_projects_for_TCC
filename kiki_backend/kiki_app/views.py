@@ -1,6 +1,5 @@
 from django.shortcuts import render, HttpResponse
 from django.http import JsonResponse
-from .models import kikiItem
 from kiki_app.services import myMcstatus
 
 

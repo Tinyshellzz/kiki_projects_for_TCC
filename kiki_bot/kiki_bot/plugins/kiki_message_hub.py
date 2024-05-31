@@ -1,4 +1,4 @@
-from nonebot import on_keyword, on_message
+from nonebot import on_message
 from nonebot.adapters.onebot.v11.message import Message
 from nonebot.adapters.onebot.v11 import Bot, Event
 from .kiki_core import replies
