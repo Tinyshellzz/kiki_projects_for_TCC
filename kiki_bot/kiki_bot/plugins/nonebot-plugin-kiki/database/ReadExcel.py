@@ -35,24 +35,19 @@ def read_excels():
         # 删除读完的 excel
         os.remove(e)
 
-secs = 0
-
 # 设置定时任务
 def update_user_names(scheduler):
-    x = datetime.now()
-    y = x + timedelta(days=1)
-    y = y.replace(day=y.day, hour=1, minute=0, second=0, microsecond=0)
-    secs = (y-x).total_seconds()
-
     def update_task():
         UserMapper.update_all_user_name()
+        x = datetime.now()
+        y = x + timedelta(days=1)
+        y = y.replace(day=y.day, hour=1, minute=0, second=0, microsecond=0)
+        secs = (y-x).total_seconds()
         scheduler.enter(secs, 1, update_user_names, (scheduler,))
 
-    t = Timer(secs, update_task)
-    t.start()
 # 每天, 更新一次user_name
 my_scheduler = sched.scheduler(time.time, time.sleep)
-my_scheduler.enter(secs, 1, update_user_names, (my_scheduler,))
+my_scheduler.enter(0, 1, update_user_names, (my_scheduler,))
 
 def _read_excels(scheduler): 
     # 开始读取 excels
