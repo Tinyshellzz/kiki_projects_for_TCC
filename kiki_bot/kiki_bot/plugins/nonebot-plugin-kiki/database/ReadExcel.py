@@ -55,7 +55,7 @@ def _read_excels(scheduler):
     scheduler.enter(60, 1, _read_excels, (scheduler,))
 # 每隔10s, 读取 excels
 my_scheduler.enter(10, 1, _read_excels, (my_scheduler,))
-# my_scheduler.run()
+my_scheduler.run()
 
 
 
