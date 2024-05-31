@@ -1,9 +1,8 @@
 import sqlite3
 from pathlib import Path
 from .User import User
+from .DBConfig import *
 
-plugin_dir = str(Path(__file__).resolve().parents[1])
-conn = sqlite3.connect(plugin_dir + '/database/user.db')
 c = conn.cursor()
 
 # 创建users表格
@@ -31,8 +30,10 @@ except Exception as e:
 
 class UserMapper:
     def insert(user: User):
-        c.execute("INSERT INTO users VALUES (?, ?, ?, ?, ?)", (user.qq_user_id, user.mc_user_name, user.mc_user_id, user.is_in_qq_group, user.banned_date))
-        conn.commit()
+        # 锁住数据库
+        with dblock:
+            c.execute("INSERT INTO users VALUES (?, ?, ?, ?, ?)", (user.qq_user_id, user.mc_user_name, user.mc_user_id, user.is_in_qq_group, user.banned_date))
+            conn.commit()
 
     def get(qq_user_id = None, mc_user_name = None, mc_user_id = None) -> list:
         if qq_user_id != None:
@@ -46,8 +47,9 @@ class UserMapper:
         return User.create_users_from_db(res)
     
     def update(user: User):
-        c.execute("""UPDATE users 
-                  SET mc_user_name=?, mc_user_id=?, mc_user_id=?, is_in_qq_group=?, banned_date=?
-                  WHERE qq_user_id=?""", (user.mc_user_name, user.mc_user_id, user.is_in_qq_group, user.banned_date, user.qq_user_id))
-        
-        conn.commit()
+        # 锁住数据库
+        with dblock:
+            c.execute("""UPDATE users 
+                    SET mc_user_name=?, mc_user_id=?, mc_user_id=?, is_in_qq_group=?, banned_date=?
+                    WHERE qq_user_id=?""", (user.mc_user_name, user.mc_user_id, user.is_in_qq_group, user.banned_date, user.qq_user_id))
+            conn.commit()
