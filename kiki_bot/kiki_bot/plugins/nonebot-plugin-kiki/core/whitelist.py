@@ -108,6 +108,7 @@ class code:
             # 将玩家添加到数据库, 并添加白名单
             UserMapper.insert(User(user_id, data.user_name, data.mc_uuid))
             whitelist_add(data.user_name)
+            await bot.send(event, Message(f'[CQ:at,qq={user_id}] {data.user_name}绑定成功'))
         else:
             await bot.send(event, Message(f'[CQ:at,qq={user_id}] 验证码错误'))
             
