@@ -38,5 +38,5 @@ https://github.com/TinyShellzz/KikiWhitelist
 第一次运行, 需要扫Lagrange.OneBot文件夹里的qr.png
 
 ## 查看服务器 status
-方法1: 输入网址 http://127.0.0.1:8000/status/ <br />
+方法1: 输入网址 http://127.0.0.1:8000/mcstatus/ <br />
 方法2: QQ群内输入 status
