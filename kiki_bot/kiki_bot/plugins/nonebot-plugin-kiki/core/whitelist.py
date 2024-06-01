@@ -64,13 +64,13 @@ def whitelist_update(qq_nums):
         
         for n in qq_nums:
             user = UserMapper.get(n)
-            if user != None: new_whitelist.add(user.user_name)
+            if user != None and user.is_banned == None: new_whitelist.add(user.user_name)
         
         whitelist = whitelist_get_players()
-        # 移除不在数据库中的 QQ 号, 谨慎处理
-        # for p in whitelist:
-        #     if not (p in new_whitelist):
-        #         whitelist_remove(p)
+
+        for p in whitelist:
+            if not (p in new_whitelist):
+                whitelist_remove(p)
 
         # 将不在服务器白名单的QQ号, 加入白名单
         for p in new_whitelist: 
@@ -127,6 +127,7 @@ class update:
                 qq_nums.add(str(q['user_id']))
         
         whitelist_update(qq_nums)
+        await bot.send(event, Message(f"白名单更新成功"))
 
 class load:
     async def handle(bot: Bot, event: Event):
@@ -137,3 +138,18 @@ class load:
         players = read_excels()
         for p in players:
             await bot.send_private_msg(user_id=p['qq_num'], message="你已通过TCC审核")
+
+        await bot.send(event, Message(f"excel 读取成功"))
+
+
+class remove:
+    async def handle(bot: Bot, event: Event):
+        # 设置使用权限
+        if not await auth_user(bot, event, auth_qq_list): return
+
+        msg = str(event.get_message())
+        user_name = msg.split(' ')[2]
+
+        whitelist_remove(user_name)
+
+        await bot.send(event, Message(f"{user_name} 已被移除白名单"))

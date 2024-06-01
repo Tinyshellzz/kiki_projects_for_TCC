@@ -1,6 +1,7 @@
 from nonebot.adapters.onebot.v11 import Bot, Event, GroupMessageEvent
 from nonebot.adapters.onebot.v11.message import Message
 from pathlib import Path
+from ..config.config import *
 
 plugin_dir = str(Path(__file__).resolve().parents[1])
 
@@ -48,9 +49,18 @@ class dns:
 
 class help:
     async def handle(bot: Bot, event: Event):
-        msg = (f"status              查看服务器状态\n"+
-                "/whitelist update   将 在数据库 且 在qq群中 的账号全部添加到白名单 (不在的则全部移除白名单)\n" +
-                "/whitelist load     从 excels 文件夹加载审核结果, 并把审核通过的消息发送给候选人\n")
+        user_id = str(event.get_user_id())
+
+        if user_id in auth_qq_list:
+            msg = (f"[CQ:at,qq={user_id}] \n" +
+                    "status\n查看服务器状态\n\n"+
+                    "/whitelist update\n将 在数据库 且 在qq群中 的账号全部添加到白名单 (不在的则全部移除白名单)\n\n" +
+                    "/whitelist load\n从 excels 文件夹加载审核结果, 并把审核通过的消息发送给候选人\n\n"
+            )
+        else:
+            msg = (f"[CQ:at,qq={user_id}] \n" +
+                    "status\n查看服务器状态\n\n"
+            )
         await bot.send(event, Message(msg))
 
 

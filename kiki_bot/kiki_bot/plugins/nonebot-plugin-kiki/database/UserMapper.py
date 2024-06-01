@@ -76,6 +76,9 @@ class UserMapper:
         res = res[0]
         return User(res[0], res[1], res[2], res[3], res[4])
     
+    def is_banned(qq_num):
+        pass
+    
     # 检查是否有重复的 qq_id
     def exists_qq_id(qq_num, user_name = None, mc_uuid = None) -> bool:
         c.execute("SELECT * FROM users WHERE qq_num=:qq_num", {'qq_num': qq_num})
