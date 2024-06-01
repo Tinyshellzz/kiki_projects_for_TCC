@@ -46,6 +46,13 @@ class dns:
             f"[CQ:image,file={plugin_dir}/resources/status.png]")
         await bot.send(event, Message(msg))
 
+class help:
+    async def handle(bot: Bot, event: Event):
+        msg = (f"status              查看服务器状态\n"+
+                "/whitelist update   将 在数据库 且 在qq群中 的账号全部添加到白名单 (不在的则全部移除白名单)\n" +
+                "/whitelist load     从 excels 文件夹加载审核结果, 并把审核通过的消息发送给候选人\n" +)
+        await bot.send(event, Message(msg))
+
 
 
 
