@@ -18,3 +18,5 @@ rconPort=25575
 rconPw='8888'
 auth_group_list = {'536038559'}     # 部分命令允许的 qq群
 auth_qq_list = {'3478848836'}   # 部分命令允许的 qq号 (例如 update_whitelist)
+code_prefix =  '我是爱坤我不是小黑子'   # 白名单验证码前缀
+kiki_whitelist_db = "D:/Learning/game tips/MineCraft/server/plugins/KikiWhitelist/code.db"  # mc白名单数据库的位置

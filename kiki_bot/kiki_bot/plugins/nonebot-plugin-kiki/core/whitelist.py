@@ -3,8 +3,10 @@ import re
 from ..config.config import *
 from nonebot.adapters.onebot.v11 import Bot
 from ..database.UserMapper import UserMapper
+from ..database.WhitelistCodeMapper import WhitelistCodeMapper
 from nonebot.adapters.onebot.v11 import Bot, Event
 from .authorization import *
+from ..database.User import User
 
 def whitelist_get_players():
     players = None
@@ -82,16 +84,39 @@ def whitelist_update(qq_nums):
     finally:
         rcon.disconnect()
 
-# 移除白名单
-class remove:
+# mc的白名单验证码
+class code:
     async def handle(bot: Bot, event: Event):
-        pass
+        if not await auth_group(bot, event, auth_group_list): return
+        user_id = str(event.get_user_id())
+
+        # 获取验证码
+        msg = str(event.get_message())
+        code = msg[-6:]
+
+        # 从验证码数据库获取数据
+        data = WhitelistCodeMapper.get(code)
+        print(data)
+        if data != None:
+            if UserMapper.exists_mc_uuid(data.mc_uuid):
+                await bot.send(event, Message(f'[CQ:at,qq={user_id}] 绑定失败: {data.user_name} 的mc账号已被绑定'))
+                return
+            if UserMapper.exists_qq_id(user_id):
+                await bot.send(event, Message(f'[CQ:at,qq={user_id}] 绑定失败: 你的qq已被绑定'))
+                return
+
+            # 将玩家添加到数据库, 并添加白名单
+            UserMapper.insert(User(user_id, data.user_name, data.mc_uuid))
+            whitelist_add(data.user_name)
+        else:
+            await bot.send(event, Message(f'[CQ:at,qq={user_id}] 验证码错误'))
+            
 
 # 跟新服务器的白名单
 class update:
     async def handle(bot: Bot, event: Event):
         # 设置使用权限
-        auth_user(bot, event, auth_qq_list)
+        if not await auth_user(bot, event, auth_qq_list): return
 
         qq_nums = set()
         for group_id in auth_group_list:

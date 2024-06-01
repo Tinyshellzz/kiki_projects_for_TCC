@@ -19,7 +19,7 @@ try:
     # 创建索引
     c.execute("""CREATE UNIQUE INDEX qq_num_index
             on users (qq_num);""")
-    c.execute("""CREATE UNIQUE INDEX user_name_index
+    c.execute("""CREATE INDEX user_name_index
             on users (user_name);""")
     c.execute("""CREATE UNIQUE INDEX mc_uuid_index
             on users (mc_uuid);""")
