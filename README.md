@@ -28,6 +28,9 @@ auth_group_list = {'536038559'}     # 部分命令允许的 qq群<br />
 auth_qq_list = {'3478848836'}   # 部分命令允许的 qq号 (例如 update_whitelist)<br />
 kiki_whitelist_db = "D:/Learning/game tips/MineCraft/server/plugins/KikiWhitelist/code.db"  # mc白名单数据库的位置
 
+## 安装bukkit插件, 以使用白名单验证码功能
+https://github.com/TinyShellzz/KikiWhitelist
+
 ## 运行工程
 双击start_all.bat即可运行
 
