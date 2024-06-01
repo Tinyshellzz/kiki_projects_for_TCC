@@ -13,19 +13,17 @@ cooldown_dicts = []
 
 match_rules = [
     ['^/{0,1}status$', status, 60],     # [正则, 方法, 冷却(s)]  (会默认调用status.py里面的 handle(bot, event) 方法)
+    ['^/whitelist update$', whitelist.update, 0],           # 将在数据库且在qq群中的账号全部添加到白名单 (不在数据库中的全部移除白名单)
+    ['^/whitelist load$', whitelist.load, 0],               # 从 excels 文件夹加载审核结果, 并把审核通过的消息发送给候选人
     ['(ip|怎么进服|服务器地址|怎么玩)', replies.ip, 10],
     ['(未知主机|连接超时|dns|连不上|连接失败|连不了)', replies.dns, 10],
     ['(怎么飞|飞行|飞)', replies.fly, 10],
-    ['^/{0,1}whitelist update$', whitelist.update, 0],
-    ['^' + code_prefix + '([0-9a-z]{6})$', whitelist.code, 10],
+    ['^' + code_prefix + '([0-9a-z]{6})$', whitelist.code, 10],   
 ]
 
 
 @matcher.handle()
 async def _(bot: Bot, event: Event):
-    # 这句只是用于测试
-    await bot.send(event, "recieve message: " + event.get_message())
-
     for i in range(len(match_rules)):
         cooldown_dicts.append({})
 

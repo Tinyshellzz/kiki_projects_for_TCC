@@ -55,6 +55,8 @@ class UserMapper:
         with dblock:
             c.execute("INSERT INTO users VALUES (?, ?, ?, ?, ?)", (user.qq_num, user.user_name, str(user.mc_uuid), user.is_banned, user.user_info))
             conn.commit()
+        
+        logger.info(f"user_name:{user.user_name} 已被被添加到数据库")
 
     # 通过 qq_num 或 user_name 或 mc_uuid, 查找数据库
     def get(qq_num = None, user_name = None, mc_uuid = None) -> User:

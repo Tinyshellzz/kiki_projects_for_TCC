@@ -7,6 +7,7 @@ from ..database.WhitelistCodeMapper import WhitelistCodeMapper
 from nonebot.adapters.onebot.v11 import Bot, Event
 from .authorization import *
 from ..database.User import User
+from ..database.ReadExcel import *
 
 def whitelist_get_players():
     players = None
@@ -113,7 +114,7 @@ class code:
             await bot.send(event, Message(f'[CQ:at,qq={user_id}] 验证码错误'))
             
 
-# 跟新服务器的白名单
+# 更新服务器的白名单
 class update:
     async def handle(bot: Bot, event: Event):
         # 设置使用权限
@@ -125,5 +126,14 @@ class update:
             for q in l:
                 qq_nums.add(str(q['user_id']))
         
-        print(qq_nums)
         whitelist_update(qq_nums)
+
+class load:
+    async def handle(bot: Bot, event: Event):
+        # 设置使用权限
+        if not await auth_user(bot, event, auth_qq_list): return
+        
+        # 向所有通过审核的人发送通知
+        players = read_excels()
+        for p in players:
+            await bot.send_private_msg(user_id=p['qq_num'], message="你已通过TCC审核")
