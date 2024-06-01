@@ -1,6 +1,6 @@
 import logging
 from pathlib import Path
-import mcrcon
+import yaml
 
 # create logger with 'kiki_bot'
 logger = logging.getLogger('kiki_bot')
@@ -11,12 +11,17 @@ fh = logging.FileHandler(plugin_dir + '/logs/kiki.log', encoding='utf-8', mode="
 fh.setLevel(logging.DEBUG)
 logger.addHandler(fh)
 
+# 加载配置文件
+data = None
+project_dir = str(Path(__file__).resolve().parents[5])
+with open(project_dir + '/config.yml', 'r', encoding='utf8') as f:
+    data = yaml.load(f, Loader=yaml.FullLoader)
 
-serIP='127.0.0.1'
-serPort=25565
-rconPort=25575
-rconPw='8888'
-auth_group_list = {'536038559'}         # bot工作qq群, 这些群里的人必须都是服务器玩家
-auth_qq_list = {'3478848836'}           # 部分命令允许的 qq号 (例如 /whitelist update)
-code_prefix =  '我是爱坤我不是小黑子'     # 白名单验证码前缀
-kiki_whitelist_db = "D:/Learning/game tips/MineCraft/server/plugins/KikiWhitelist/code.db"  # mc白名单数据库的位置
+serIP=data['server_ip']
+serPort=data['server_port']
+rconPort=data['rcon_port']
+rconPw=['rcon_password']
+auth_group_list = data['auth_group_list']       # bot工作qq群, 这些群里的人必须都是服务器玩家
+auth_qq_list = data['auth_qq_list']             # 部分命令允许的 qq号 (例如 /whitelist update)
+code_prefix =  data['code_prefix']              # 白名单验证码前缀
+kiki_whitelist_db = data['kiki_whitelist_db']   # mc白名单数据库的位置

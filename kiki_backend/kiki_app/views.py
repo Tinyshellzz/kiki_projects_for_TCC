@@ -5,7 +5,7 @@ from kiki_app.services import myMcstatus
 
 # Create your views here.
 def home(request):
-    return render(request, "Test.html")
+    return render(request, "base.html")
 
 def mcstatus(request):
     system_status = myMcstatus.get_system_status()

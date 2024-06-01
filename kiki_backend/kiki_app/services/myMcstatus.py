@@ -5,11 +5,14 @@ import config
 import re
 import logging
 import psutil
+import sys
 
 logger = logging.getLogger(__name__)
 # 获取服务器 tps
 def get_tps():
     tps_value = None
+    print('config.project_dir', file=sys.stderr)
+    print(config.project_dir, file=sys.stderr)
     rcon = mcrcon.MCRcon(config.serIP, config.rconPw, config.rconPort, timeout=2)
     try:
         rcon.connect()

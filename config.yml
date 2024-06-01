@@ -1,0 +1,10 @@
+server_ip: '127.0.0.1'
+server_port: 25565
+rcon_port: 25575
+rcon_password: '8888'
+auth_group_list:          # bot工作qq群, 这些群里的人必须都是服务器玩家
+  - '536038559'
+auth_qq_list:             # 部分命令允许的 qq号 (例如 /whitelist update)
+  - '3478848836'
+code_prefix: '我是爱坤我不是小黑子'     # 白名单验证码前缀, 与服务器要一致
+kiki_whitelist_db: "D:/Learning/game tips/MineCraft/server/plugins/KikiWhitelist/code.db"  # minecraft服务器白名单数据库的位置, 见 KikiWhitelist插件
