@@ -7,6 +7,7 @@ from .WhitelistCode import WhitelistCode
 
 c = conn_codes.cursor()
 
+# 获取 mc 服务器的 验证码
 class WhitelistCodeMapper:
     def get(code):
         c.execute("SELECT * FROM codes WHERE code=:code", {'code': code})
