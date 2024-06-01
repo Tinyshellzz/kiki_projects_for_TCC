@@ -12,21 +12,7 @@ conda env create -f environment.yml
 Set  "anaconda_dir=E:\DevInstall\Anaconda"
 ```
 
-## 修改kiki_backend配置文件
-serIP='127.0.0.1'  // mc服务器ip <br />
-serPort=25565    // mc服务器端口 <br />
-rconPort=25575  // rcon端口 <br />
-rconPw='8888'  // rcon密码
-
-## 修改kiki_bot配置文件
-位置: kiki_bot\kiki_bot\plugins\nonebot-plugin-kiki\config <br />
-serIP='127.0.0.1'// mc服务器ip <br />
-serPort=25565 // mc服务器端口 <br />
-rconPort=25575// rcon端口 <br />
-rconPw='8888' // rcon密码<br />
-auth_group_list = {'536038559'}     # qq群，群内成员应全是服务器玩家<br />
-auth_qq_list = {'3478848836'}   # 部分命令允许的 qq号 (例如 update_whitelist)<br />
-kiki_whitelist_db = "D:/Learning/game tips/MineCraft/server/plugins/KikiWhitelist/code.db"  # mc白名单数据库的位置
+## 修改配置文件 config.yml
 
 ## 安装bukkit插件, 以使用白名单验证码功能
 https://github.com/TinyShellzz/KikiWhitelist
@@ -35,8 +21,11 @@ https://github.com/TinyShellzz/KikiWhitelist
 双击start_all.bat即可运行
 
 ## 登录你的QQ
-第一次运行, 需要扫Lagrange.OneBot文件夹里的qr.png
+第一次运行, 需要扫Lagrange.OneBot文件夹里的r-0.png.png
 
 ## 查看服务器 status
 方法1: 输入网址 http://127.0.0.1:8000/mcstatus/ <br />
 方法2: QQ群内输入 status
+
+## bot使用方式
+帮助文档：在qq中发送消息 help 
