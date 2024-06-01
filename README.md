@@ -24,7 +24,7 @@ serIP='127.0.0.1'// mc服务器ip <br />
 serPort=25565 // mc服务器端口 <br />
 rconPort=25575// rcon端口 <br />
 rconPw='8888' // rcon密码<br />
-auth_group_list = {'536038559'}     # 部分命令允许的 qq群<br />
+auth_group_list = {'536038559'}     # qq群，群内成员应全是服务器玩家<br />
 auth_qq_list = {'3478848836'}   # 部分命令允许的 qq号 (例如 update_whitelist)<br />
 kiki_whitelist_db = "D:/Learning/game tips/MineCraft/server/plugins/KikiWhitelist/code.db"  # mc白名单数据库的位置
 
