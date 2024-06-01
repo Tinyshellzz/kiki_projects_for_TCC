@@ -134,6 +134,7 @@ class load:
         # 设置使用权限
         if not await auth_user(bot, event, auth_qq_list): return
         
+        await bot.send(event, Message(f"excel 读取中... (耗时较长)"))
         # 向所有通过审核的人发送通知
         players = read_excels()
         for p in players:
