@@ -130,7 +130,9 @@ class code:
 
         # 获取验证码
         msg = str(event.get_message())
-        code = msg[-6:]
+        # code = msg[-6:]
+        code = re.search(code_prefix + '([0-9a-z]{6})', msg)
+        code = code.groups()[0]
 
         # 从验证码数据库获取数据
         data = WhitelistCodeMapper.get(code)
