@@ -9,6 +9,7 @@ from datetime import datetime
 from .config.config import *
 from .core import timed_task
 import re
+from .tools import get_image
 
 timed_task.run()
 
@@ -34,6 +35,8 @@ match_rules = [
 
 @matcher.handle()
 async def _(bot: Bot, event: Event):
+    # await bot.send(event, Message("received message: " + str(event.get_message())))
+
     for i in range(len(match_rules)):
         cooldown_dicts.append({})
 
