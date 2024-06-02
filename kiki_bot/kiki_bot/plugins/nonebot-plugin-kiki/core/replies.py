@@ -17,8 +17,7 @@ class ip:
         group_id = str(event.group_id)
         self_id = str(event.self_id)
         
-        msg = (f"[CQ:at,qq={user_id}]\n"+
-            "【服务器信息-地址】\n" + 
+        msg = (f"【服务器信息-地址】\n" + 
             "-----------\n" + 
             "首选IP:Tcc-mc.com\n" + 
             "备用IP:Mc.tcc-mc.com\n" + 
