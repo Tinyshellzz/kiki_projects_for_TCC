@@ -1,4 +1,4 @@
-@echo off
+title kiki_backend
 Set  "anaconda_dir=E:\DevInstall\Anaconda"
 
 call %anaconda_dir%/Scripts/activate.bat %anaconda_dir%

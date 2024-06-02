@@ -1,4 +1,4 @@
-@echo off
+title kiki_bot
 Set  "anaconda_dir=E:\DevInstall\Anaconda"
 
 cd "Lagrange.OneBot"
