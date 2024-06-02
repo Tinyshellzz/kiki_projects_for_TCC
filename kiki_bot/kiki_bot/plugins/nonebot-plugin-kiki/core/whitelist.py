@@ -205,3 +205,27 @@ class add:
         whitelist_add(user_name)
 
         await bot.send(event, Message(f"{user_name} 已被添加白名单"))
+
+class getqq:
+    async def handle(bot: Bot, event: Event):
+        user_id = str(event.get_user_id())
+        msg = str(event.get_message())
+        qq_num = msg.split(' ')[2]
+
+        user = UserMapper.get(qq_num)
+        if user == None:
+            await bot.send(event, Message((f"[CQ:at,qq={user_id}] 未找到找到该qq")))
+            return
+        await bot.send(event, Message(f"[CQ:at,qq={user_id}]\nqq: {user.qq_num}\n游戏昵称: {user.user_name}\nuuid: {user.mc_uuid}\n备注: {user.user_info}"))
+
+class getname:
+    async def handle(bot: Bot, event: Event):
+        user_id = str(event.get_user_id())
+        msg = str(event.get_message())
+        user_name = msg.split(' ')[2]
+
+        user = UserMapper.get(user_name=user_name)
+        if user == None:
+            await bot.send(event, Message((f"[CQ:at,qq={user_id}] 未找到找到该玩家")))
+            return
+        await bot.send(event, Message(f"[CQ:at,qq={user_id}]\nqq: {user.qq_num}\n游戏昵称: {user.user_name}\nuuid: {user.mc_uuid}\n备注: {user.user_info}"))

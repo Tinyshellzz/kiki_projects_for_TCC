@@ -61,6 +61,8 @@ class help:
         else:
             msg = (f"[CQ:at,qq={user_id}] \n" +
                     "status\n查看服务器状态\n\n"
+                    "/whitelist getqq QQ号\n依据qq查找玩家\n\n" +
+                    "/whitelist getname 游戏昵称\n依据游戏昵称查找玩家"
             )
         await bot.send(event, Message(msg))
 
