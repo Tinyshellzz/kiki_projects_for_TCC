@@ -72,7 +72,7 @@ async def send_picture(bot: Bot, event: Event):
     image.save(url, 'PNG')
 
     # 发送图片
-    await bot.send(event, Message(f"[CQ:image,file={url}"))
+    await bot.send(event, Message(f"[CQ:image,file={url}]"))
 
     time.sleep(1)
     os.remove(url)

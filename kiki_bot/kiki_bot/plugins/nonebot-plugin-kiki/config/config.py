@@ -21,6 +21,7 @@ serIP=data['server_ip']
 serPort=data['server_port']
 rconPort=data['rcon_port']
 rconPw=data['rcon_password']
+server_whitelist=data['server_whitelist']     # 服务器白名单位置
 auth_group_list = data['auth_group_list']       # bot工作qq群, 这些群里的人必须都是服务器玩家
 auth_qq_list = data['auth_qq_list']             # 部分命令允许的 qq号 (例如 /whitelist update)
 code_prefix =  data['code_prefix']              # 白名单验证码前缀

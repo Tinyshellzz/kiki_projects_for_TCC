@@ -8,6 +8,10 @@ from nonebot.adapters.onebot.v11 import Bot, Event
 from .authorization import *
 from ..database.User import User
 from ..database.ReadExcel import *
+from threading import Lock
+import json
+
+lock = Lock()
 
 def whitelist_get_players():
     players = None
@@ -28,26 +32,38 @@ def whitelist_get_players():
     return players
 
 def whitelist_add(user_name):
-    if user_name == None: return
-    print(rconPw)
-    rcon = mcrcon.MCRcon(serIP, rconPw, rconPort, timeout=2)
-    try:
-        rcon.connect()
-        response = rcon.command(f'whitelist add {user_name}')
-        logger.info(response)
-        rcon.command(f'whitelist reload')
-    except Exception as e:
-        logger.warning(e)
-    finally:
-        rcon.disconnect()
+    with lock:
+        if user_name == None: return
+        print(rconPw)
+        rcon = mcrcon.MCRcon(serIP, rconPw, rconPort, timeout=2)
+        try:
+            rcon.connect()
+            response = rcon.command(f'whitelist add {user_name}')
+            logger.info(response)
+            rcon.command(f'whitelist reload')
+        except Exception as e:
+            logger.warning(e)
+        finally:
+            rcon.disconnect()
 
 def whitelist_remove(user_name):
-    if user_name == None: return
+    with lock:
+        if user_name == None: return
+        rcon = mcrcon.MCRcon(serIP, rconPw, rconPort, timeout=2)
+        try:
+            rcon.connect()
+            response = rcon.command(f'whitelist remove {user_name}')
+            logger.info(response)
+            rcon.command(f'whitelist reload')
+        except Exception as e:
+            logger.warning(e)
+        finally:
+            rcon.disconnect()
+
+def whitelist_reload():
     rcon = mcrcon.MCRcon(serIP, rconPw, rconPort, timeout=2)
     try:
         rcon.connect()
-        response = rcon.command(f'whitelist remove {user_name}')
-        logger.info(response)
         rcon.command(f'whitelist reload')
     except Exception as e:
         logger.warning(e)
@@ -57,30 +73,54 @@ def whitelist_remove(user_name):
 
 # 检查列表里所有的QQ号, 已经数据库中的记录, 据此更改 whitelist
 def whitelist_update(qq_nums):
-    rcon = mcrcon.MCRcon(serIP, rconPw, rconPort, timeout=2)
-    try:
-        rcon.connect()
-        # 新的 whitelist
-        new_whitelist = set()
-        
-        for n in qq_nums:
-            user = UserMapper.get(n)
-            if user != None and user.is_banned == None: new_whitelist.add(user.user_name)
-        
-        whitelist = whitelist_get_players()
+    w = set()
+    for n in qq_nums:
+        user = UserMapper.get(n)
+        if user != None and user.is_banned == None: w.add(user)
 
-        # 将不在服务器白名单的QQ号, 加入白名单
-        for p in new_whitelist: 
-            if not (p in whitelist):
-                response = rcon.command(f'whitelist add {p}')
-                logger.info(response)
-        
-        rcon.command(f'whitelist reload')
+    with lock:
+        if os.path.exists(server_whitelist):
+            whitelist = "["
+            
+            for user in w:
+                whitelist = whitelist + json.dumps({"uuid": user.mc_uuid, "name": user.user_name}) + ','
+            
+            l = len(whitelist)
+            if whitelist[l-1] ==',':
+                whitelist = whitelist[:-1] + ']'
+            else:
+                whitelist = whitelist + ']'
 
-    except Exception as e:
-        logger.warning(e)
-    finally:
-        rcon.disconnect()
+            # 直接将白名单写入 whitelist.json
+            with open(server_whitelist, "w") as text_file:
+                text_file.write(whitelist)
+            
+            whitelist_reload()
+        else:
+            # 新的 whitelist
+            new_whitelist = set()
+            
+            for user in w:
+                new_whitelist.add(user.user_name)
+            rcon = mcrcon.MCRcon(serIP, rconPw, rconPort, timeout=2)
+            try:
+                rcon.connect()
+                
+                whitelist = whitelist_get_players()
+
+                # 将不在服务器白名单的QQ号, 加入白名单
+                for p in new_whitelist: 
+                    if not (p in whitelist):
+                        response = rcon.command(f'whitelist add {p}')
+                        logger.info(response)
+                
+                rcon.command(f'whitelist reload')
+
+            except Exception as e:
+                logger.warning(e)
+            finally:
+                rcon.disconnect()
+
 
 # mc的白名单验证码
 class code:
@@ -136,7 +176,8 @@ class load:
         # 向所有通过审核的人发送通知
         players = read_excels()
         for p in players:
-            await bot.send_private_msg(user_id=p['qq_num'], message="你已通过TCC审核")
+            # await bot.send_private_msg(user_id=p['qq_num'], message="你已通过TCC审核")
+            pass
 
         await bot.send(event, Message(f"excel 读取成功"))
 
