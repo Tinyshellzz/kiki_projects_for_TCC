@@ -137,10 +137,12 @@ class code:
         print(data)
         if data != None:
             if UserMapper.exists_mc_uuid(data.mc_uuid):
-                await bot.send(event, Message(f'[CQ:at,qq={user_id}] 绑定失败: {data.user_name} 的mc账号已被绑定'))
+                user = UserMapper.get(mc_uuid=data.mc_uuid)
+                await bot.send(event, Message(f'[CQ:at,qq={user_id}] 绑定失败: \n{data.user_name} 的mc账号已被 {user.qq_num} 绑定\n如有问题请联系管理员'))
                 return
             if UserMapper.exists_qq_id(user_id):
-                await bot.send(event, Message(f'[CQ:at,qq={user_id}] 绑定失败: 你的qq已被绑定'))
+                user = UserMapper.get(qq_num=user_id)
+                await bot.send(event, Message(f'[CQ:at,qq={user_id}] 绑定失败: \n你的qq已被 {user.user_name} 绑定\n如有问题请联系管理员'))
                 return
 
             # 将玩家添加到数据库, 并添加白名单
