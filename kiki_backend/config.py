@@ -11,4 +11,4 @@ with open(project_dir + '/config.yml', 'r', encoding='utf8') as f:
 serIP=data['server_ip']
 serPort=data['server_port']
 rconPort=data['rcon_port']
-rconPw=['rcon_password']
+rconPw=data['rcon_password']

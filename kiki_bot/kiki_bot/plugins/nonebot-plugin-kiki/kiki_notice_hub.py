@@ -19,6 +19,7 @@ class GroupIncreaseNotice:
     async def handle(bot: Bot, event: Event):
         # 判断是否是新成员入群事件
         if not isinstance(event, GroupIncreaseNoticeEvent): return
+        if not (event.group_id in auth_group_list): return
 
         # 进入的群号
         group_id = event.group_id
@@ -34,6 +35,7 @@ class GroupDecreaseNotice:
     async def handle(bot: Bot, event: Event):
         # 判断是否是退群事件
         if not isinstance(event, GroupDecreaseNoticeEvent): return
+        if not (event.group_id in auth_group_list): return
 
         group_id = event.group_id
         

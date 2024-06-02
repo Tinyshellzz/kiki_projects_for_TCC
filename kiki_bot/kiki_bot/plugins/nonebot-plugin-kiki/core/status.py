@@ -72,6 +72,6 @@ async def send_picture(bot: Bot, event: Event):
     image.save(url, 'PNG')
 
     # 发送图片
-    await bot.send(event, MessageSegment.image(url))
+    await bot.send(event, Message(f"[CQ:image,file={url}"))
 
     os.remove(url)

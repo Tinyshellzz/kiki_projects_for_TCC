@@ -29,6 +29,7 @@ def whitelist_get_players():
 
 def whitelist_add(user_name):
     if user_name == None: return
+    print(rconPw)
     rcon = mcrcon.MCRcon(serIP, rconPw, rconPort, timeout=2)
     try:
         rcon.connect()
@@ -68,14 +69,10 @@ def whitelist_update(qq_nums):
         
         whitelist = whitelist_get_players()
 
-        for p in whitelist:
-            if not (p in new_whitelist):
-                whitelist_remove(p)
-
         # 将不在服务器白名单的QQ号, 加入白名单
         for p in new_whitelist: 
             if not (p in whitelist):
-                response = rcon.command(f'whitelist remove {p}')
+                response = rcon.command(f'whitelist add {p}')
                 logger.info(response)
         
         rcon.command(f'whitelist reload')
@@ -120,6 +117,7 @@ class update:
         # 设置使用权限
         if not await auth_user(bot, event, auth_qq_list): return
 
+        await bot.send(event, Message(f"白名单更新中...(耗时可能较长)"))
         qq_nums = set()
         for group_id in auth_group_list:
             l = await bot.get_group_member_list(group_id=group_id)
@@ -154,3 +152,15 @@ class remove:
         whitelist_remove(user_name)
 
         await bot.send(event, Message(f"{user_name} 已被移除白名单"))
+
+class add:
+    async def handle(bot: Bot, event: Event):
+        # 设置使用权限
+        if not await auth_user(bot, event, auth_qq_list): return
+
+        msg = str(event.get_message())
+        user_name = msg.split(' ')[2]
+
+        whitelist_add(user_name)
+
+        await bot.send(event, Message(f"{user_name} 已被添加白名单"))

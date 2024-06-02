@@ -15,9 +15,10 @@ cooldown_dicts = []
 match_rules = [
     ['^/{0,1}help$', replies.help, 10],                     # 帮助
     ['^/{0,1}status$', status, 60],                         # 查看服务器状态
-    ['^/whitelist update$', whitelist.update, 0],           # 将 在数据库 且 在qq群中 的账号全部添加到白名单 (不在的则全部移除白名单)
+    ['^/whitelist update$', whitelist.update, 0],           # 将 在数据库 且 在qq群中 的账号全部添加到白名单
     ['^/whitelist load$', whitelist.load, 0],               # 从 excels 文件夹加载审核结果, 并把审核通过的消息发送给候选人
     ['^/whitelist remove .*$', whitelist.remove, 0],        # 从白名单移除玩家
+    ['^/whitelist add .*$', whitelist.remove, 0],        # 从白名单移除玩家
     ['^' + code_prefix + '[0-9a-z]{6}$', whitelist.code, 10],    # 白名单验证码
     ['(ip|怎么进服|服务器地址|怎么玩)', replies.ip, 10],
     ['(未知主机|连接超时|dns|连不上|连接失败|连不了)', replies.dns, 10],

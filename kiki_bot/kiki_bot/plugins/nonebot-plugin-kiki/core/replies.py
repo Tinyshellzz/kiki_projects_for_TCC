@@ -35,7 +35,7 @@ class fly:
         user_id = str(event.get_user_id())
 
         msg = (f"[CQ:at,qq={user_id}]\n"+
-            "节假日开启飞行, 命令是\\fly")
+            "节假日开启飞行, 命令是/fly")
         await bot.send(event, Message(msg))
 
 class dns:
