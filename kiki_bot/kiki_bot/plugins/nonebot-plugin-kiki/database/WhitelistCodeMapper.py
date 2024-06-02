@@ -1,3 +1,4 @@
+# 负责与验证码数据库交互
 from pathlib import Path
 from .User import User
 from .DBConfig import *

@@ -1,3 +1,4 @@
+# 集中处理各种消息事件
 from nonebot import on_message
 from nonebot.adapters.onebot.v11.message import Message
 from nonebot.adapters.onebot.v11 import Bot, Event

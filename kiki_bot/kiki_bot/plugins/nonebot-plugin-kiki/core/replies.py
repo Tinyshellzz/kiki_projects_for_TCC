@@ -1,3 +1,4 @@
+# 负责处理简答的回复
 from nonebot.adapters.onebot.v11 import Bot, Event, GroupMessageEvent
 from nonebot.adapters.onebot.v11.message import Message
 from pathlib import Path

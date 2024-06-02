@@ -1,3 +1,4 @@
+# 集中处理notice事件, 像是退群/加群
 from nonebot import on_notice
 from nonebot.adapters.onebot.v11 import Bot, Event
 from nonebot.adapters.onebot.v11.event import GroupIncreaseNoticeEvent, GroupDecreaseNoticeEvent

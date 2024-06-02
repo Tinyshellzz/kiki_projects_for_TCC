@@ -1,3 +1,4 @@
+# 授权功能
 from nonebot.adapters.onebot.v11 import Bot, Event, GroupMessageEvent
 from nonebot.adapters.onebot.v11.message import Message
 
