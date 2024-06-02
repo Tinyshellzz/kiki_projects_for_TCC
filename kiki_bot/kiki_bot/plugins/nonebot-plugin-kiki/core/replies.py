@@ -55,7 +55,7 @@ class help:
         if user_id in auth_qq_list:
             msg = (f"[CQ:at,qq={user_id}] \n" +
                     "status\n查看服务器状态\n\n"+
-                    "/whitelist update\n将 在数据库 且 在qq群中 的账号全部添加到白名单 (不在的则全部移除白名单)\n\n" +
+                    "/whitelist update\n将 在数据库 且 在qq群中 的账号全部添加到白名单\n\n" +
                     "/whitelist load\n从 excels 文件夹加载审核结果, 并把审核通过的消息发送给候选人\n\n"
             )
         else:
