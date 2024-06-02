@@ -3,6 +3,7 @@ from nonebot.adapters.onebot.v11 import Bot, Event, GroupMessageEvent
 from nonebot.adapters.onebot.v11.message import Message
 from pathlib import Path
 from ..config.config import *
+from ..tools.tools import *
 
 plugin_dir = str(Path(__file__).resolve().parents[1])
 
@@ -28,16 +29,16 @@ class ip:
             "更多请查阅【TCC玩家手册】\n" + 
             "https://docs.qq.com/aio/DZGZrVFVqTERCTmNn&#34")
 
-        await bot.send_group_msg(group_id=group_id, message=Message(msg))
+        messages = []
+        messages.append(to_msg_node(msg))
+        await send_forward_msg(bot, event, messages)
 
 
 class fly:
     async def handle(bot: Bot, event: Event):
-        user_id = str(event.get_user_id())
-
-        msg = (f"[CQ:at,qq={user_id}]\n"+
-            "节假日开启飞行, 命令是/fly")
-        await bot.send(event, Message(msg))
+        messages = []
+        messages.append(to_msg_node("【服务器指令-飞行】\n-----------\n在游戏对话框输入/fly开/关飞行\n提示:只在节假日和周五晚上开放\n-----------\n更多请查阅【TCC玩家手册】\nhttps://docs.qq.com/aio/DZGZrVFVqTERCTmNn&#34"))
+        await send_forward_msg(bot, event, messages)
 
 class dns:
     async def handle(bot: Bot, event: Event):
