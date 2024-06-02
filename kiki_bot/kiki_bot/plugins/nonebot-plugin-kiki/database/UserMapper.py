@@ -5,8 +5,8 @@ from .DBConfig import *
 from ..tools import tools
 from ..config.config import *
 
-c = conn.cursor()
 
+c = conn.cursor()
 # 创建users表格
 try:
     c.execute("""CREATE TABLE users (
@@ -29,6 +29,7 @@ try:
     conn.commit()
 except Exception as e:
     pass
+c.close()
 
 class UserMapper:
     def insert(user: User):
@@ -52,15 +53,18 @@ class UserMapper:
             logger.error(f"uuid:{user.mc_uuid} 已被绑定")
             return
 
+        c = conn.cursor()
         # 锁住数据库, 插入操作
         with dblock:
             c.execute("INSERT INTO users VALUES (?, ?, ?, ?, ?)", (user.qq_num, user.user_name, str(user.mc_uuid), user.is_banned, user.user_info))
             conn.commit()
+        c.close()
         
         logger.info(f"user_name:{user.user_name} 已被被添加到数据库")
 
     # 通过 qq_num 或 user_name 或 mc_uuid, 查找数据库
     def get(qq_num = None, user_name = None, mc_uuid = None) -> User:
+        c = conn.cursor()
         if qq_num != None:
             c.execute("SELECT * FROM users WHERE qq_num=:qq_num", {'qq_num': qq_num})
         elif user_name != None:
@@ -69,6 +73,7 @@ class UserMapper:
             c.execute("SELECT * FROM users WHERE mc_uuid=:mc_uuid", {'mc_uuid': mc_uuid})
         
         res = c.fetchall()
+        c.close()
 
         # 没找到
         if len(res) == 0:
@@ -82,24 +87,30 @@ class UserMapper:
     
     # 检查是否有重复的 qq_id
     def exists_qq_id(qq_num, user_name = None, mc_uuid = None) -> bool:
+        c = conn.cursor()
         c.execute("SELECT * FROM users WHERE qq_num=:qq_num", {'qq_num': qq_num})
         res = c.fetchall()
+        c.close()
         if len(res) != 0: 
             return True
 
         return False
 
     def exists_user_name(user_name) -> bool:
+        c = conn.cursor()
         c.execute("SELECT * FROM users WHERE user_name=:user_name", {'user_name': user_name})
         res = c.fetchall()
+        c.close()
         if len(res) != 0: 
             return True
         
         return False
     
     def exists_mc_uuid(mc_uuid) -> bool:
+        c = conn.cursor()
         c.execute("SELECT * FROM users WHERE mc_uuid=:mc_uuid", {'mc_uuid': mc_uuid})
         res = c.fetchall()
+        c.close()
         if len(res) != 0: 
             return True
         
@@ -107,26 +118,35 @@ class UserMapper:
 
     # 更新 is_banned 和 user_info
     def update_banned_by_qq(qq_num, is_banned, user_info = None):
+        c = conn.cursor()
         # 锁住数据库
         with dblock:
             c.execute("""UPDATE users 
                     SET is_banned=?, user_info=?
                     WHERE qq_num=?""", (is_banned, user_info, qq_num))
             conn.commit()
+        c.close()
 
     # 将 user_name 更改的与 uuid 一致, 因为有人可能会改名
     def update_all_user_name():
+        c = conn.cursor()
         c.execute('SELECT * FROM users')
+        c.close()
         for row in c:
             user_name = tools.get_name_by_uuid(row[2])
             if not (row[1] == user_name):
                 with dblock:
+                    c = conn.cursor()
                     logger.info(f"user_name:{row[1]} 被更新为 {user_name}")
                     c.execute("UPDATE users SET user_name=? WHERE qq_num=?", (user_name, row[0]))
                     conn.commit()
+                    c.close()
+        
 
     # 删除
     def delete_by_qq(qq_num):
+        c = conn.cursor()
         with dblock:
             c.execute("DELETE FROM users WHERE qq_num=:qq_num", {'qq_num': qq_num})
             conn.commit()
+        c.close()
