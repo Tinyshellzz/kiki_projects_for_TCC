@@ -67,7 +67,7 @@ async def send_picture(bot: Bot, event: Event):
         draw.text((text_start_x, text_start_y), line, font=font, fill=text_color)
         text_start_y += text_height + line_spacing
         if text_start_y > height:
-             break
+            break
     # 保存图片
     image.save(url, 'PNG')
 
