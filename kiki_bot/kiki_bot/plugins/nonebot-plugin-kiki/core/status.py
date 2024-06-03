@@ -12,7 +12,7 @@ from ..config.config import *
 plugin_dir = str(Path(__file__).resolve().parents[1])
 background = Image.open(plugin_dir+"/resources/status.png")
 font = ImageFont.truetype(plugin_dir+"/resources/YeZiGongChangAoYeHei-2.ttf", 36)
-# 授权群组
+num = 0
 
 # 入口函数
 async def handle(bot: Bot, event: Event):
@@ -26,8 +26,8 @@ async def send_picture(bot: Bot, event: Event):
     current_time = datetime.now()
     _current_time = current_time.strftime("%Y-%m-%d %H:%M:%S")
     # 文件存储位置
-    timestr = time.strftime("%Y%m%d-%H%M%S")
-    url = plugin_dir + f"/Output_Serverstatus_{timestr}--{user_id}.png"
+    num = num + 1
+    url = plugin_dir + f"/Output_Serverstatus_{num}.png"
 
     # 获取minecraft状态, 并计算用时
     mc = json.loads(requests.get("http://127.0.0.1:8000/mcstatus/").text)
@@ -74,5 +74,7 @@ async def send_picture(bot: Bot, event: Event):
     # 发送图片
     await bot.send(event, Message(f"[CQ:image,file={url}]"))
 
-    time.sleep(1)
-    os.remove(url)
+    try:
+        os.remove(plugin_dir + f"/Output_Serverstatus_{num-1}.png")
+    except:
+        pass

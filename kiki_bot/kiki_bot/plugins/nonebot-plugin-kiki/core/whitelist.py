@@ -208,6 +208,7 @@ class get:
         if userbyqq != None:
             await bot.send(event, Message(f"[CQ:at,qq={user_id}]\nqq: {userbyqq.qq_num}\n游戏昵称: {userbyqq.user_name}\nuuid: {userbyqq.mc_uuid}\n备注: {userbyqq.user_info}"))
             return
+
 # 与remove不同, 删除该玩家的数据库记录
 class delete:
     async def handle(bot: Bot, event: Event):
