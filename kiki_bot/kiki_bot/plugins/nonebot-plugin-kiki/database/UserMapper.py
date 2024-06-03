@@ -13,7 +13,7 @@ try:
             qq_num text,
             user_name text,
             mc_uuid text,
-            is_banned text,
+            whitelisted text,
             user_info text
     )""")
 
@@ -56,7 +56,7 @@ class UserMapper:
         c = conn.cursor()
         # 锁住数据库, 插入操作
         with dblock:
-            c.execute("INSERT INTO users VALUES (?, ?, ?, ?, ?)", (user.qq_num, user.user_name, str(user.mc_uuid), user.is_banned, user.user_info))
+            c.execute("INSERT INTO users VALUES (?, ?, ?, ?, ?)", (user.qq_num, user.user_name, str(user.mc_uuid), user.whitelisted, user.user_info))
             conn.commit()
         c.close()
         
@@ -82,7 +82,7 @@ class UserMapper:
         res = res[0]
         return User(res[0], res[1], res[2], res[3], res[4])
     
-    def is_banned(qq_num):
+    def whitelisted(qq_num):
         pass
     
     # 检查是否有重复的 qq_id
@@ -116,31 +116,37 @@ class UserMapper:
         
         return False
 
-    # 更新 is_banned 和 user_info
-    def update_banned_by_qq(qq_num, is_banned, user_info = None):
+    # 更新 whitelisted
+    def update_whitelisted_by_uuid(mc_uuid, user_name, whitelisted):
         c = conn.cursor()
         # 锁住数据库
         with dblock:
             c.execute("""UPDATE users 
-                    SET is_banned=?, user_info=?
-                    WHERE qq_num=?""", (is_banned, user_info, qq_num))
+                    SET user_name=?, whitelisted=?
+                    WHERE mc_uuid=?""", (user_name, whitelisted, mc_uuid))
             conn.commit()
         c.close()
 
-    # 将 user_name 更改的与 uuid 一致, 因为有人可能会改名
-    def update_all_user_name():
+    # 更新 user_info
+    def update_user_info_by_uuid(mc_uuid, user_name, user_info):
         c = conn.cursor()
-        c.execute('SELECT * FROM users')
+        # 锁住数据库
+        with dblock:
+            c.execute("""UPDATE users 
+                    SET user_name=?, user_info=?
+                    WHERE mc_uuid=?""", (user_name, user_info, mc_uuid))
+            conn.commit()
         c.close()
-        for row in c:
-            user_name = tools.get_name_by_uuid(row[2])
-            if not (row[1] == user_name):
-                with dblock:
-                    c = conn.cursor()
-                    logger.info(f"user_name:{row[1]} 被更新为 {user_name}")
-                    c.execute("UPDATE users SET user_name=? WHERE qq_num=?", (user_name, row[0]))
-                    conn.commit()
-                    c.close()
+
+    def update_whitelisted_by_qq(qq_num, whitelisted):
+        c = conn.cursor()
+        # 锁住数据库
+        with dblock:
+            c.execute("""UPDATE users 
+                    SET whitelisted=?
+                    WHERE qq_num=?""", (whitelisted, qq_num))
+            conn.commit()
+        c.close()
         
 
     # 删除
@@ -150,3 +156,24 @@ class UserMapper:
             c.execute("DELETE FROM users WHERE qq_num=:qq_num", {'qq_num': qq_num})
             conn.commit()
         c.close()
+
+        # 删除
+    def delete_by_uuid(mc_uuid):
+        c = conn.cursor()
+        with dblock:
+            c.execute("DELETE FROM users WHERE mc_uuid=:mc_uuid", {'mc_uuid': mc_uuid})
+            conn.commit()
+        c.close()
+
+
+    def get_all_user():
+        c = conn.cursor()
+        c.execute("SELECT * FROM users")
+        res = c.fetchall()
+        c.close()
+
+        users = []
+        for r in res:
+            users.append(User(res[0], res[1], res[2], res[3], res[4]))
+        
+        return users

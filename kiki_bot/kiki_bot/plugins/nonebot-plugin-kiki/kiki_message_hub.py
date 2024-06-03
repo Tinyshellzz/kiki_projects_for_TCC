@@ -7,11 +7,7 @@ from .core import status
 from .core import whitelist
 from datetime import datetime
 from .config.config import *
-from .core import timed_task
 import re
-from .tools import get_image
-
-timed_task.run()
 
 matcher=on_message()
 cooldown_dicts = []
@@ -21,12 +17,15 @@ match_rules = [
     ['^/{0,1}help$', replies.help, 10],                     # 帮助
     ['^/{0,1}status$', status, 60],                         # 查看服务器状态
     ['^/whitelist update$', whitelist.update, 0],           # 将 在数据库 且 在qq群中 的账号全部添加到白名单
-    ['^/whitelist load$', whitelist.load, 0],               # 从 excels 文件夹加载审核结果, 并把审核通过的消息发送给候选人
+    ['^/whitelist sync$', whitelist.sync, 0],               # 同步minecraft官方的白名单
+    ['^/whitelist load$', whitelist.load, 0],               # 从 excels 文件夹加载审核结果
     ['^/whitelist remove .*$', whitelist.remove, 0],        # 从白名单移除玩家
-    ['^/whitelist add .*$', whitelist.add, 0],              # 从白名单添加玩家
-    ['^/whitelist getqq .*$', whitelist.getqq, 0],            # 依据qq查找玩家
-    ['^/whitelist getname .*$', whitelist.getname, 0],            # 依据游戏昵称查找玩家
-    [code_prefix + '[0-9a-zA-Z]{6}', whitelist.code, 10],    # 白名单验证码
+    ['^/whitelist delete .*$', whitelist.delete, 0],        # 与remove不同, 删除该玩家的数据库记录
+    ['^/whitelist add .*$', whitelist.add, 0],              # 添加玩家到白名单
+    ['^/whitelist insert .*$', whitelist.insert, 0],        # 将玩家插入数据库
+    ['^/whitelist getqq .*$', whitelist.getqq, 0],          # 依据qq查找玩家
+    ['^/whitelist getname .*$', whitelist.getname, 0],      # 依据游戏昵称查找玩家
+    [code_prefix + '[0-9a-zA-Z]{6}', whitelist.code, 10],   # 白名单验证码
     ['(ip|怎么进服|服务器地址|怎么玩)', replies.ip, 10],
     ['(未知主机|连接超时|dns|连不上|连接失败|连不了)', replies.dns, 10],
     ['(怎么飞|飞行|飞)', replies.fly, 10],

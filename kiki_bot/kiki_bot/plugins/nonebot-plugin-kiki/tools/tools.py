@@ -14,6 +14,18 @@ def get_uuid_by_name(user_name):
     ret = mc_uuid[0:8] + '-' + mc_uuid[8:12] + '-' + mc_uuid[12:16] + '-' + mc_uuid[16:20] + '-' + mc_uuid[20:]
     return ret
 
+def get_name_and_uuid_by_name(user_name):
+    url = f'https://api.mojang.com/users/profiles/minecraft/{user_name}?'
+    response = requests.get(url)
+    data = response.json()
+    # 不是合法 user_name
+    if 'errorMessage' in data: 
+        return None
+    
+    mc_uuid = data['id']
+    ret = mc_uuid[0:8] + '-' + mc_uuid[8:12] + '-' + mc_uuid[12:16] + '-' + mc_uuid[16:20] + '-' + mc_uuid[20:]
+    return (data['name'], ret)
+
 def get_name_by_uuid(uuid):
     uuid = uuid.replace('-', '')
     url = f'https://api.mojang.com/user/profile/{uuid}'

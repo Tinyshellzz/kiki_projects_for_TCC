@@ -9,66 +9,52 @@ from .authorization import *
 from ..database.User import User
 from ..database.ReadExcel import *
 from threading import Lock
+from ..tools.tools import *
 import json
 
-lock = Lock()
-
-def whitelist_get_players():
-    players = None
-    rcon = mcrcon.MCRcon(serIP, rconPw, rconPort, timeout=2)
+def whitelist_insert(qq_num, _user_name):
+    name = None
+    mc_uuid = None
     try:
-        rcon.connect()
-        response = rcon.command('whitelist list')
-        match = re.search('.*: (.*)', response)
-        if match == None: return
-        match = match.groups()[0]
-        res = match.split(', ')
-        players = set(res)
-    except Exception as e:
-        logger.warning(e)
-    finally:
-        rcon.disconnect()
+        name, mc_uuid = get_name_and_uuid_by_name(_user_name)
+    except:
+        return False
+    if name == None or mc_uuid == None: return False 
+    
+    UserMapper.insert(User(qq_num, name, mc_uuid, 'true'))
 
-    return players
-
-def whitelist_add(user_name):
-    with lock:
-        if user_name == None: return
-        print(rconPw)
-        rcon = mcrcon.MCRcon(serIP, rconPw, rconPort, timeout=2)
-        try:
-            rcon.connect()
-            response = rcon.command(f'whitelist add {user_name}')
-            logger.info(response)
-            rcon.command(f'whitelist reload')
-        except Exception as e:
-            logger.warning(e)
-        finally:
-            rcon.disconnect()
-
-def whitelist_remove(user_name):
-    with lock:
-        if user_name == None: return
-        rcon = mcrcon.MCRcon(serIP, rconPw, rconPort, timeout=2)
-        try:
-            rcon.connect()
-            response = rcon.command(f'whitelist remove {user_name}')
-            logger.info(response)
-            rcon.command(f'whitelist reload')
-        except Exception as e:
-            logger.warning(e)
-        finally:
-            rcon.disconnect()
-
-def whitelist_reload():
-    rcon = mcrcon.MCRcon(serIP, rconPw, rconPort, timeout=2)
+def whitelist_add(_user_name):
+    name = None
+    mc_uuid = None
     try:
-        rcon.connect()
-        rcon.command(f'whitelist reload')
-    except Exception as e:
-        logger.warning(e)
-    finally:
-        rcon.disconnect()
+        name, mc_uuid = get_name_and_uuid_by_name(_user_name)
+    except:
+        return False
+    if name == None or mc_uuid == None: return False 
+    
+    UserMapper.update_whitelisted_by_uuid(mc_uuid, name, 'true')
+
+def whitelist_remove(_user_name):
+    name = None
+    mc_uuid = None
+    try:
+        name, mc_uuid = get_name_and_uuid_by_name(_user_name)
+    except:
+        return False
+    if name == None or mc_uuid == None: return False 
+    
+    UserMapper.update_whitelisted_by_uuid(mc_uuid, name, None)
+
+def whitelist_delete(_user_name):
+    name = None
+    mc_uuid = None
+    try:
+        name, mc_uuid = get_name_and_uuid_by_name(_user_name)
+    except:
+        return False
+    if name == None or mc_uuid == None: return False 
+    
+    UserMapper.delete_by_uuid(mc_uuid)
 
 
 # 检查列表里所有的QQ号, 已经数据库中的记录, 据此更改 whitelist
@@ -76,13 +62,18 @@ def whitelist_update(qq_nums):
     w = set()
     for n in qq_nums:
         user = UserMapper.get(n)
-        if user != None and user.is_banned == None: w.add(user)
+        if user != None and user.whitelisted == None: 
+            UserMapper.update_whitelisted_by_qq(n, 'true')
 
-    with lock:
+
+class sync():
+    async def handle(bot: Bot, event: Event):
+        users = UserMapper.get_all_user()
+
         if os.path.exists(server_whitelist):
             whitelist = "["
             
-            for user in w:
+            for user in users:
                 whitelist = whitelist + json.dumps({"uuid": user.mc_uuid, "name": user.user_name}) + ','
             
             l = len(whitelist)
@@ -95,27 +86,12 @@ def whitelist_update(qq_nums):
             with open(server_whitelist, "w") as text_file:
                 text_file.write(whitelist)
             
-            whitelist_reload()
-        else:
-            # 新的 whitelist
-            new_whitelist = set()
-            
-            for user in w:
-                new_whitelist.add(user.user_name)
+            # reload 使白名单生效
             rcon = mcrcon.MCRcon(serIP, rconPw, rconPort, timeout=2)
             try:
                 rcon.connect()
-                
-                whitelist = whitelist_get_players()
-
-                # 将不在服务器白名单的QQ号, 加入白名单
-                for p in new_whitelist: 
-                    if not (p in whitelist):
-                        response = rcon.command(f'whitelist add {p}')
-                        logger.info(response)
-                
-                rcon.command(f'whitelist reload')
-
+                response = rcon.command('whitelist reload')
+                logger.info(response)
             except Exception as e:
                 logger.warning(e)
             finally:
@@ -194,9 +170,11 @@ class remove:
         msg = str(event.get_message())
         user_name = msg.split(' ')[2]
 
-        whitelist_remove(user_name)
-
-        await bot.send(event, Message(f"{user_name} 已被移除白名单"))
+        state = whitelist_remove(user_name)
+        if state == False:
+            await bot.send(event, Message(f"错误"))
+        else:
+            await bot.send(event, Message(f"{user_name} 已被移除白名单"))
 
 class add:
     async def handle(bot: Bot, event: Event):
@@ -206,9 +184,11 @@ class add:
         msg = str(event.get_message())
         user_name = msg.split(' ')[2]
 
-        whitelist_add(user_name)
-
-        await bot.send(event, Message(f"{user_name} 已被添加白名单"))
+        state = whitelist_add(user_name)
+        if state == False:
+            await bot.send(event, Message(f"错误"))
+        else:
+            await bot.send(event, Message(f"{user_name} 已被添加白名单"))
 
 class getqq:
     async def handle(bot: Bot, event: Event):
@@ -233,3 +213,38 @@ class getname:
             await bot.send(event, Message((f"[CQ:at,qq={user_id}] 未找到找到该玩家")))
             return
         await bot.send(event, Message(f"[CQ:at,qq={user_id}]\nqq: {user.qq_num}\n游戏昵称: {user.user_name}\nuuid: {user.mc_uuid}\n备注: {user.user_info}"))
+
+# 与remove不同, 删除该玩家的数据库记录
+class delete:
+    async def handle(bot: Bot, event: Event):
+        # 设置使用权限
+        if not await auth_user(bot, event, auth_qq_list): return
+
+        msg = str(event.get_message())
+        user_name = msg.split(' ')[2]
+
+        state = whitelist_delete(user_name)
+        if state == False:
+            await bot.send(event, Message(f"错误"))
+        else:
+            await bot.send(event, Message(f"{user_name} 已被删除该玩家"))
+
+# 将玩家插入数据库
+class insert:
+    async def handle(bot: Bot, event: Event):
+        # 设置使用权限
+        if not await auth_user(bot, event, auth_qq_list): return
+
+        msg = str(event.get_message())
+        sp = msg.split(' ')
+        if len(sp) < 4: 
+            bot.send(event, Message(f"参数不足, /whiteliste insert QQ号 游戏昵称"))
+        
+        qq_num = sp[2]
+        user_name = sp[3]
+
+        state = whitelist_insert(qq_num, user_name)
+        if state == False:
+            await bot.send(event, Message(f"错误"))
+        else:
+            await bot.send(event, Message(f"{user_name} 已被删除该玩家"))
