@@ -8,4 +8,4 @@ auth_group_list:          # bot工作qq群, 这些群里的人必须都是服务
 auth_qq_list:             # 授权的qq号 (例如 /whitelist update 权限)
   - '3478848836'
 code_prefix: '我是爱坤我不是小黑子'     # 白名单验证码前缀, 与服务器要一致
-kiki_whitelist_db: "D:/Learning/game tips/MineCraft/server/plugins/KikiWhitelist/code.db"  # minecraft服务器白名单数据库的位置, 见 KikiWhitelist插件
+kiki_whitelist_db: "D:/Learning/game tips/MineCraft/server/plugins/KikiWhitelist/code.db"  # minecraft服务器白名单数据库的位置, 见 KikiWhitelist插件sad
