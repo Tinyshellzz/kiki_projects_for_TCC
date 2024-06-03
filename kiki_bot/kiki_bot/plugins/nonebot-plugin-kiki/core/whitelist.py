@@ -89,23 +89,21 @@ class code:
         # 从验证码数据库获取数据
         data = WhitelistCodeMapper.get(code)
         print(data)
+        if UserMapper.exists_qq_id(user_id):
+            user = UserMapper.get(qq_num=user_id)
+            await bot.send(event, Message(f'[CQ:at,qq={user_id}] 老东西，你已经绑定了账号『{user.user_name}』无法重复绑定'))
+            return
+        if UserMapper.exists_mc_uuid(data.mc_uuid):
+            user = UserMapper.get(mc_uuid=data.mc_uuid)
+            await bot.send(event, Message(f'[CQ:at,qq={user_id}] 绑定失败:『{data.user_name}』已被『{user.qq_num}』绑定\n如有问题请联系管理员'))
+            return
         if data != None:
-            if UserMapper.exists_mc_uuid(data.mc_uuid):
-                user = UserMapper.get(mc_uuid=data.mc_uuid)
-                await bot.send(event, Message(f'[CQ:at,qq={user_id}] 绑定失败: \n{data.user_name} 的mc账号已被 {user.qq_num} 绑定\n如有问题请联系管理员'))
-                return
-            if UserMapper.exists_qq_id(user_id):
-                user = UserMapper.get(qq_num=user_id)
-                await bot.send(event, Message(f'[CQ:at,qq={user_id}] 绑定失败: \n你的qq已被 {user.user_name} 绑定\n如有问题请联系管理员'))
-                return
-
             # 将玩家添加到数据库, 并添加白名单
             UserMapper.insert(User(user_id, data.user_name, data.mc_uuid))
             whitelist_add(data.user_name)
-            await bot.send(event, Message(f'[CQ:at,qq={user_id}] {data.user_name}绑定成功'))
+            await bot.send(event, Message(f'[CQ:at,qq={user_id}] {data.user_name}是吧，我在服务器等你嗷！来了服务器指定没你好果汁吃！'))
         else:
-            await bot.send(event, Message(f'[CQ:at,qq={user_id}] 验证码错误'))
-            
+            await bot.send(event, Message(f'[CQ:at,qq={user_id}] 验证码有误，请返回服务器检查'))
 
 # 更新服务器的白名单
 class update:
@@ -166,7 +164,7 @@ class add:
         else:
             await bot.send(event, Message(f"{user_name} 已被添加白名单"))
 
-class getqq:
+class getbyqq:
     async def handle(bot: Bot, event: Event):
         user_id = str(event.get_user_id())
         msg = str(event.get_message())
@@ -174,11 +172,12 @@ class getqq:
 
         user = UserMapper.get(qq_num)
         if user == None:
-            await bot.send(event, Message((f"[CQ:at,qq={user_id}] 未找到找到该qq")))
+            await bot.send(event, Message((f"[CQ:at,qq={user_id}] 该qq没有绑定玩家")))
             return
         await bot.send(event, Message(f"[CQ:at,qq={user_id}]\nqq: {user.qq_num}\n游戏昵称: {user.user_name}\nuuid: {user.mc_uuid}\n备注: {user.user_info}"))
 
-class getname:
+
+class getbyname:
     async def handle(bot: Bot, event: Event):
         user_id = str(event.get_user_id())
         msg = str(event.get_message())
@@ -186,10 +185,29 @@ class getname:
 
         user = UserMapper.get(user_name=user_name)
         if user == None:
-            await bot.send(event, Message((f"[CQ:at,qq={user_id}] 未找到找到该玩家")))
+            await bot.send(event, Message((f"[CQ:at,qq={user_id}] 未找到该玩家qq，请检查id拼写")))
             return
         await bot.send(event, Message(f"[CQ:at,qq={user_id}]\nqq: {user.qq_num}\n游戏昵称: {user.user_name}\nuuid: {user.mc_uuid}\n备注: {user.user_info}"))
 
+class get:
+    async def handle(bot: Bot, event: Event):
+        user_id = str(event.get_user_id())
+        msg = str(event.get_message())
+        user_name = msg.split(' ')[1]
+        qq_num = msg.split(' ')[1]
+
+        userbyname = UserMapper.get(user_name=user_name)
+        userbyqq = UserMapper.get(qq_num)
+
+        if userbyname is None and userbyqq is None:
+            await bot.send(event, Message((f"[CQ:at,qq={user_id}] 查无此人，请检查id或者qq是否有误")))
+            return
+        if userbyname != None:
+            await bot.send(event, Message(f"[CQ:at,qq={user_id}]\nqq: {userbyname.qq_num}\n游戏昵称: {userbyname.user_name}\nuuid: {userbyname.mc_uuid}\n备注: {userbyname.user_info}"))
+            return
+        if userbyqq != None:
+            await bot.send(event, Message(f"[CQ:at,qq={user_id}]\nqq: {userbyqq.qq_num}\n游戏昵称: {userbyqq.user_name}\nuuid: {userbyqq.mc_uuid}\n备注: {userbyqq.user_info}"))
+            return
 # 与remove不同, 删除该玩家的数据库记录
 class delete:
     async def handle(bot: Bot, event: Event):

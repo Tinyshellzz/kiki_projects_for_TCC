@@ -25,12 +25,13 @@ match_rules = [
     ['^/whitelist delete .*$', whitelist.delete, 0],        # 与remove不同, 删除该玩家的数据库记录
     ['^/whitelist add .*$', whitelist.add, 0],              # 添加玩家到白名单
     ['^/whitelist insert .*$', whitelist.insert, 0],        # 将玩家插入数据库
-    ['^/whitelist getqq .*$', whitelist.getqq, 0],          # 依据qq查找玩家
-    ['^/whitelist getname .*$', whitelist.getname, 0],      # 依据游戏昵称查找玩家
+    ['^/whitelist getbyqq .*$', whitelist.getbyqq, 0],            # 依据qq查找玩家
+    ['^/whitelist getbyname .*$', whitelist.getbyname, 0],            # 依据游戏昵称查找玩家
+    ['^找人 .*$', whitelist.get, 0],            # 万能查询
     ['^.*' + code_prefix + '[0-9a-zA-Z]{6}.*$', whitelist.code, 10],   # 白名单验证码
     ['(ip|怎么进服|服务器地址|怎么玩)', replies.ip, 10],
-    ['(未知主机|连接超时|dns|连不上|连接失败|连不了)', replies.dns, 10],
-    ['(怎么飞|飞行|飞)', replies.fly, 10],
+    # ['(未知主机|连接超时|dns|连不上|连接失败|连不了)', replies.dns, 10],
+    ['(怎么飞|飞行)', replies.fly, 10],
 ]
 
 

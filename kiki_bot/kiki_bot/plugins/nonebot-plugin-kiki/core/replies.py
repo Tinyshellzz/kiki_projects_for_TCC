@@ -63,6 +63,7 @@ class help:
                     "status\n查看服务器状态\n\n"
                     "/whitelist getqq QQ号\n依据qq查找玩家\n\n" +
                     "/whitelist getname 游戏昵称\n依据游戏昵称查找玩家"
+                    "找人 游戏id或者qq号\n根据qq或者id查找玩家\n"
             )
         await bot.send(event, Message(msg))
 
