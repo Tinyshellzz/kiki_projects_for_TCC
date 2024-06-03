@@ -22,6 +22,8 @@ async def handle(bot: Bot, event: Event):
     await send_picture(bot, event)
 
 async def send_picture(bot: Bot, event: Event):
+    global num
+
     user_id = event.get_user_id()
     current_time = datetime.now()
     _current_time = current_time.strftime("%Y-%m-%d %H:%M:%S")
