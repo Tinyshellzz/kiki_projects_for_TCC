@@ -8,12 +8,14 @@ from .core import whitelist
 from datetime import datetime
 from .config.config import *
 import re
+from .tools import transfer_db
 
 matcher=on_message()
 cooldown_dicts = []
 
 # [正则, 方法, 冷却(s)]  (会默认调用status.py里面的 handle(bot, event) 方法)
 match_rules = [
+    ['^test$', transfer_db, 0],
     ['^/{0,1}help$', replies.help, 10],                     # 帮助
     ['^/{0,1}status$', status, 60],                         # 查看服务器状态
     ['^/whitelist update$', whitelist.update, 0],           # 将 在数据库 且 在qq群中 的账号全部添加到白名单
@@ -25,7 +27,7 @@ match_rules = [
     ['^/whitelist insert .*$', whitelist.insert, 0],        # 将玩家插入数据库
     ['^/whitelist getqq .*$', whitelist.getqq, 0],          # 依据qq查找玩家
     ['^/whitelist getname .*$', whitelist.getname, 0],      # 依据游戏昵称查找玩家
-    [code_prefix + '[0-9a-zA-Z]{6}', whitelist.code, 10],   # 白名单验证码
+    ['^.*' + code_prefix + '[0-9a-zA-Z]{6}.*$', whitelist.code, 10],   # 白名单验证码
     ['(ip|怎么进服|服务器地址|怎么玩)', replies.ip, 10],
     ['(未知主机|连接超时|dns|连不上|连接失败|连不了)', replies.dns, 10],
     ['(怎么飞|飞行|飞)', replies.fly, 10],

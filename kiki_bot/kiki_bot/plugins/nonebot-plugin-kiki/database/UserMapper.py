@@ -64,6 +64,8 @@ class UserMapper:
 
     # 通过 qq_num 或 user_name 或 mc_uuid, 查找数据库
     def get(qq_num = None, user_name = None, mc_uuid = None) -> User:
+        if user_name != None: user_name = user_name.lower()
+
         c = conn.cursor()
         if qq_num != None:
             c.execute("SELECT * FROM users WHERE qq_num=:qq_num", {'qq_num': qq_num})
@@ -87,6 +89,7 @@ class UserMapper:
     
     # 检查是否有重复的 qq_id
     def exists_qq_id(qq_num, user_name = None, mc_uuid = None) -> bool:
+        if user_name != None: user_name = user_name.lower()
         c = conn.cursor()
         c.execute("SELECT * FROM users WHERE qq_num=:qq_num", {'qq_num': qq_num})
         res = c.fetchall()
@@ -97,6 +100,8 @@ class UserMapper:
         return False
 
     def exists_user_name(user_name) -> bool:
+        user_name = user_name.lower()
+
         c = conn.cursor()
         c.execute("SELECT * FROM users WHERE user_name=:user_name", {'user_name': user_name})
         res = c.fetchall()
@@ -118,6 +123,8 @@ class UserMapper:
 
     # 更新 whitelisted
     def update_whitelisted_by_uuid(mc_uuid, user_name, whitelisted):
+        user_name = user_name.lower()
+
         c = conn.cursor()
         # 锁住数据库
         with dblock:
@@ -127,8 +134,23 @@ class UserMapper:
             conn.commit()
         c.close()
 
+        # 更新 whitelisted
+    def update_whitelisted_by_name(user_name, whitelisted):
+        if user_name != None: user_name = user_name.lower()
+
+        c = conn.cursor()
+        # 锁住数据库
+        with dblock:
+            c.execute("""UPDATE users 
+                    SET whitelisted=?
+                    WHERE user_name=?""", (whitelisted, user_name))
+            conn.commit()
+        c.close()
+
     # 更新 user_info
     def update_user_info_by_uuid(mc_uuid, user_name, user_info):
+        if user_name != None: user_name = user_name.lower()
+        
         c = conn.cursor()
         # 锁住数据库
         with dblock:
@@ -162,6 +184,16 @@ class UserMapper:
         c = conn.cursor()
         with dblock:
             c.execute("DELETE FROM users WHERE mc_uuid=:mc_uuid", {'mc_uuid': mc_uuid})
+            conn.commit()
+        c.close()
+
+        # 删除
+    def delete_by_name(user_name):
+        if user_name != None: user_name = user_name.lower()
+        
+        c = conn.cursor()
+        with dblock:
+            c.execute("DELETE FROM users WHERE user_name=:user_name", {'user_name': user_name})
             conn.commit()
         c.close()
 

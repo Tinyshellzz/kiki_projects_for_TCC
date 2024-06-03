@@ -23,38 +23,14 @@ def whitelist_insert(qq_num, _user_name):
     
     UserMapper.insert(User(qq_num, name, mc_uuid, 'true'))
 
-def whitelist_add(_user_name):
-    name = None
-    mc_uuid = None
-    try:
-        name, mc_uuid = get_name_and_uuid_by_name(_user_name)
-    except:
-        return False
-    if name == None or mc_uuid == None: return False 
-    
-    UserMapper.update_whitelisted_by_uuid(mc_uuid, name, 'true')
+def whitelist_add(user_name):
+    UserMapper.update_whitelisted_by_name(user_name, 'true')
 
-def whitelist_remove(_user_name):
-    name = None
-    mc_uuid = None
-    try:
-        name, mc_uuid = get_name_and_uuid_by_name(_user_name)
-    except:
-        return False
-    if name == None or mc_uuid == None: return False 
-    
-    UserMapper.update_whitelisted_by_uuid(mc_uuid, name, None)
+def whitelist_remove(user_name):
+    UserMapper.update_whitelisted_by_uuid(user_name, None)
 
-def whitelist_delete(_user_name):
-    name = None
-    mc_uuid = None
-    try:
-        name, mc_uuid = get_name_and_uuid_by_name(_user_name)
-    except:
-        return False
-    if name == None or mc_uuid == None: return False 
-    
-    UserMapper.delete_by_uuid(mc_uuid)
+def whitelist_delete(user_name):
+    UserMapper.delete_by_name(user_name)
 
 
 # 检查列表里所有的QQ号, 已经数据库中的记录, 据此更改 whitelist
