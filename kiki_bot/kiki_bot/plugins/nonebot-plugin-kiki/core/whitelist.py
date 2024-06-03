@@ -222,7 +222,7 @@ class delete:
         if state == False:
             await bot.send(event, Message(f"错误"))
         else:
-            await bot.send(event, Message(f"{user_name} 已被删除该玩家"))
+            await bot.send(event, Message(f"{user_name} 该玩家的数据库记录已被删除"))
 
 # 将玩家插入数据库
 class insert:
