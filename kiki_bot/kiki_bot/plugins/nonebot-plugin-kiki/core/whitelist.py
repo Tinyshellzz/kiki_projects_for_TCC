@@ -174,7 +174,7 @@ class getbyqq:
         if user == None:
             await bot.send(event, Message((f"[CQ:at,qq={user_id}] 该qq没有绑定玩家")))
             return
-        await bot.send(event, Message(f"[CQ:at,qq={user_id}]\nqq: {user.qq_num}\n游戏昵称: {user.user_name}\nuuid: {user.mc_uuid}\n备注: {user.user_info}"))
+        await bot.send(event, Message(f"[CQ:at,qq={user_id}]\nqq: {user.qq_num}\n游戏昵称: {user.user_name}\nuuid: {user.mc_uuid}\n白名单: {user.whitelisted}\n备注: {user.user_info}"))
 
 
 class getbyname:
@@ -187,7 +187,7 @@ class getbyname:
         if user == None:
             await bot.send(event, Message((f"[CQ:at,qq={user_id}] 未找到该玩家qq，请检查id拼写")))
             return
-        await bot.send(event, Message(f"[CQ:at,qq={user_id}]\nqq: {user.qq_num}\n游戏昵称: {user.user_name}\nuuid: {user.mc_uuid}\n备注: {user.user_info}"))
+        await bot.send(event, Message(f"[CQ:at,qq={user_id}]\nqq: {user.qq_num}\n游戏昵称: {user.user_name}\nuuid: {user.mc_uuid}\n白名单: {user.whitelisted}\n备注: {user.user_info}"))
 
 class get:
     async def handle(bot: Bot, event: Event):
@@ -203,10 +203,10 @@ class get:
             await bot.send(event, Message((f"[CQ:at,qq={user_id}] 查无此人，请检查id或者qq是否有误")))
             return
         if userbyname != None:
-            await bot.send(event, Message(f"[CQ:at,qq={user_id}]\nqq: {userbyname.qq_num}\n游戏昵称: {userbyname.user_name}\nuuid: {userbyname.mc_uuid}\n备注: {userbyname.user_info}"))
+            await bot.send(event, Message(f"[CQ:at,qq={user_id}]\nqq: {userbyname.qq_num}\n游戏昵称: {userbyname.user_name}\nuuid: {userbyname.mc_uuid}\n白名单: {userbyname.whitelisted}\n备注: {userbyname.user_info}"))
             return
         if userbyqq != None:
-            await bot.send(event, Message(f"[CQ:at,qq={user_id}]\nqq: {userbyqq.qq_num}\n游戏昵称: {userbyqq.user_name}\nuuid: {userbyqq.mc_uuid}\n备注: {userbyqq.user_info}"))
+            await bot.send(event, Message(f"[CQ:at,qq={user_id}]\nqq: {userbyqq.qq_num}\n游戏昵称: {userbyqq.user_name}\nuuid: {userbyqq.mc_uuid}\n白名单: {userbyqq.whitelisted}\n备注: {userbyqq.user_info}"))
             return
 
 # 与remove不同, 删除该玩家的数据库记录
