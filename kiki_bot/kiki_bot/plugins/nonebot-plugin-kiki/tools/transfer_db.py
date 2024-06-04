@@ -45,7 +45,10 @@ async def handle(bot: Bot, event: Event):
 
     c_target = target.cursor()
     for r in res:
-        name = get_name_by_uuid(r[2])
+        try:
+            name = get_name_by_uuid(r[2])
+        except:
+            print(f'###############转移{r[1].lower()}失败#############')
         print(f'转移{name}成功')
         c_target.execute("INSERT INTO users VALUES (?, ?, ?, ?, ?, ?)", (r[0], r[1].lower(), name, r[2], 'true', r[4]))
     target.commit()
