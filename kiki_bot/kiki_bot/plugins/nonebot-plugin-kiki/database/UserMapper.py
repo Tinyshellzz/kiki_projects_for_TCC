@@ -35,11 +35,11 @@ c.close()
 
 def insert(user: User):
     # user_name 已被绑定 
-    if UserMapper.exists_qq_id(user.user_name): 
+    if exists_qq_id(user.user_name): 
         logger.error(f"user_name:{user.user_name} 已被绑定")
         return
     # qq 已被绑定
-    if UserMapper.exists_qq_id(user.qq_num): 
+    if exists_qq_id(user.qq_num): 
         logger.error(f"qq:{user.qq_num} 已被绑定")
         return
     # 验证 uuid
@@ -53,7 +53,7 @@ def insert(user: User):
         user.display_name = display_name
         user.mc_uuid = uuid
     # uuid 已被绑定 
-    if UserMapper.exists_mc_uuid(user.mc_uuid): 
+    if exists_mc_uuid(user.mc_uuid): 
         logger.error(f"uuid:{user.mc_uuid} 已被绑定")
         return False
     c = conn.cursor()
