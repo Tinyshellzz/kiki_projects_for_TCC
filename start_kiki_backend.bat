@@ -5,4 +5,4 @@ Set  "anaconda_dir=E:\DevInstall\Anaconda"
 call conda init
 call conda activate mc
 cd kiki_backend
-python manage.py runserver
+python manage.py runserver 0.0.0.0:8000
