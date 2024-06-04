@@ -3,3 +3,4 @@
 *.log
 keystore.json
 config copy.yml
+config.yml
