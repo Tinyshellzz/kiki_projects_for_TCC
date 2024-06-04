@@ -93,7 +93,7 @@ class code:
             user = UserMapper.get(qq_num=user_id)
             await bot.send(event, Message(f'[CQ:at,qq={user_id}] 老东西，你已经绑定了账号『{user.user_name}』无法重复绑定'))
             return
-        if UserMapper.exists_mc_uuid(data.mc_uuid):
+        if data != None and UserMapper.exists_mc_uuid(data.mc_uuid):
             user = UserMapper.get(mc_uuid=data.mc_uuid)
             await bot.send(event, Message(f'[CQ:at,qq={user_id}] 绑定失败:『{data.user_name}』已被『{user.qq_num}』绑定\n如有问题请联系管理员'))
             return

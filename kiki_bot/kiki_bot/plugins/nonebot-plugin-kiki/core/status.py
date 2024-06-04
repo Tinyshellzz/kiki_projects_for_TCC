@@ -18,6 +18,8 @@ num = 0
 async def handle(bot: Bot, event: Event):
     # 进行权限验证
     if not await auth(bot, event, group_list=auth_group_list): return
+    print("##############status start##############")
+
     # 发送图片
     await send_picture(bot, event)
 
@@ -72,11 +74,13 @@ async def send_picture(bot: Bot, event: Event):
             break
     # 保存图片
     image.save(url, 'PNG')
+    time.sleep(0.1)
 
     # 发送图片
     await bot.send(event, Message(f"[CQ:image,file={url}]"))
 
     try:
-        os.remove(plugin_dir + f"/Output_Serverstatus_{num-1}.png")
+        old = num-1
+        os.remove(plugin_dir + f"/Output_Serverstatus_{old}.png")
     except:
         pass

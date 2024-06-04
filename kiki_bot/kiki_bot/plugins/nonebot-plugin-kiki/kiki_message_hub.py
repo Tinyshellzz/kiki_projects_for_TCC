@@ -18,7 +18,7 @@ cooldown_dicts = []
 match_rules = [
     ['^test$', no_action, 0],
     ['^/{0,1}help$', replies.help, 10],                     # 帮助
-    ['^/{0,1}status$', status, 60],                         # 查看服务器状态
+    ['^/{0,1}status$', status, 0],                         # 查看服务器状态
     ['^/whitelist update$', whitelist.update, 0],           # 将 在数据库 且 在qq群中 的账号全部添加到白名单
     ['^/whitelist sync$', whitelist.sync, 0],               # 同步minecraft官方的白名单
     ['^/whitelist load$', whitelist.load, 0],               # 从 excels 文件夹加载审核结果
