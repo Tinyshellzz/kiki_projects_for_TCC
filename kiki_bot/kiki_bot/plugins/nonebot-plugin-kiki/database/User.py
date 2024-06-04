@@ -1,6 +1,6 @@
 import json
 from ..tools.tools import *
-from .UserMapper import UserMapper
+from .UserMapper import *
 
 class User:
     def __init__(self, qq_num, user_name, display_name = None, mc_uuid = None, whitelisted = None, user_info = None):
@@ -16,7 +16,7 @@ class User:
     
     def get_display_name(self):
         if self.display_name == None:
-            user = UserMapper.get(user_name=self.user_name)
+            user = get(user_name=self.user_name)
             if user.display_name != None: 
                 self.display_name = user.display_name
                 return self.display_name
@@ -24,7 +24,7 @@ class User:
                 name = None
                 try:
                     name = get_name_by_uuid(self.mc_uuid)
-                    UserMapper.update_name_by_uuid(self.mc_uuid, name, name)
+                    update_name_by_uuid(self.mc_uuid, name, name)
                 except:
                     pass
                 self.user_name = name.lower()

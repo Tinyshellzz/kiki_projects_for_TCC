@@ -4,7 +4,7 @@ from nonebot.adapters.onebot.v11 import Bot, Event
 from nonebot.adapters.onebot.v11.event import GroupIncreaseNoticeEvent, GroupDecreaseNoticeEvent
 from nonebot.adapters.onebot.v11.message import Message
 from .core.whitelist import *
-from .database.UserMapper import UserMapper
+from .database import UserMapper
 import re
 
 matcher=on_notice()
