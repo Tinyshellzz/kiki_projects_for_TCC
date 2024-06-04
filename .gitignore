@@ -1,4 +1,4 @@
 *.db
-*.yml
 *.png*.log
 *.json
+config.yml
