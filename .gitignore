@@ -1,8 +1,4 @@
-Lagrange.OneBot\keystore.json
-Lagrange.OneBot\qr-0.png
-user.db
-config.yml
-user_old.db
-kiki_bot\kiki_bot\plugins\nonebot-plugin-kiki\logs\kiki.log
-Lagrange.OneBot\lagrange-0.db
-Lagrange.OneBot\lagrange-0-log.db
+*.db
+*.yml
+*.png*.log
+*.json
