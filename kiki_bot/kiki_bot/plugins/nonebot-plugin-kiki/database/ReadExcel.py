@@ -4,7 +4,11 @@ from pathlib import Path
 import os
 from os import listdir
 from os.path import isfile, join
+<<<<<<< HEAD
 from . import UserMapper 
+=======
+from . import UserMapper
+>>>>>>> c3402501409082fccc9c62d29311d80611e06c88
 from .User import User
 from ..config.config import *
 
