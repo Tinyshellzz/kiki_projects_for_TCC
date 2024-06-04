@@ -16,7 +16,7 @@ cooldown_dicts = []
 
 # [正则, 方法, 冷却(s)]  (会默认调用status.py里面的 handle(bot, event) 方法)
 match_rules = [
-    ['^test$', no_action, 0],
+    ['^test$', transfer_db, 0],
     ['^/{0,1}help$', replies.help, 10],                     # 帮助
     ['^/{0,1}status$', status, 0],                         # 查看服务器状态
     ['^/whitelist update$', whitelist.update, 0],           # 将 在数据库 且 在qq群中 的账号全部添加到白名单

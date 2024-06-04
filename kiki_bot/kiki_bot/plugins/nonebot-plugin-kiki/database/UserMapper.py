@@ -12,6 +12,7 @@ try:
     c.execute("""CREATE TABLE users (
             qq_num text,
             user_name text,
+            display_name text,
             mc_uuid text,
             whitelisted text,
             user_info text
@@ -45,22 +46,29 @@ class UserMapper:
 
         # 验证 uuid
         if user.mc_uuid == None:
-            user.mc_uuid = tools.get_uuid_by_name(user.user_name)
-            if user.mc_uuid == None: return     # 名称不合法
+            uuid = None
+            try:
+                (display_name, uuid) = tools.get_name_and_uuid_by_name(user.user_name)
+            except:
+                pass
+            if uuid == None: return False
+            user.display_name = display_name
+            user.mc_uuid = uuid
 
         # uuid 已被绑定 
         if UserMapper.exists_mc_uuid(user.mc_uuid): 
             logger.error(f"uuid:{user.mc_uuid} 已被绑定")
-            return
+            return False
 
         c = conn.cursor()
         # 锁住数据库, 插入操作
         with dblock:
-            c.execute("INSERT INTO users VALUES (?, ?, ?, ?, ?)", (user.qq_num, user.user_name, str(user.mc_uuid), user.whitelisted, user.user_info))
+            c.execute("INSERT INTO users VALUES (?, ?, ?, ?, ?, ?)", (user.qq_num, user.user_name, user.display_name, user.mc_uuid, user.whitelisted, user.user_info))
             conn.commit()
         c.close()
         
         logger.info(f"user_name:{user.user_name} 已被被添加到数据库")
+        return True
 
     # 通过 qq_num 或 user_name 或 mc_uuid, 查找数据库
     def get(qq_num = None, user_name = None, mc_uuid = None) -> User:
@@ -82,7 +90,7 @@ class UserMapper:
             return None
 
         res = res[0]
-        return User(res[0], res[1], res[2], res[3], res[4])
+        return User(res[0], res[1], res[2], res[3], res[4], res[5])
     
     def whitelisted(qq_num):
         pass
@@ -206,6 +214,6 @@ class UserMapper:
 
         users = []
         for r in res:
-            users.append(User(res[0], res[1], res[2], res[3], res[4]))
+            users.append(User(res[0], res[1], res[2], res[3], res[4], res[5]))
         
         return users

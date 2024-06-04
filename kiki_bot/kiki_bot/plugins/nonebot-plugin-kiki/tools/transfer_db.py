@@ -2,6 +2,7 @@ from pathlib import Path
 import sqlite3
 from ..config.config import *
 from ..core.authorization import *
+from ..tools.tools import *
 from nonebot.adapters.onebot.v11 import Bot, Event
 
 async def handle(bot: Bot, event: Event):
@@ -18,6 +19,7 @@ async def handle(bot: Bot, event: Event):
         c_target.execute("""CREATE TABLE users (
                 qq_num text,
                 user_name text,
+                display_name text,
                 mc_uuid text,
                 whitelisted text,
                 user_info text
@@ -43,7 +45,9 @@ async def handle(bot: Bot, event: Event):
 
     c_target = target.cursor()
     for r in res:
-        c_target.execute("INSERT INTO users VALUES (?, ?, ?, ?, ?)", (r[0], r[1].lower(), r[2], 'true', r[4]))
+        name = get_name_by_uuid(r[2])
+        print(f'转移{name}成功')
+        c_target.execute("INSERT INTO users VALUES (?, ?, ?, ?, ?, ?)", (r[0], r[1].lower(), name, r[2], 'true', r[4]))
     target.commit()
     c_target.close()
     c_source.close()

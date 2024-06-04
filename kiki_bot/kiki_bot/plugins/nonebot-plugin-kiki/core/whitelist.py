@@ -100,10 +100,10 @@ class code:
             return
         if data != None:
             # 将玩家添加到数据库, 并添加白名单
-            user = User(user_id, data.user_name, data.mc_uuid)
+            user = User(user_id, data.user_name, data.display_name, data.mc_uuid)
             UserMapper.insert(user)
             whitelist_add(data.user_name)
-            await bot.send(event, Message(f'[CQ:at,qq={user_id}] {user.get_display_name()}是吧，我在服务器等你嗷！来了服务器指定没你好果汁吃！'))
+            await bot.send(event, Message(f'[CQ:at,qq={user_id}] {data.display_name}是吧，我在服务器等你嗷！来了服务器指定没你好果汁吃！'))
         else:
             await bot.send(event, Message(f'[CQ:at,qq={user_id}] 验证码有误，请返回服务器检查'))
 
