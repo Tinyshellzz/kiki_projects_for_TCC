@@ -1,5 +1,6 @@
 *.db
-*.png*.log
+*.png
+*.log
 *.json
 config.yml
 Lagrange.OneBot\keystore.json
