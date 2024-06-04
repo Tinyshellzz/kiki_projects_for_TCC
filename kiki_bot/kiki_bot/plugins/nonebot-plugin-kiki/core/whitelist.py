@@ -78,6 +78,7 @@ class sync():
 class code:
     async def handle(bot: Bot, event: Event):
         if not await auth_group(bot, event, auth_group_list): return
+        print('####################whitelist code start########################')
         user_id = str(event.get_user_id())
 
         # 获取验证码

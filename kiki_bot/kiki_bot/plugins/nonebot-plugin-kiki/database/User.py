@@ -13,5 +13,5 @@ class User:
         return json.dumps(self.__dict__)
     
     def get_display_name(self):
-        (name, uuid) = get_name_and_uuid_by_name(self.name)
+        (name, uuid) = get_name_and_uuid_by_name(self.user_name)
         return name
