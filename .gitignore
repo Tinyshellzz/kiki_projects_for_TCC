@@ -1,5 +1,5 @@
 *.db
 *.png
 *.log
-Lagrange.OneBot\keystore.json
-config-example.yml
+keystore.json
+config copy.yml
