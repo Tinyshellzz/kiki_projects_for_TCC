@@ -67,3 +67,7 @@ async def send_forward_msg(bot: Bot, event: Event, messages):
     res_id = await bot.call_api("send_forward_msg", group_id=event.group_id, messages=messages)
     print(res_id)
     await bot.send(event, MessageSegment.forward(res_id))
+
+class no_action:
+    async def handle(bot: Bot, event: Event):
+        pass
