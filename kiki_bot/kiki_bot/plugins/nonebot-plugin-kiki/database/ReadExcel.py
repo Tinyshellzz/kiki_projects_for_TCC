@@ -4,7 +4,7 @@ from pathlib import Path
 import os
 from os import listdir
 from os.path import isfile, join
-from .UserMapper import UserMapper
+from . import UserMapper 
 from .User import User
 from ..config.config import *
 

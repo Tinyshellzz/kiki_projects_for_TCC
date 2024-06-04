@@ -216,6 +216,7 @@ class delete:
     async def handle(bot: Bot, event: Event):
         # 设置使用权限
         if not await auth_user(bot, event, auth_qq_list): return
+        print("---------------whitelist delete ---------------------")
 
         msg = str(event.get_message())
         user_name = msg.split(' ')[2]
@@ -244,4 +245,4 @@ class insert:
         if state == False:
             await bot.send(event, Message(f"错误"))
         else:
-            await bot.send(event, Message(f"{user_name} 已被删除该玩家"))
+            await bot.send(event, Message(f"{user_name} 玩家插入成功"))
