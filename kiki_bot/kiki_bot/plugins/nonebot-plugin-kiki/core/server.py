@@ -40,6 +40,6 @@ class unban:
         user_name = re.search('^/unban (.*)$', msg)
         user_name = user_name.groups()[0]
 
-        response = excute(f'unban {user_name}')
+        response = excute(f'pardon {user_name}')
 
         await bot.send(event, Message(f'{response}--完成'))
