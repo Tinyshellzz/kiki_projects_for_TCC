@@ -1,4 +1,5 @@
 import json
+from ..tools.tools import *
 
 class User:
     def __init__(self, qq_num, user_name, mc_uuid = None, whitelisted = None, user_info = None):
@@ -10,3 +11,7 @@ class User:
 
     def __repr__(self) -> str:
         return json.dumps(self.__dict__)
+    
+    def get_display_name(self):
+        (name, uuid) = get_name_and_uuid_by_name(self.name)
+        return name
