@@ -12,5 +12,5 @@ auth_qq_list:             # 授权的qq号 (例如 /whitelist update 权限)
   - '3478848836'
   - '1120629503'
   - '3673502571'
-code_prefix: '我是爱坤我{0,1}不[是做]小黑子'     # 白名单验证码前缀, 与服务器要一致
+code_prefix: '我是爱坤我{0,1}不[是做]小黑子'     # 白名单验证码前缀, 与服务器要一致aaa
 kiki_whitelist_db: "D:/Learning/game tips/MineCraft/server/plugins/KikiWhitelist/code.db"  # minecraft服务器白名单数据库的位置, 见 KikiWhitelist插件
