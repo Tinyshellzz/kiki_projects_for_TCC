@@ -27,7 +27,7 @@ def whitelist_add(user_name):
     UserMapper.update_whitelisted_by_name(user_name, 'true')
 
 def whitelist_remove(user_name):
-    UserMapper.update_whitelisted_by_uuid(user_name, None)
+    UserMapper.update_whitelisted_by_name(user_name, None)
 
 def whitelist_delete(user_name):
     UserMapper.delete_by_name(user_name)
