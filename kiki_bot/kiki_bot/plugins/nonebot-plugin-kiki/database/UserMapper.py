@@ -168,6 +168,19 @@ class UserMapper:
             conn.commit()
         c.close()
 
+    # 更新 user_info
+    def update_name_by_uuid(mc_uuid, user_name, display_name):
+        if user_name != None: user_name = user_name.lower()
+        
+        c = conn.cursor()
+        # 锁住数据库
+        with dblock:
+            c.execute("""UPDATE users 
+                    SET user_name=?, display_name=?
+                    WHERE mc_uuid=?""", (user_name, display_name, mc_uuid))
+            conn.commit()
+        c.close()
+
     def update_whitelisted_by_qq(qq_num, whitelisted):
         c = conn.cursor()
         # 锁住数据库
