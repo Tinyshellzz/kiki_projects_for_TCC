@@ -7,6 +7,7 @@ from .core import status
 from .core import whitelist
 from datetime import datetime
 from .config.config import *
+from .core import server
 import re
 from .tools import transfer_db
 from .tools.tools import *
@@ -19,6 +20,8 @@ match_rules = [
     ['^test$', transfer_db, 0],
     ['^/{0,1}help$', replies.help, 10],                     # 帮助
     ['^/{0,1}status$', status, 0],                         # 查看服务器状态
+    ['^/ban (.*)$', server.ban, 0],                         # 封禁玩家
+    ['^/unban (.*)$', server.unban, 0],                      # 解封玩家
     ['^/whitelist update$', whitelist.update, 0],           # 将 在数据库 且 在qq群中 的账号全部添加到白名单
     ['^/whitelist sync$', whitelist.sync, 0],               # 同步minecraft官方的白名单
     ['^/whitelist load$', whitelist.load, 0],               # 从 excels 文件夹加载审核结果
@@ -28,7 +31,7 @@ match_rules = [
     ['^/whitelist insert .*$', whitelist.insert, 0],        # 将玩家插入数据库
     ['^/whitelist getbyqq .*$', whitelist.getbyqq, 0],      # 依据qq查找玩家
     ['^/whitelist getbyname .*$', whitelist.getbyname, 0],  # 依据游戏昵称查找玩家
-    ['^(找人|search) .*$', whitelist.get, 0],               # 万能查询
+    ['^(找人|search).*$', whitelist.get, 0],               # 万能查询
     ['^.*' + code_prefix + '[0-9a-zA-Z]{6}.*$', whitelist.code, 10],   # 白名单验证码
     ['(ip|怎么进服|服务器地址|怎么玩)', replies.ip, 10],
     # ['(未知主机|连接超时|dns|连不上|连接失败|连不了)', replies.dns, 10],

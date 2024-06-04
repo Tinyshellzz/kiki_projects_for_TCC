@@ -3,4 +3,5 @@
 *.log
 keystore.json
 config copy.yml
+config - 副本.yml
 config.yml

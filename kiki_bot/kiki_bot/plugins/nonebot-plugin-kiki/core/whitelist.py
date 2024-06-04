@@ -195,11 +195,12 @@ class get:
     async def handle(bot: Bot, event: Event):
         user_id = str(event.get_user_id())
         msg = str(event.get_message())
-        user_name = msg.split(' ')[1]
-        qq_num = msg.split(' ')[1]
+        
+        match = re.search('^(找人|search)(.*$)', msg)
+        match = match.groups()[1].strip()
 
-        userbyname = UserMapper.get(user_name=user_name)
-        userbyqq = UserMapper.get(qq_num)
+        userbyname = UserMapper.get(user_name=match)
+        userbyqq = UserMapper.get(match)
 
         if userbyname is None and userbyqq is None:
             await bot.send(event, Message((f"[CQ:at,qq={user_id}] 查无此人，请检查id或者qq是否有误")))
