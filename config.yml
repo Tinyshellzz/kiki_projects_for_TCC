@@ -1,9 +1,9 @@
 server_ip: '127.0.0.1'    # minecraft 地址
-server_port: 28800        # minecraft 端口
-rcon_port: 28802          # minecraft rcon 端口
-rcon_password: 'TccServer2024=-9'     # minecraft rcon 密码
-server_whitelist: "E:/Tcc-S3/whitelist.json"   # 服务器白名单位置
-kiki_whitelist_db: "E:/Tcc-S3/plugins/KikiWhitelist/code.db"  # minecraft服务器白名单数据库的位置, 见 KikiWhitelist插件
+server_port: 25565        # minecraft 端口
+rcon_port: 25575          # minecraft rcon 端口
+rcon_password: '8888'     # minecraft rcon 密码
+server_whitelist: "D:/Learning/game tips/MineCraft/server/whitelist.json"   # 服务器白名单位置
+kiki_whitelist_db: "D:/Learning/game tips/MineCraft/server/plugins/KikiWhitelist/code.db"  # minecraft服务器白名单数据库的位置, 见 KikiWhitelist插件
 auth_group_list:          # bot工作qq群, 这些群里的人必须都是服务器玩家
   - '296472922'
   - '318190410'
