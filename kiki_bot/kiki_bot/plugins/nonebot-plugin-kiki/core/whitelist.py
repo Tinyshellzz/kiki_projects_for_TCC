@@ -2,7 +2,7 @@ import mcrcon
 import re
 from ..config.config import *
 from nonebot.adapters.onebot.v11 import Bot
-from ..database.UserMapper import UserMapper
+from ..database import UserMapper
 from ..database.WhitelistCodeMapper import WhitelistCodeMapper
 from nonebot.adapters.onebot.v11 import Bot, Event
 from .authorization import *
