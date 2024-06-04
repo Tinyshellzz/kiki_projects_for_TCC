@@ -1,7 +1,7 @@
 server_ip: '127.0.0.1'    # minecraft 地址
 server_port: 28800        # minecraft 端口
 rcon_port: 28802          # minecraft rcon 端口
-rcon_password: 'TccServer2024=-9'     # minecraft rcon 密码
+rcon_password: '8888'     # minecraft rcon 密码
 server_whitelist: "E:/Tcc-S3/whitelist.json"   # 服务器白名单位置
 auth_group_list:          # bot工作qq群, 这些群里的人必须都是服务器玩家
   - '296472922'
