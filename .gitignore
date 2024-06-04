@@ -2,5 +2,5 @@
 *.png
 *.log
 *.json
-config.yml
+config-example.yml
 Lagrange.OneBot\keystore.json
