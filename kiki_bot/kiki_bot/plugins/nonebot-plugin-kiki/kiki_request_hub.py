@@ -3,7 +3,7 @@ from nonebot import on_request
 from nonebot.adapters.onebot.v11 import Bot, Event
 from nonebot.adapters.onebot.v11.event import GroupRequestEvent
 import re
-from .database.UserMapper import UserMapper
+from .database import UserMapper
 from .config.config import *
 
 matcher=on_request()
