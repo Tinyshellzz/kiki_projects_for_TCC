@@ -6,6 +6,7 @@ import re
 import logging
 import psutil
 import sys
+import time
 
 logger = logging.getLogger(__name__)
 # 获取服务器 tps
@@ -17,7 +18,7 @@ def get_tps():
     try:
         rcon.connect()
         response = rcon.command('tps')
-        match = re.search("Median Region TPS:.*?([0-9]+\.[0-9]+)", response)
+        match = re.search("Median Region TPS:.*?([0-9]{1,2}\.[0-9]+)", response)
         tps_value = match.groups()[0]
     except Exception as e:
         logger.warning(e)
@@ -27,6 +28,8 @@ def get_tps():
 
 def get_system_status():
     # 获取 CPU 状态
+    cpu_usage = psutil.cpu_percent()
+    time.sleep(0.1)
     cpu_usage = psutil.cpu_percent()
     cpu_usage = '{0}%'.format(cpu_usage)
     # 获取 内存 状态

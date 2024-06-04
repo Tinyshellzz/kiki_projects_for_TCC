@@ -17,12 +17,13 @@ async def handle(bot: Bot, event: Event):
     # 创建users表格
     try:
         c_target.execute("""CREATE TABLE users (
-                qq_num text,
-                user_name text,
-                display_name text,
-                mc_uuid text,
-                whitelisted text,
-                user_info text
+            qq_num text,
+            user_name text,
+            display_name text,
+            mc_uuid text,
+            whitelisted text,
+            last_login_time text,
+            user_info text
         )""")
 
         # 创建索引
@@ -45,12 +46,8 @@ async def handle(bot: Bot, event: Event):
 
     c_target = target.cursor()
     for r in res:
-        try:
-            name = get_name_by_uuid(r[2])
-        except:
-            print(f'###############转移{r[1].lower()}失败#############')
-        print(f'转移{name}成功')
-        c_target.execute("INSERT INTO users VALUES (?, ?, ?, ?, ?, ?)", (r[0], r[1].lower(), name, r[2], 'true', r[4]))
+        print(f'转移{r[2]}成功')
+        c_target.execute("INSERT INTO users VALUES (?, ?, ?, ?, ?, ?, ?)", (r[0], r[1], r[2], r[3], r[4], None, r[5]))
     target.commit()
     c_target.close()
     c_source.close()

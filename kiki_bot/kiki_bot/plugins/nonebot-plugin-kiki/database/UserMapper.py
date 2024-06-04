@@ -15,6 +15,7 @@ try:
             display_name text,
             mc_uuid text,
             whitelisted text,
+            last_login_time text,
             user_info text
     )""")
 
@@ -56,10 +57,11 @@ def insert(user: User):
     if exists_mc_uuid(user.mc_uuid): 
         logger.error(f"uuid:{user.mc_uuid} 已被绑定")
         return False
+
     c = conn.cursor()
     # 锁住数据库, 插入操作
     with dblock:
-        c.execute("INSERT INTO users VALUES (?, ?, ?, ?, ?, ?)", (user.qq_num, user.user_name, user.display_name, user.mc_uuid, user.whitelisted, user.user_info))
+        c.execute("INSERT INTO users VALUES (?, ?, ?, ?, ?, ?, ?)", (user.qq_num, user.user_name, user.display_name, user.mc_uuid, user.whitelisted, user.last_login_time, user.user_info))
         conn.commit()
     c.close()
     
@@ -82,7 +84,7 @@ def get(qq_num = None, user_name = None, mc_uuid = None) -> User:
     if len(res) == 0:
         return None
     res = res[0]
-    return User(res[0], res[1], res[2], res[3], res[4], res[5])
+    return User(res[0], res[1], res[2], res[3], res[4], res[5], res[6])
 
 def whitelisted(qq_num):
     pass
@@ -180,14 +182,16 @@ def delete_by_qq(qq_num):
         c.execute("DELETE FROM users WHERE qq_num=:qq_num", {'qq_num': qq_num})
         conn.commit()
     c.close()
-    # 删除
+
+# 删除
 def delete_by_uuid(mc_uuid):
     c = conn.cursor()
     with dblock:
         c.execute("DELETE FROM users WHERE mc_uuid=:mc_uuid", {'mc_uuid': mc_uuid})
         conn.commit()
     c.close()
-    # 删除
+
+# 删除
 def delete_by_name(user_name):
     if user_name != None: user_name = user_name.lower()
     
@@ -196,6 +200,7 @@ def delete_by_name(user_name):
         c.execute("DELETE FROM users WHERE user_name=:user_name", {'user_name': user_name})
         conn.commit()
     c.close()
+
 def get_all_user():
     c = conn.cursor()
     c.execute("SELECT * FROM users")
@@ -203,6 +208,6 @@ def get_all_user():
     c.close()
     users = []
     for r in res:
-        users.append(User(res[0], res[1], res[2], res[3], res[4], res[5]))
+        users.append(User(res[0], res[1], res[2], res[3], res[4], res[5], res[6]))
     
     return users

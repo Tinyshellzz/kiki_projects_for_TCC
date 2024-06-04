@@ -89,21 +89,29 @@ class code:
 
         # 从验证码数据库获取数据
         data = WhitelistCodeMapper.get(code)
-        print(data)
-        if UserMapper.exists_qq_id(user_id):
-            user = UserMapper.get(qq_num=user_id)
-            await bot.send(event, Message(f'[CQ:at,qq={user_id}] 老东西，你已经绑定了账号『{user.get_display_name()}』无法重复绑定'))
-            return
-        if data != None and UserMapper.exists_mc_uuid(data.mc_uuid):
-            user = UserMapper.get(mc_uuid=data.mc_uuid)
-            await bot.send(event, Message(f'[CQ:at,qq={user_id}] 绑定失败:『{data.user_name}』已被『{user.qq_num}』绑定\n如有问题请联系管理员'))
-            return
         if data != None:
-            # 将玩家添加到数据库, 并添加白名单
-            user = User(user_id, data.user_name, data.display_name, data.mc_uuid)
+            if UserMapper.exists_qq_id(user_id):
+                user = UserMapper.get(qq_num=user_id)
+                if user.mc_uuid != data.mc_uuid:
+                    await bot.send(event, Message(f'[CQ:at,qq={user_id}] 老东西，你已经绑定了账号『{user.get_display_name()}』无法重复绑定'))
+                    return
+                else:
+                    whitelist_add(user.get_display_name())
+                    await bot.send(event, Message(f'[CQ:at,qq={user_id}]『{data.display_name}』是吧，我在服务器等你嗷！来了服务器指定没你好果汁吃！'))
+                    return
+            if UserMapper.exists_mc_uuid(data.mc_uuid):
+                user = UserMapper.get(mc_uuid=data.mc_uuid)
+                if user.qq_num != user_id:
+                    await bot.send(event, Message(f'[CQ:at,qq={user_id}] 绑定失败:『{data.user_name}』已被『{user.qq_num}』绑定\n如有问题请联系管理员'))
+                    return
+                else:
+                    whitelist_add(user.get_display_name())
+                    await bot.send(event, Message(f'[CQ:at,qq={user_id}]『{data.display_name}』是吧，我在服务器等你嗷！来了服务器指定没你好果汁吃！'))
+                    return
+            # 不存在数据库记录, 则将将玩家添加到数据库
+            user = User(user_id, data.user_name, data.display_name, data.mc_uuid, 'true', data.last_login_time)
             UserMapper.insert(user)
-            whitelist_add(data.user_name)
-            await bot.send(event, Message(f'[CQ:at,qq={user_id}] {data.display_name}是吧，我在服务器等你嗷！来了服务器指定没你好果汁吃！'))
+            await bot.send(event, Message(f'[CQ:at,qq={user_id}]『{data.display_name}』是吧，我在服务器等你嗷！来了服务器指定没你好果汁吃！'))
         else:
             await bot.send(event, Message(f'[CQ:at,qq={user_id}] 验证码有误，请返回服务器检查'))
 

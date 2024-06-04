@@ -21,4 +21,4 @@ class WhitelistCodeMapper:
             return None
         
         res = res[0]
-        return WhitelistCode(res[0], res[1], res[2], res[3])
+        return WhitelistCode(res[0], res[1], res[2], res[3], res[4])

@@ -3,12 +3,13 @@ from ..tools.tools import *
 from .UserMapper import *
 
 class User:
-    def __init__(self, qq_num, user_name, display_name = None, mc_uuid = None, whitelisted = None, user_info = None):
+    def __init__(self, qq_num, user_name, display_name = None, mc_uuid = None, whitelisted = None, last_login_time = None, user_info = None):
         self.qq_num = qq_num
         self.user_name = user_name.lower()
         self.display_name = display_name
         self.mc_uuid = mc_uuid
         self.whitelisted = whitelisted
+        self.last_login_time = last_login_time
         self.user_info = user_info      # 封禁理由, 封禁时间 之类的
 
     def __repr__(self) -> str:
