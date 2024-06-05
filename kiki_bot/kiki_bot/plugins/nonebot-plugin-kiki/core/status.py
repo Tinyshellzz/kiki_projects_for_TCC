@@ -8,11 +8,10 @@ import json
 from .authorization import *
 import os
 from ..config.config import *
+from ..tools.tools import *
+from ..tools.async_tools import *
 
 plugin_dir = str(Path(__file__).resolve().parents[1])
-background = Image.open(plugin_dir+"/resources/status.png")
-font = ImageFont.truetype(plugin_dir+"/resources/YeZiGongChangAoYeHei-2.ttf", 36)
-num = 0
 
 # 入口函数
 async def handle(bot: Bot, event: Event):
@@ -53,36 +52,10 @@ async def send_picture(bot: Bot, event: Event):
         f"本次指令由“{user_id}”唤起",
         f"唤起时间: {_current_time}",
     ]
-    text_start_x = 170
-    text_start_y = 390
-    text_color = (255, 255, 255)
-    line_spacing = 20
-
-    width, height = background.size
-    image = Image.new('RGBA', (width, height))
-    image.paste(background, (0, 0))
-    draw = ImageDraw.Draw(image)
-
-    # 计算字体高度
-    text_box = draw.textbbox((0, 0), text_lines[0], font)
-    text_height = text_box[3] - text_box[1] 
-
-    # 开始画文本
-    for line in text_lines:
-        draw.text((text_start_x, text_start_y), line, font=font, fill=text_color)
-        text_start_y += text_height + line_spacing
-        if text_start_y > height:
-            break
-    # 保存图片
-    image.save(url, 'PNG')
-    time.sleep(0.1)
-
+    
+    url = draw_text_lines('status', text_lines)
+    
     # 发送图片
     await bot.send(event, Message(f"[CQ:image,file={url}]"))
-    time.sleep(0.1)
-
-    try:
-        old = num-1
-        os.remove(plugin_dir + f"/Output_Serverstatus_{old}.png")
-    except:
-        pass
+    sleep(1)
+    os.remove(url)

@@ -3,7 +3,8 @@ from nonebot.adapters.onebot.v11 import Bot, Event, GroupMessageEvent
 from nonebot.adapters.onebot.v11.message import Message
 from pathlib import Path
 from ..config.config import *
-from ..tools.tools import *
+from ..tools.async_tools import *
+import requests
 import json
 
 plugin_dir = str(Path(__file__).resolve().parents[1])

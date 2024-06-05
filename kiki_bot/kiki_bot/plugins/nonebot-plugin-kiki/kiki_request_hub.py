@@ -20,18 +20,18 @@ class GroupRequest:
         if not isinstance(event, GroupRequestEvent): return
         # 不在目标群
         group_id = event.group_id
-        if not (group_id in auth_group_list): return
+        if not (str(group_id) in auth_group_list): return
         
         # 入群验证的答案
         answer = re.search(".*答案：(.*)", event.comment)
         answer = answer.groups()[0]
 
         # 申请者的QQ号
-        user_id = event.get_user_id()
+        user_id = str(event.get_user_id())
         # QQ号再数据库中, 就同意入群
         if UserMapper.exists_qq_id(user_id):
             await bot.set_group_add_request(flag = event.flag, approve=True)
         else:
             # False拒绝申请, True就是同意
-            await bot.set_group_add_request(flag = event.flag, approve=True, reason='答案错误')
+            await bot.set_group_add_request(flag = event.flag, approve=False, reason='答案错误')
         

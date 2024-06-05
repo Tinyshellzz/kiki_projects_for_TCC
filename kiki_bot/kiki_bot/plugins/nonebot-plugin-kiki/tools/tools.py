@@ -1,6 +1,15 @@
 import requests
 from nonebot.adapters.onebot.v11.message import Message, MessageSegment
 from nonebot.adapters.onebot.v11 import Bot, Event
+from ..config.config import *
+from PIL import Image, ImageDraw, ImageFont
+import os
+import time
+import threading
+
+background = Image.open(plugin_dir+"/resources/status.png")
+font = ImageFont.truetype(plugin_dir+"/resources/YeZiGongChangAoYeHei-2.ttf", 36)
+num = 0
 
 def get_uuid_by_name(user_name):
     url = f'https://api.mojang.com/users/profiles/minecraft/{user_name}?'
@@ -39,18 +48,6 @@ def get_name_by_uuid(uuid):
     user_name = data['name']
     return user_name
 
-def to_msg_node(msg):
-    ret = {
-                "type": "node",
-                "data": {
-                    "name": "KiKi机器人",
-                    "uin": "3975252362",
-                    "content": [MessageSegment.text(msg)],
-                },
-        }
-    
-    return ret
-
 def to_image_node(fpath):
     ret = {
                 "type": "node",
@@ -63,11 +60,38 @@ def to_image_node(fpath):
     
     return ret
 
-async def send_forward_msg(bot: Bot, event: Event, messages):
-    res_id = await bot.call_api("send_forward_msg", group_id=event.group_id, messages=messages)
-    print(res_id)
-    await bot.send(event, MessageSegment.forward(res_id))
-
 class no_action:
     async def handle(bot: Bot, event: Event):
         pass
+
+def draw_text_lines(name, text_lines):
+    global num
+
+    num = num + 1
+    url = plugin_dir + f"/{name}_{num}.png"
+
+    text_start_x = 170
+    text_start_y = 390
+    text_color = (255, 255, 255)
+    line_spacing = 20
+
+    width, height = background.size
+    image = Image.new('RGBA', (width, height))
+    image.paste(background, (0, 0))
+    draw = ImageDraw.Draw(image)
+
+    # 计算字体高度
+    text_box = draw.textbbox((0, 0), text_lines[0], font)
+    text_height = text_box[3] - text_box[1] 
+
+    # 开始画文本
+    for line in text_lines:
+        draw.text((text_start_x, text_start_y), line, font=font, fill=text_color)
+        text_start_y += text_height + line_spacing
+        if text_start_y > height:
+            break
+    # 保存图片
+    image.save(url, 'PNG')
+    time.sleep(0.1)
+
+    return url
