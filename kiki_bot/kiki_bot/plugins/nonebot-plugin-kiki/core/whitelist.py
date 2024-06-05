@@ -189,7 +189,10 @@ class get:
         match = match.groups()[1].strip()
 
         userbyname = UserMapper.get(user_name=match)
-        userbyqq = UserMapper.get(match)
+
+        match = re.search('([0-9]*)', match)
+        match = match.groups()[0].strip()
+        userbyqq = UserMapper.get(qq_num=match)
 
         if userbyname is None and userbyqq is None:
             await bot.send(event, Message((f"[CQ:at,qq={user_id}] 查无此人, 请检查id或者qq是否有误")))
