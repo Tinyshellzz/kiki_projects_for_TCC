@@ -204,7 +204,7 @@ class online:
     async def handle(bot: Bot, event: Event):
         user_id = str(event.get_user_id())
         
-        response = json.loads(requests.get("http://127.0.0.1:8000/mcstatus/").text)
+        response = json.loads(requests.get("http://127.0.0.1:8000/mcstatus/online/").text)
         print(response)
         msg = response['online']
 
