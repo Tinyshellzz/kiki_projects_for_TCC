@@ -92,7 +92,13 @@ class code:
         code = re.search('^.*' + code_prefix + '([0-9a-zA-Z]{6}).*$', msg)
         code = code.groups()[0].lower()
 
-        # 从验证码数据库获取数据
+        #检测是否已经是老东西
+        if UserMapper.exists_qq_id(user_id):
+            user = UserMapper.get(qq_num=user_id)
+            await bot.send(event, Message(f'[CQ:at,qq={user_id}] 老东西，你已经绑定了账号『{user.get_display_name()}』无法重复绑定'))
+            return
+
+        # 从验证码数据库获取验证码数据
         data = WhitelistCodeMapper.get(code)
         if data != None:
             if UserMapper.exists_qq_id(user_id):
