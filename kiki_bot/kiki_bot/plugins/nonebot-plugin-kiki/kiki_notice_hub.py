@@ -51,8 +51,10 @@ class GroupIncreaseNotice:
         user_name = UserMapper.get(str(event.get_user_id()))
         whitelist_add(user_name)
         sleep(1)
-        os.remove(url)
-
+        try:
+            os.remove(url)
+        except:
+            pass
 
 
 class GroupDecreaseNotice:
