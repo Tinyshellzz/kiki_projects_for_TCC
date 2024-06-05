@@ -89,7 +89,7 @@ at_self_replies = [
     "哈比下",
     "牡蛎莫牡蛎",
     "TD",
-    "CTMD金刚钻又坏了"
+    "他宝贝的金刚钻又坏了"
 ]
 class at_self:
     async def handle(bot: Bot, event: Event):
