@@ -89,6 +89,9 @@ def draw_text_lines(name, text_lines):
         filename, file_extension = os.path.splitext(f)
         file = join(plugin_dir, f)
         if isfile(file) and (file_extension == '.png' or file_extension == '.jpg') and f != file_name:
-            os.remove(file)
+            try:
+                os.remove(file)
+            except:
+                pass
 
     return url
