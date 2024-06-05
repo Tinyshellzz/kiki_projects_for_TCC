@@ -58,4 +58,7 @@ async def send_picture(bot: Bot, event: Event):
     # 发送图片
     await bot.send(event, Message(f"[CQ:image,file={url}]"))
     sleep(1)
-    os.remove(url)
+    try:
+        os.remove(url)
+    except:
+        pass
