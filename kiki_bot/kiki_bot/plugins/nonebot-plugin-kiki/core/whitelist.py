@@ -184,6 +184,7 @@ class get:
     async def handle(bot: Bot, event: Event):
         user_id = str(event.get_user_id())
         msg = str(event.get_message())
+        print(msg)
         
         match = re.search('^(找人|search)(.*$)', msg)
         match = match.groups()[1].strip()
