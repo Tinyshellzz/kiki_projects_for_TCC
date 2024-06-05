@@ -1,6 +1,7 @@
 from django.shortcuts import render, HttpResponse
 from django.http import JsonResponse
 from kiki_app.services import myMcstatus
+import json
 
 
 # Create your views here.
@@ -16,7 +17,7 @@ def mcstatus(request):
 
 def mcstatusOnline(request):
     online = myMcstatus.get_online_players()
-    return JsonResponse(online)
+    return HttpResponse(json.dumps(online,ensure_ascii=False),content_type="application/json,charset=utf-8")
 
 def mcstatusTps(request):
     tps = myMcstatus.get_tps()
