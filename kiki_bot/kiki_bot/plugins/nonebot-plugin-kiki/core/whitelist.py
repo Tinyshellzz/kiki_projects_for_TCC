@@ -187,12 +187,16 @@ class get:
         print(msg)
         
         match = re.search('^(找人|search)(.*$)', msg)
-        match = match.groups()[1].strip()
-        userbyname = UserMapper.get(user_name=match)
+        userbyname = None
+        if len(match.groups()) == 2:
+            match = match.groups()[1].strip()
+            userbyname = UserMapper.get(user_name=match)
 
-        match = re.search('([0-9]*)', msg)
-        match = match.groups()[0]
-        userbyqq = UserMapper.get(qq_num=match)
+        userbyqq = None
+        match = re.search('([0-9]{8,12})', msg)
+        if match != None:
+            match = match.groups()[0]
+            userbyqq = UserMapper.get(qq_num=match)
 
         if userbyname is None and userbyqq is None:
             await bot.send(event, Message((f"[CQ:at,qq={user_id}] 查无此人, 请检查id或者qq是否有误")))
