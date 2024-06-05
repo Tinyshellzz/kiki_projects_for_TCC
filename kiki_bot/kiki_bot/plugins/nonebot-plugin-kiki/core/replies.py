@@ -86,6 +86,7 @@ at_self_replies = [
 class at_self:
     async def handle(bot: Bot, event: Event):
         user_id = str(event.get_user_id())
+        print('-------------replies at_self---------------')
         
         msg = at_self_replies[randrange(len(at_self_replies))]
         await bot.send(event, Message(f"[CQ:at,qq={user_id}] {msg}"))
