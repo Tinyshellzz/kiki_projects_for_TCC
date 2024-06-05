@@ -12,8 +12,6 @@ logger = logging.getLogger(__name__)
 # 获取服务器 tps
 def get_tps():
     tps_value = None
-    print('config.project_dir', file=sys.stderr)
-    print(config.project_dir, file=sys.stderr)
     rcon = mcrcon.MCRcon(config.serIP, config.rconPw, config.rconPort, timeout=2)
     try:
         rcon.connect()
@@ -60,3 +58,17 @@ def get_mc_status():
         logger.warning(e)
     
     return {'onlinePlayers': None, 'queryLatency': None, 'version': None}
+
+def get_online_players():
+    online = None
+    rcon = mcrcon.MCRcon(config.serIP, config.rconPw, config.rconPort, timeout=2)
+    try:
+        rcon.connect()
+        response = rcon.command('tps')
+        match = re.search("(.*)", response)
+        online = match.groups()[0]
+    except Exception as e:
+        logger.warning(e)
+    finally:
+        rcon.disconnect()
+    return {"online": online}

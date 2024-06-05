@@ -14,6 +14,9 @@ def mcstatus(request):
     all_status = {**mc_status, 'tps': tps, **system_status}
     return JsonResponse(all_status)
 
+def mcstatusOnline(request):
+    online = myMcstatus.get_online_players()
+    return JsonResponse(online)
 
 def mcstatusTps(request):
     tps = myMcstatus.get_tps()
