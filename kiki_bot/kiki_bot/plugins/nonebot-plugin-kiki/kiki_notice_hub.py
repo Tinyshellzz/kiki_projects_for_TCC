@@ -44,7 +44,8 @@ class GroupIncreaseNotice:
         group_id = event.group_id
         
         url = draw_text_lines('welcome', text_lines)
-        await bot.send_group_msg(group_id=group_id, message=Message(f"[CQ:image,file={url}]"))
+        user_id = str(event.user_id)
+        await bot.send_group_msg(group_id=group_id, message=Message(f"[CQ:at,qq={user_id}] [CQ:image,file={url}]"))
 
         # 将玩家添加到白名单
         user_name = UserMapper.get(str(event.get_user_id()))
