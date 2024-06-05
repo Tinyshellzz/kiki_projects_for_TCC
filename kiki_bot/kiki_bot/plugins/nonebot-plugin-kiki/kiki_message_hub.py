@@ -32,6 +32,7 @@ match_rules = [
     ['^(找人|search).*$', whitelist.get, 0],                # 万能查询
     ['^online$', replies.online, 0],                        # 查看在线晚间
     ['^.*' + code_prefix + '[0-9a-zA-Z]{6}.*$', whitelist.code, 10],   # 白名单验证码
+    ['(3975252362)', replies.at_self, 10],   # 白名单验证码
     ['(怎么进服|服务器地址|怎么玩)', replies.ip, 10],
     # ['(未知主机|连接超时|dns|连不上|连接失败|连不了)', replies.dns, 10],
     ['(怎么飞|飞行)', replies.fly, 10],

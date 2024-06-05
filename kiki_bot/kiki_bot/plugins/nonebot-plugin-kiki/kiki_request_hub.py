@@ -33,5 +33,6 @@ class GroupRequest:
             await bot.set_group_add_request(flag = event.flag, approve=True)
         else:
             # False拒绝申请, True就是同意
-            await bot.set_group_add_request(flag = event.flag, approve=False, reason='答案错误')
+            pass
+            # await bot.set_group_add_request(flag = event.flag, approve=False, reason='答案错误')
         

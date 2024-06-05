@@ -20,6 +20,18 @@ def to_msg_node(msg):
         }
     
     return ret
+    
+def to_image_node(fpath):
+    ret = {
+                "type": "node",
+                "data": {
+                    "name": "KiKi机器人",
+                    "uin": "3975252362",
+                    "content": [MessageSegment.image(fpath)],
+                },
+        }
+    
+    return ret
 
 async def get_user_info(bot: Bot, event: Event, user_id):
     return await bot.call_api('get_stranger_info', user_id=user_id)

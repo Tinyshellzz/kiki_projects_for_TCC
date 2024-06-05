@@ -10,6 +10,7 @@ from ..database.User import User
 from ..database.ReadExcel import *
 from threading import Lock
 from ..tools.tools import *
+from ..tools.async_tools import *
 import json
 
 def whitelist_insert(qq_num, _user_name):
@@ -35,7 +36,8 @@ def whitelist_delete(user_name):
 # 展示user
 async def dispaly_user(bot: Bot, event: Event, user: User):
     user_id = str(event.get_user_id())
-    await bot.send(event, Message(f"[CQ:at,qq={user_id}]\nqq: {user.qq_num}\n游戏昵称: {user.get_display_name()}\n白名单: {user.whitelisted}\n上次登录: {user.last_login_time}\n备注: {user.user_info}"))
+    messages = [to_msg_node("qq: {user.qq_num}\n游戏昵称: {user.get_display_name()}\n白名单: {user.whitelisted}\n上次登录: {user.last_login_time}\n备注: {user.user_info}")]
+    await send_forward_msg(bot, event, messages)
 
 
 # 检查列表里所有的QQ号, 已经数据库中的记录, 据此更改 whitelist
