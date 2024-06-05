@@ -10,8 +10,10 @@ import os
 from ..config.config import *
 from ..tools.tools import *
 from ..tools.async_tools import *
+import uuid
 
 plugin_dir = str(Path(__file__).resolve().parents[1])
+last_url = None
 
 # 入口函数
 async def handle(bot: Bot, event: Event):
@@ -23,14 +25,10 @@ async def handle(bot: Bot, event: Event):
     await send_picture(bot, event)
 
 async def send_picture(bot: Bot, event: Event):
-    global num
-
+    global last_url
     user_id = event.get_user_id()
     current_time = datetime.now()
     _current_time = current_time.strftime("%Y-%m-%d %H:%M:%S")
-    # 文件存储位置
-    num = num + 1
-    url = plugin_dir + f"/Output_Serverstatus_{num}.png"
 
     # 获取minecraft状态, 并计算用时
     mc = json.loads(requests.get("http://127.0.0.1:8000/mcstatus/").text)
@@ -57,8 +55,3 @@ async def send_picture(bot: Bot, event: Event):
     
     # 发送图片
     await bot.send(event, Message(f"[CQ:image,file={url}]"))
-    sleep(1)
-    try:
-        os.remove(url)
-    except:
-        pass

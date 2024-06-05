@@ -6,6 +6,9 @@ from PIL import Image, ImageDraw, ImageFont
 import os
 import time
 import threading
+from datetime import datetime
+from os import listdir
+from os.path import isfile, join
 
 background = Image.open(plugin_dir+"/resources/status.png")
 font = ImageFont.truetype(plugin_dir+"/resources/YeZiGongChangAoYeHei-2.ttf", 36)
@@ -53,10 +56,11 @@ class no_action:
         pass
 
 def draw_text_lines(name, text_lines):
-    global num
+    current_time = datetime.now()
+    current_time_str = current_time.strftime("%Y-%m-%d'T'%H:%M:%S")
 
-    num = num + 1
-    url = plugin_dir + f"/{name}_{num}.png"
+    file_name = f"/{name}_{current_time_str}.png"
+    url = plugin_dir + file_name
 
     text_start_x = 170
     text_start_y = 390
@@ -80,6 +84,11 @@ def draw_text_lines(name, text_lines):
             break
     # 保存图片
     image.save(url, 'PNG')
-    time.sleep(0.1)
+
+    for f in listdir(plugin_dir):
+        filename, file_extension = os.path.splitext(f)
+        file = join(plugin_dir, f)
+        if isfile(file) and (file_extension == '.png' or file_extension == '.jpg') and f != file_name:
+            os.remove(file)
 
     return url

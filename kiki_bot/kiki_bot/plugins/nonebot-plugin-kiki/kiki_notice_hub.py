@@ -17,9 +17,11 @@ async def _(bot: Bot, event: Event):
     await GroupIncreaseNotice.handle(bot, event)
     await GroupDecreaseNotice.handle(bot, event)
 
+last_url = None
 # 新成员入群处理
 class GroupIncreaseNotice:
     async def handle(bot: Bot, event: Event):
+        global last_url
         # 判断是否是新成员入群事件
         if not isinstance(event, GroupIncreaseNoticeEvent): return
         if not (str(event.group_id) in auth_group_list): return
@@ -50,11 +52,6 @@ class GroupIncreaseNotice:
         # 将玩家添加到白名单
         user_name = UserMapper.get(str(event.get_user_id()))
         whitelist_add(user_name)
-        sleep(1)
-        try:
-            os.remove(url)
-        except:
-            pass
 
 
 class GroupDecreaseNotice:
