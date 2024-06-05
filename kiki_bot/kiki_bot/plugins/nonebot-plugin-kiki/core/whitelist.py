@@ -92,19 +92,18 @@ class code:
         code = re.search('^.*' + code_prefix + '([0-9a-zA-Z]{6}).*$', msg)
         code = code.groups()[0].lower()
 
-        if UserMapper.exists_qq_id(user_id):
-            user = UserMapper.get(qq_num=user_id)
-            if user.mc_uuid != data.mc_uuid:
-                await bot.send(event, Message(f'[CQ:at,qq={user_id}] 老东西，你已经绑定了账号『{user.get_display_name()}』无法重复绑定'))
-                return
-            else:
-                whitelist_add(user.get_display_name())
-                await bot.send(event, Message(f'[CQ:at,qq={user_id}]『{data.display_name}』是吧，我在服务器等你嗷！来了服务器指定没你好果汁吃！'))
-                return
-        
         # 从验证码数据库获取数据
         data = WhitelistCodeMapper.get(code)
         if data != None:
+            if UserMapper.exists_qq_id(user_id):
+                user = UserMapper.get(qq_num=user_id)
+                if user.mc_uuid != data.mc_uuid:
+                    await bot.send(event, Message(f'[CQ:at,qq={user_id}] 老东西，你已经绑定了账号『{user.get_display_name()}』无法重复绑定'))
+                    return
+                else:
+                    whitelist_add(user.get_display_name())
+                    await bot.send(event, Message(f'[CQ:at,qq={user_id}]『{data.display_name}』是吧，我在服务器等你嗷！来了服务器指定没你好果汁吃！'))
+                    return
             if UserMapper.exists_mc_uuid(data.mc_uuid):
                 user = UserMapper.get(mc_uuid=data.mc_uuid)
                 if user.qq_num != user_id:
