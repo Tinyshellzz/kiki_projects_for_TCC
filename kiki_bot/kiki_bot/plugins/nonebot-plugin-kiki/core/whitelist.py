@@ -35,7 +35,7 @@ def whitelist_delete(user_name):
 # 展示user
 async def dispaly_user(bot: Bot, event: Event, user: User):
     user_id = str(event.get_user_id())
-    await bot.send(event, Message(f"[CQ:at,qq={user_id}]\nqq: {user.qq_num}\n游戏昵称: {user.get_display_name()}\nuuid: {user.mc_uuid}\n白名单: {user.whitelisted}\n上次登录: {user.last_login_time}\n备注: {user.user_info}"))
+    await bot.send(event, Message(f"[CQ:at,qq={user_id}]\nqq: {user.qq_num}\n游戏昵称: {user.get_display_name()}\n白名单: {user.whitelisted}\n上次登录: {user.last_login_time}\n备注: {user.user_info}"))
 
 
 # 检查列表里所有的QQ号, 已经数据库中的记录, 据此更改 whitelist

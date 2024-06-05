@@ -52,19 +52,12 @@ class help:
     async def handle(bot: Bot, event: Event):
         user_id = str(event.get_user_id())
 
-        if user_id in auth_qq_list:
-            msg = (f"[CQ:at,qq={user_id}] \n" +
-                    "status\n查看服务器状态\n\n"+
-                    "/whitelist update\n将 在数据库 且 在qq群中 的账号全部添加到白名单\n\n" +
-                    "/whitelist load\n从 excels 文件夹加载审核结果, 并把审核通过的消息发送给候选人\n\n"
-            )
-        else:
-            msg = (f"[CQ:at,qq={user_id}] \n" +
-                    "status\n查看服务器状态\n\n"
-                    "/whitelist getqq QQ号\n依据qq查找玩家\n\n" +
-                    "/whitelist getname 游戏昵称\n依据游戏昵称查找玩家"
-                    "找人 游戏id或者qq号\n根据qq或者id查找玩家\n"
-            )
+        msg = (f"[CQ:at,qq={user_id}] \n" +
+                            "status: 查看服务器状态\n"
+                            "找人 昵称: 找人"
+                    )
+        if user_id  in auth_qq_list:
+            msg = msg + ("\n")
         await bot.send(event, Message(msg))
 
 
