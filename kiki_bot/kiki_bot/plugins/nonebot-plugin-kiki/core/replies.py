@@ -6,6 +6,7 @@ from ..config.config import *
 from ..tools.async_tools import *
 import requests
 import json
+from random import randrange
 
 plugin_dir = str(Path(__file__).resolve().parents[1])
 
@@ -74,18 +75,20 @@ class online:
         messages = []
         messages.append(to_msg_node(msg))
         await send_forward_msg(bot, event, messages)
-{}
+
+at_self_replies = [
+    "找我干嘛！",
+    "牡蛎哒哟",
+    "亚美蝶",
+    "爱你的猫帕瓦",
+    "我只是个bot，不要为难人家"
+]
 class at_self:
     async def handle(bot: Bot, event: Event):
         user_id = str(event.get_user_id())
         
-        response = json.loads(requests.get("http://127.0.0.1:8000/mcstatus/online/").text)
-        print(response)
-        msg = response['online']
-
-        messages = []
-        messages.append(to_msg_node(msg))
-        await send_forward_msg(bot, event, messages)
+        msg = at_self_replies[randrange(len(at_self_replies))]
+        await bot.send(event, Message(f"[CQ:at,qq={user_id}] {msg}"))
 
 
 
