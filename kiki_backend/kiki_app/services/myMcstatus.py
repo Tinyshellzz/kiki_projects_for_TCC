@@ -65,6 +65,7 @@ def get_online_players():
     try:
         rcon.connect()
         response = rcon.command('list')
+        print(response)
         match = re.search("(.*)", response)
         online = match.groups()[0]
     except Exception as e:
