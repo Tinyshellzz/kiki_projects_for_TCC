@@ -187,11 +187,10 @@ class get:
         
         match = re.search('^(找人|search)(.*$)', msg)
         match = match.groups()[1].strip()
-
         userbyname = UserMapper.get(user_name=match)
 
-        match = re.search('([0-9]*)', match)
-        match = match.groups()[0].strip()
+        match = re.search('([0-9]*)', msg)
+        match = match.groups()[0]
         userbyqq = UserMapper.get(qq_num=match)
 
         if userbyname is None and userbyqq is None:
