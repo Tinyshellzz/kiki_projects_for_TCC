@@ -3,6 +3,5 @@
 *.log
 keystore.json
 __pycache__/
-config copy.yml
 config - 副本.yml
 config.yml

@@ -1,0 +1,16 @@
+server_ip: '127.0.0.1'    # minecraft 地址
+server_port: 25565        # minecraft 端口
+rcon_port: 25575          # minecraft rcon 端口
+rcon_password: '8888'     # minecraft rcon 密码
+server_whitelist: "D:/Learning/game tips/MineCraft/server/whitelist.json"   # 服务器白名单位置
+kiki_whitelist_db: "D:/Learning/game tips/MineCraft/server/plugins/KikiWhitelist/code.db"  # minecraft服务器白名单数据库的位置, 见 KikiWhitelist插件
+auth_group_list:          # bot工作qq群, 这些群里的人必须都是服务器玩家
+  - '296472922'
+  - '318190410'
+  - '936461179'
+  - '536038559'
+auth_qq_list:             # 授权的qq号 (例如 /whitelist update 权限)
+  - '3478848836'
+  - '1120629503'
+  - '3673502571'
+code_prefix: '我是爱坤我{0,1}不[是做]小黑子'     # 白名单验证码前缀, 与服务器要一致
