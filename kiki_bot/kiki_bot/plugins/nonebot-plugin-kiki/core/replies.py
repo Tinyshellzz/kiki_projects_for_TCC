@@ -74,7 +74,18 @@ class online:
         messages = []
         messages.append(to_msg_node(msg))
         await send_forward_msg(bot, event, messages)
+{}
+class at_self:
+    async def handle(bot: Bot, event: Event):
+        user_id = str(event.get_user_id())
+        
+        response = json.loads(requests.get("http://127.0.0.1:8000/mcstatus/online/").text)
+        print(response)
+        msg = response['online']
 
+        messages = []
+        messages.append(to_msg_node(msg))
+        await send_forward_msg(bot, event, messages)
 
 
 

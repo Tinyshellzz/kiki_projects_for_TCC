@@ -48,18 +48,6 @@ def get_name_by_uuid(uuid):
     user_name = data['name']
     return user_name
 
-def to_image_node(fpath):
-    ret = {
-                "type": "node",
-                "data": {
-                    "name": "KiKi机器人",
-                    "uin": "3975252362",
-                    "content": [MessageSegment.image(fpath)],
-                },
-        }
-    
-    return ret
-
 class no_action:
     async def handle(bot: Bot, event: Event):
         pass
