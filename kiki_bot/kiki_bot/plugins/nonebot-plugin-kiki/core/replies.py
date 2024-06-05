@@ -81,7 +81,14 @@ at_self_replies = [
     "牡蛎哒哟",
     "亚美蝶",
     "爱你的猫帕瓦",
-    "我只是个bot，不要为难人家"
+    "我只是个bot，不要为难人家",
+    "装逼我让你飞起来",
+    "要不要让你看看什么叫黑手",
+    "哈利路大旋风",
+    "哈比下",
+    "牡蛎莫牡蛎",
+    "TD",
+    "CNMD金刚钻又坏了"
 ]
 class at_self:
     async def handle(bot: Bot, event: Event):
