@@ -64,7 +64,7 @@ def get_online_players():
     rcon = mcrcon.MCRcon(config.serIP, config.rconPw, config.rconPort, timeout=2)
     try:
         rcon.connect()
-        response = rcon.command('tps')
+        response = rcon.command('list')
         match = re.search("(.*)", response)
         online = match.groups()[0]
     except Exception as e:
