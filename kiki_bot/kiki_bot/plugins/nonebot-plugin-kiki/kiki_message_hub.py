@@ -19,7 +19,7 @@ cooldown_dicts = []
 match_rules = [
     ['^test$', no_action, 0],
     ['^/{0,1}(help|帮助)$', replies.help, 10],                     # 帮助
-    ['^/{0,1}status$', status, 0],                         # 查看服务器状态
+    ['^/{0,1}status$', status, 60],                         # 查看服务器状态
     ['^/ban (.*)$', server.ban, 0],                         # 封禁玩家
     ['^/unban (.*)$', server.unban, 0],                      # 解封玩家
     ['^/whitelist update$', whitelist.update, 0],           # 将 在数据库 且 在qq群中 的账号全部添加到白名单
@@ -33,7 +33,7 @@ match_rules = [
     ['川川', whitelist.hi, 0],                             # 川川
     ['^online$', replies.online, 0],                        # 查看在线晚间
     ['^.*' + code_prefix + '[0-9a-zA-Z]{6}.*$', whitelist.code, 10],   # 白名单验证码
-    ['3975252362', replies.at_self, 10],   # 白名单验证码
+    ['(3975252362|3624128565)', replies.at_self, 10],   # 白名单验证码
     ['(怎么进服|服务器地址|怎么玩)', replies.ip, 10],
     # ['(未知主机|连接超时|dns|连不上|连接失败|连不了)', replies.dns, 10],
     ['(怎么飞|飞行)', replies.fly, 10],
@@ -47,7 +47,10 @@ async def _(bot: Bot, event: Event):
     for i in range(len(match_rules)):
         cooldown_dicts.append({})
 
-    msg = str(event.get_message())
+    log = event.get_log_string()
+    msg = re.search('\'(.+)\'', log)
+    msg = msg.groups()[0]
+    print(msg)
     for i in range(len(match_rules)):
         rule = match_rules[i]
         if re.search(rule[0], msg) != None:
