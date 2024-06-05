@@ -18,7 +18,7 @@ cooldown_dicts = []
 # [正则, 方法, 冷却(s)]  (会默认调用status.py里面的 handle(bot, event) 方法)
 match_rules = [
     ['^test$', no_action, 0],
-    ['^/{0,1}help$', replies.help, 10],                     # 帮助
+    ['^/{0,1}(help|帮助)$', replies.help, 10],                     # 帮助
     ['^/{0,1}status$', status, 0],                         # 查看服务器状态
     ['^/ban (.*)$', server.ban, 0],                         # 封禁玩家
     ['^/unban (.*)$', server.unban, 0],                      # 解封玩家
