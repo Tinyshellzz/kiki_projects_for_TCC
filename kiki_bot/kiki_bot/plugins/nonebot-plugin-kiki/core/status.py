@@ -79,6 +79,7 @@ async def send_picture(bot: Bot, event: Event):
 
     # 发送图片
     await bot.send(event, Message(f"[CQ:image,file={url}]"))
+    time.sleep(0.1)
 
     try:
         old = num-1
