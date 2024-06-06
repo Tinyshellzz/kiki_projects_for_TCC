@@ -264,6 +264,7 @@ class remarke:
                 if user.user_info != None and user.user_info != '无':
                     if user_id in auth_qq_list:
                         UserMapper.update_info_by_qq(user_id, splite[1])
+                        await bot.send(event, Message((f"[CQ:at,qq={user_id}] {user.display_name} 的备注已设置为 {splite[1]}")))
                     else:
                         await bot.send(event, Message((f"[CQ:at,qq={user_id}] 错误, 你只有已经设置过备注")))
                 else:
@@ -278,11 +279,13 @@ class remarke:
             if user_id in auth_qq_list:
                 user = UserMapper.get(user_name=splite[1])
                 if user == None:
-                    user = UserMapper.get(qq_num=splite[2])
+                    user = UserMapper.get(qq_num=splite[1])
                 if user == None:
                     await bot.send(event, Message((f"[CQ:at,qq={user_id}] 错误, 未找到此人")))
                     return
                 
-                user.user_info = splite[2]
+                user.user_info = ""
+                for i in range(2, len(splite)):
+                    user.user_info += splite[i]
                 UserMapper.update_user(user)
                 await bot.send(event, Message((f"[CQ:at,qq={user_id}] {user.display_name} 的备注已设置为 {splite[2]}")))
