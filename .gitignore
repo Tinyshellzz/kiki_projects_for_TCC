@@ -1,6 +1,7 @@
 *.db
 *.png
-!dns.png
+!dns_win11.png
+!dns_win10.png
 *.log
 keystore.json
 __pycache__/
