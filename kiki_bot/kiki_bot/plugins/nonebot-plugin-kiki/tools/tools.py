@@ -94,5 +94,4 @@ def draw_text_lines(name, text_lines):
             except:
                 pass
 
-    time.sleep(0.5)
     return url
