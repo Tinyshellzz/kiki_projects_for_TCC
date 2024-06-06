@@ -60,8 +60,8 @@ class help:
 
         msg = (f"[CQ:at,qq={user_id}] \n" +
                             "status: 查看服务器状态\n" +
-                            "online: 查看在线玩家" + 
-                            "search 昵称: 找人" +
+                            "online: 查看在线玩家\n" + 
+                            "search 昵称: 找人\n" +
                             "找人 昵称: 找人"
                     )
         if user_id  in auth_qq_list:
