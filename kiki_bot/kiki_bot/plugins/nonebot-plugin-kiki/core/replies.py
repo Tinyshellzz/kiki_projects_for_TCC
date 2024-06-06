@@ -47,7 +47,7 @@ class dns:
         user_id = str(event.get_user_id())
 
         msg = (f"[CQ:at,qq={user_id}]\n"+
-            "下面是教程\n" +
+            "下面是Win11的教程\n" +
             f"[CQ:image,file={plugin_dir}/resources/dns.png]")
         await bot.send(event, Message(msg))
 
