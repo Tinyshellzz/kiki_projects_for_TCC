@@ -63,8 +63,8 @@ class help:
                             "online: 查看在线玩家\n" + 
                             "search <昵称>: 找人\n" +
                             "找人 <昵称>: 找人\n" +
-                            "remarke <昵称>: 添加备注\n" +
-                            "备注 内容: 添加备注"
+                            "remarke <内容>: 添加备注\n" +
+                            "备注 <内容>: 添加备注"
                     )
         if user_id  in auth_qq_list:
             msg = msg + ("")
