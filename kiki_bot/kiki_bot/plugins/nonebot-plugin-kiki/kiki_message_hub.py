@@ -33,9 +33,9 @@ match_rules = [
     ['川川', whitelist.hi, 0],                             # 川川
     ['^online$', replies.online, 0],                        # 查看在线晚间
     ['^.*' + code_prefix + '[0-9a-zA-Z]{6}.*$', whitelist.code, 10],   # 白名单验证码
-    ['(3975252362|3624128565)', replies.at_self, 10],   # 白名单验证码
+    ['(3975252362|3624128565)', replies.at_self, 10],   # 艾特回复
     ['(怎么进服|服务器地址|怎么玩)', replies.ip, 10],
-    # ['(未知主机|连接超时|dns|连不上|连接失败|连不了)', replies.dns, 10],
+    ['(未知主机|连接超时|dns|连不上|连接失败|连不了)', replies.dns, 10], #DNS
     ['(怎么飞|飞行)', replies.fly, 10],
 ]
 

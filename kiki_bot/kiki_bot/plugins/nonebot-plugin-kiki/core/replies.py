@@ -48,7 +48,7 @@ class dns:
 
         msg = (f"[CQ:at,qq={user_id}]\n"+
             "下面是教程\n" +
-            f"[CQ:image,file={plugin_dir}/resources/status.png]")
+            f"[CQ:image,file={plugin_dir}/resources/dns.png]")
         await bot.send(event, Message(msg))
 
 class help:
@@ -87,6 +87,7 @@ at_self_replies = [
     "要不要让你看看什么叫黑手",
     "哈利路大旋风",
     "哈比下",
+    "一得阁拉米啊米诺斯",
     "牡蛎莫牡蛎",
     "TD",
     "他宝贝的金刚钻又坏了"
