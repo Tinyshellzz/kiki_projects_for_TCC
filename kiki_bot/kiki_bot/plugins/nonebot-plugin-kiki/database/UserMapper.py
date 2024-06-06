@@ -67,6 +67,18 @@ def insert(user: User):
     
     logger.info(f"user_name:{user.user_name} 已被被添加到数据库")
     return True
+
+# 更新user
+def update_user(user: User):
+    c = conn.cursor()
+    # 锁住数据库
+    with dblock:
+        c.execute("""UPDATE users 
+                SET user_name=?, display_name=?, mc_uuid=?, whitelisted=?, last_login_time=?, user_info=?
+                WHERE qq_num=?""", (user.user_name, user.display_name, user.mc_uuid, user.whitelisted, user.last_login_time, user.user_info, user.qq_num))
+        conn.commit()
+    c.close()
+
 # 通过 qq_num 或 user_name 或 mc_uuid, 查找数据库
 def get(qq_num = None, user_name = None, mc_uuid = None) -> User:
     if user_name != None: user_name = user_name.lower()
@@ -85,9 +97,6 @@ def get(qq_num = None, user_name = None, mc_uuid = None) -> User:
         return None
     res = res[0]
     return User(res[0], res[1], res[2], res[3], res[4], res[5], res[6])
-
-def whitelisted(qq_num):
-    pass
 
 # 检查是否有重复的 qq_id
 def exists_qq_id(qq_num, user_name = None, mc_uuid = None) -> bool:
@@ -130,7 +139,7 @@ def update_whitelisted_by_uuid(mc_uuid, user_name, whitelisted):
                 WHERE mc_uuid=?""", (user_name, whitelisted, mc_uuid))
         conn.commit()
     c.close()
-    # 更新 whitelisted
+# 更新 whitelisted
 def update_whitelisted_by_name(user_name, whitelisted):
     if user_name != None: user_name = user_name.lower()
     c = conn.cursor()
@@ -198,6 +207,27 @@ def delete_by_name(user_name):
     c = conn.cursor()
     with dblock:
         c.execute("DELETE FROM users WHERE user_name=:user_name", {'user_name': user_name})
+        conn.commit()
+    c.close()
+
+def update_info_by_qq(qq_num, user_info):
+    c = conn.cursor()
+    # 锁住数据库
+    with dblock:
+        c.execute("""UPDATE users 
+                SET user_info=?
+                WHERE qq_num=?""", (user_info, qq_num))
+        conn.commit()
+    c.close()
+
+
+def update_info_by_name(user_name, user_info):
+    c = conn.cursor()
+    # 锁住数据库
+    with dblock:
+        c.execute("""UPDATE users 
+                SET user_info=?
+                WHERE user_name=?""", (user_info, user_name))
         conn.commit()
     c.close()
 

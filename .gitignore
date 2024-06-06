@@ -1,5 +1,6 @@
 *.db
 *.png
+*.jpg
 !dns_win11.png
 !dns_win10.png
 *.log

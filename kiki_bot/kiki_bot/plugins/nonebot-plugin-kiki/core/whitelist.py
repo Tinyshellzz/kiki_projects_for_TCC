@@ -250,3 +250,39 @@ class insert:
             await bot.send(event, Message(f"错误"))
         else:
             await bot.send(event, Message(f"{user_name} 玩家插入成功"))
+
+class remarke:
+    async def handle(bot: Bot, event: Event):
+        user_id = str(event.get_user_id())
+        print('-------------replies remarke---------------')
+
+        msg = str(event.get_message())
+        splite = msg.split(' ')
+        if len(splite) == 2:
+            user = UserMapper.get(user_id)
+            if user != None:
+                if user.user_info != None:
+                    if user_id in auth_qq_list:
+                        UserMapper.update_info_by_qq(user_id, splite[1])
+                    else:
+                        await bot.send(event, Message((f"[CQ:at,qq={user_id}] 错误, 你只有已经设置过备注")))
+                else:
+                    UserMapper.update_info_by_qq(user_id, splite[1])
+                    if len(splite[1].encode('utf-8')) > 30:
+                        await bot.send(event, Message((f"[CQ:at,qq={user_id}] 备注过长, 汉字10字或英文30字以内")))
+                        return
+                    await bot.send(event, Message((f"[CQ:at,qq={user_id}] {user.display_name} 的备注已设置为 {splite[1]}")))
+            else:
+                await bot.send(event, Message((f"[CQ:at,qq={user_id}] 你还没有绑定白名单")))
+        else:
+            if user_id in auth_qq_list:
+                user = UserMapper.get(user_name=splite[1])
+                if user == None:
+                    user = UserMapper.get(qq_num=splite[2])
+                if user == None:
+                    await bot.send(event, Message((f"[CQ:at,qq={user_id}] 错误, 未找到此人")))
+                    return
+                
+                user.user_info = splite[2]
+                UserMapper.update_user(user)
+                await bot.send(event, Message((f"[CQ:at,qq={user_id}] {user.display_name} 的备注已设置为 {splite[2]}")))

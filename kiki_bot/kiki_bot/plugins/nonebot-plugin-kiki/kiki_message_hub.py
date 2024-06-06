@@ -30,6 +30,7 @@ match_rules = [
     ['^/whitelist add .*$', whitelist.add, 0],              # 添加玩家到白名单
     ['^/whitelist insert .*$', whitelist.insert, 0],        # 将玩家插入数据库
     ['^(找人|search).*$', whitelist.get, 0],                # 万能查询
+    ['^(备注|remarke).*$', whitelist.remarke, 0],           # 添加备注
     ['川川', whitelist.hi, 0],                             # 川川
     ['^online$', replies.online, 0],                        # 查看在线晚间
     ['^.*' + code_prefix + '[0-9a-zA-Z]{6}.*$', whitelist.code, 10],   # 白名单验证码
