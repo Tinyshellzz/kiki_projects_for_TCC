@@ -48,7 +48,7 @@ class dns:
 
         msg = (f"[CQ:at,qq={user_id}]\n"+
             "下面是Win10的教程\n" +
-            f"[CQ:image,file={plugin_dir}/resources/dns_win11.png]"+
+            f"[CQ:image,file={plugin_dir}/resources/dns_win10.png]"+
             "下面是Win11的教程\n" +
             f"[CQ:image,file={plugin_dir}/resources/dns_win11.png]"
             )
