@@ -261,7 +261,7 @@ class remarke:
         if len(splite) == 2:
             user = UserMapper.get(user_id)
             if user != None:
-                if user.user_info != None:
+                if user.user_info != None and user.user_info != '无':
                     if user_id in auth_qq_list:
                         UserMapper.update_info_by_qq(user_id, splite[1])
                     else:
