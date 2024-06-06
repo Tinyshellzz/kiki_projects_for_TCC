@@ -269,8 +269,8 @@ class remarke:
                         await bot.send(event, Message((f"[CQ:at,qq={user_id}] 错误, 你只有已经设置过备注")))
                 else:
                     UserMapper.update_info_by_qq(user_id, splite[1])
-                    if len(splite[1].encode('utf-8')) > 30:
-                        await bot.send(event, Message((f"[CQ:at,qq={user_id}] 备注过长, 汉字10字或英文30字以内")))
+                    if len(splite[1].encode('utf-8')) > 90:
+                        await bot.send(event, Message((f"[CQ:at,qq={user_id}] 备注过长, 30字以内")))
                         return
                     await bot.send(event, Message((f"[CQ:at,qq={user_id}] {user.display_name} 的备注已设置为 {splite[1]}")))
             else:
