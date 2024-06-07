@@ -94,6 +94,8 @@ class code:
         code = re.search('^.*' + code_prefix + '([0-9a-zA-Z]{6}).*$', msg)
         code = code.groups()[0].lower()
 
+        # 从验证码数据库获取验证码数据
+        data = WhitelistCodeMapper.get(code)
         if UserMapper.exists_qq_id(user_id):
             user = UserMapper.get(qq_num=user_id)
             if user.mc_uuid != data.mc_uuid:
@@ -104,8 +106,6 @@ class code:
                 await bot.send(event, Message(f'[CQ:at,qq={user_id}]『{data.display_name}』是吧，我在服务器等你嗷！来了服务器指定没你好果汁吃！'))
                 return
                 
-        # 从验证码数据库获取验证码数据
-        data = WhitelistCodeMapper.get(code)
         if data != None:
             if UserMapper.exists_mc_uuid(data.mc_uuid):
                 user = UserMapper.get(mc_uuid=data.mc_uuid)
