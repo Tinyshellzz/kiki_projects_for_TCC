@@ -4,6 +4,7 @@ from nonebot.adapters.onebot.v11.message import Message
 from nonebot.adapters.onebot.v11 import Bot, Event
 from .core import replies
 from .core import status
+from .core import group
 from .core import whitelist
 from datetime import datetime
 from .config.config import *
@@ -28,10 +29,10 @@ match_rules = [
     ['^/whitelist remove .*$', whitelist.remove, 0],        # 从白名单移除玩家
     ['^/whitelist delete .*$', whitelist.delete, 0],        # 与remove不同, 删除该玩家的数据库记录
     ['^/whitelist add .*$', whitelist.add, 0],              # 添加玩家到白名单
-    ['^/whitelist insert .*$', whitelist.insert, 0],        # 将玩家插入数据库
+    ['^/whitelist (insert|bind) .*$', whitelist.insert, 0],        # 将玩家插入数据库
     ['^(找人|search).*$', whitelist.get, 0],                # 万能查询
     ['^(备注|remarke).+$', whitelist.remarke, 0],           # 添加备注
-    ['^(踢|kick).+$', whitelist.kick, 0],                   # 移出群聊
+    ['^(踢|kick).+$', group.kick, 0],                       # 移出群聊
     ['川川', whitelist.hi, 0],                              # 川川
     ['^online$', replies.online, 0],                        # 查看在线晚间
     ['^.*' + code_prefix + '[0-9a-zA-Z]{6}.*$', whitelist.code, 10],   # 白名单验证码
@@ -52,7 +53,7 @@ async def _(bot: Bot, event: Event):
     log = event.get_log_string()
     msg = re.search('\'(.+)\'', log)
     msg = msg.groups()[0]
-    print(msg)
+    # print(msg)
     for i in range(len(match_rules)):
         rule = match_rules[i]
         if re.search(rule[0], msg) != None:

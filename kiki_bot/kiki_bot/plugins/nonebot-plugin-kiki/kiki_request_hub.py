@@ -30,7 +30,11 @@ class GroupRequest:
         user_id = str(event.get_user_id())
         # QQ号再数据库中, 就同意入群
         if UserMapper.exists_qq_id(user_id):
-            await bot.set_group_add_request(flag = event.flag, approve=True)
+            user = UserMapper.get(user_id)
+            if user.whitelisted != "ban":
+                await bot.set_group_add_request(flag = event.flag, approve=True)
+            else:
+                await bot.set_group_add_request(flag = event.flag, approve=False, reason='你不允许加入该群')
         else:
             # False拒绝申请, True就是同意
             pass

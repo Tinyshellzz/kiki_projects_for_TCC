@@ -197,7 +197,7 @@ class get:
         userbyqq = None
         match = re.search('([0-9]{8,12})', msg)
         if match != None:
-            match = match.groups()[0]
+            match = match.groups()[0].strip()
             userbyqq = UserMapper.get(qq_num=match)
 
         if userbyname is None and userbyqq is None:
