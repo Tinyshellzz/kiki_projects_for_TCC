@@ -47,3 +47,7 @@ class unban:
         UserMapper.update_whitelisted_by_name(user_name, None)
 
         await bot.send(event, Message(f'{response}--完成'))
+
+class ban_syn:
+    async def handle(bot: Bot, event: Event):
+        pass
