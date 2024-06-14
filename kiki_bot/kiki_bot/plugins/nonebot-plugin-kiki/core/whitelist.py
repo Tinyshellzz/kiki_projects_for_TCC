@@ -208,12 +208,7 @@ class get:
             return
         if userbyqq != None:
             await dispaly_user(bot, event, userbyqq)
-            return
-        
-class hi:
-    async def handle(bot: Bot, event: Event):
-        await bot.send(event,Message((f"川川爱你~")))
-        return        
+            return      
 
 # 与remove不同, 删除该玩家的数据库记录
 class delete:
