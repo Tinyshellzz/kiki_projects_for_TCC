@@ -34,7 +34,7 @@ match_rules = [
     ['^(找人|search).*$', whitelist.get, 0],                # 万能查询
     ['^(备注|remarke).+$', whitelist.remarke, 0],           # 添加备注
     ['^(踢|kick).+$', group.kick, 0],                       # 移出群聊
-    ['川川', heChuan.hi, 0],                                # 川川
+    ['^川川$', heChuan.hi, 0],                                # 川川
     ['^online$', replies.online, 0],                        # 查看在线晚间
     ['^.*' + code_prefix + '[0-9a-zA-Z]{6}.*$', whitelist.code, 10],   # 白名单验证码
     ['(3975252362|3624128565)', replies.at_self, 10],   # 艾特回复
