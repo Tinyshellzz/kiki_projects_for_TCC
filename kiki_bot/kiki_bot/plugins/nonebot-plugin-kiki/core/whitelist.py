@@ -2,56 +2,36 @@ import mcrcon
 import re
 from ..config.config import *
 from nonebot.adapters.onebot.v11 import Bot
-from ..database import UserMapper
 from ..database.WhitelistCodeMapper import WhitelistCodeMapper
 from nonebot.adapters.onebot.v11 import Bot, Event
 from .authorization import *
-from ..database.User import User
+from ..database.UserMapper import User, UserMapper
+from ..database.UserMCMapper import MCUser, UserMCMapper
 from ..database.ReadExcel import *
-from threading import Lock
-from ..tools.tools import *
-from ..tools.async_tools import *
+from ..utils import tools
 import json
+from ..utils.MyException import MyException
 
-def whitelist_insert(qq_num, _user_name):
-    name = None
-    mc_uuid = None
-    try:
-        name, mc_uuid = get_name_and_uuid_by_name(_user_name)
-    except:
-        return False
-    if name == None or mc_uuid == None: return False 
-    
-    UserMapper.insert(User(qq_num, name, mc_uuid, 'true'))
-
-def whitelist_add(user_name):
-    UserMapper.update_whitelisted_by_name(user_name, 'true')
-
-def whitelist_remove(user_name):
-    UserMapper.update_whitelisted_by_name(user_name, None)
-
-def whitelist_delete(user_name):
-    UserMapper.delete_by_name(user_name)
 
 # 展示user
 async def dispaly_user(bot: Bot, event: Event, user: User):
     user_id = str(event.get_user_id())
-    messages = [to_msg_node(f"qq: {user.qq_num}\n游戏昵称: {user.get_display_name()}\n白名单: {user.whitelisted}\n上次登录: {user.last_login_time}\n备注: {user.user_info}")]
-    await send_forward_msg(bot, event, messages)
+    messages = [tools.to_msg_node(f"qq: {user.qq_num}\n游戏昵称: {user.get_display_name()}\n白名单: {user.whitelisted}\n上次登录: {user.last_login_time}\n备注: {user.user_info}")]
+    await tools.send_forward_msg(bot, event, messages)
 
 
 # 检查列表里所有的QQ号, 已经数据库中的记录, 据此更改 whitelist
 def whitelist_update(qq_nums):
     w = set()
     for n in qq_nums:
-        user = UserMapper.get(n)
-        if user != None and user.whitelisted == None: 
-            UserMapper.update_whitelisted_by_qq(n, 'true')
+        user = UserMCMapper.get(n)
+        if user != None: 
+            UserMCMapper.add_whitelist(user.id, True)
 
 
 class sync():
     async def handle(bot: Bot, event: Event):
-        users = UserMapper.get_all_user()
+        users = UserMCMapper.get_all_user()
 
         if os.path.exists(server_whitelist):
             whitelist = "["
@@ -70,7 +50,7 @@ class sync():
                 text_file.write(whitelist)
             
             # reload 使白名单生效
-            rcon = mcrcon.MCRcon(serIP, rconPw, rconPort, timeout=2)
+            rcon = mcrcon.MCRcon(server_ip, rcon_password, rcon_port, timeout=2)
             try:
                 rcon.connect()
                 response = rcon.command('whitelist reload')
@@ -96,29 +76,30 @@ class code:
 
         # 从验证码数据库获取验证码数据
         data = WhitelistCodeMapper.get(code)
-        if UserMapper.exists_qq_id(user_id):
-            user = UserMapper.get(qq_num=user_id)
+        if UserMCMapper.exists_qq_id(user_id):
+            user = UserMCMapper.get(qq_num=user_id)
             if user.mc_uuid != data.mc_uuid:
                 await bot.send(event, Message(f'[CQ:at,qq={user_id}] 老东西，你已经绑定了账号『{user.get_display_name()}』无法重复绑定'))
                 return
             else:
-                whitelist_add(user.get_display_name())
+                UserMCMapper.add_whitelist(user.id)
                 await bot.send(event, Message(f'[CQ:at,qq={user_id}]『{data.display_name}』是吧，我在服务器等你嗷！来了服务器指定没你好果汁吃！'))
                 return
                 
         if data != None:
-            if UserMapper.exists_mc_uuid(data.mc_uuid):
-                user = UserMapper.get(mc_uuid=data.mc_uuid)
+            if UserMCMapper.exists_mc_uuid(data.mc_uuid):
+                user = UserMCMapper.get(mc_uuid=data.mc_uuid)
                 if user.qq_num != user_id:
                     await bot.send(event, Message(f'[CQ:at,qq={user_id}] 绑定失败:『{data.user_name}』已被『{user.qq_num}』绑定\n如有问题请联系管理员'))
                     return
                 else:
-                    whitelist_add(user.get_display_name())
+                    UserMCMapper.add_whitelist(user.id)
                     await bot.send(event, Message(f'[CQ:at,qq={user_id}]『{data.display_name}』是吧，我在服务器等你嗷！来了服务器指定没你好果汁吃！'))
                     return
             # 不存在数据库记录, 则将将玩家添加到数据库
-            user = User(user_id, data.user_name, data.display_name, data.mc_uuid, 'true', data.last_login_time)
-            UserMapper.insert(user)
+            id = UserMapper.insert(User(email=user_id + "@qq.com", permission=1))
+            mc_user = MCUser(id, user_id, data.user_name, data.display_name, data.mc_uuid, 'true', data.last_login_time)
+            UserMCMapper.insert(mc_user)
             await bot.send(event, Message(f'[CQ:at,qq={user_id}]『{data.display_name}』是吧，我在服务器等你嗷！来了服务器指定没你好果汁吃！'))
         else:
             await bot.send(event, Message(f'[CQ:at,qq={user_id}] 验证码有误，请返回服务器检查'))
@@ -162,11 +143,11 @@ class remove:
         msg = str(event.get_message())
         user_name = msg.split(' ')[2]
 
-        state = whitelist_remove(user_name)
-        if state == False:
-            await bot.send(event, Message(f"错误"))
-        else:
-            await bot.send(event, Message(f"{user_name} 已被移除白名单"))
+        mc_user = UserMCMapper.get(user_name=user_name)
+        if mc_user:
+            await bot.send(event, Message(f"{user_name} 玩家不存在"))
+        UserMCMapper.remove_whitelist(mc_user.id)
+        await bot.send(event, Message(f"{user_name} 已被移除白名单"))
 
 class add:
     async def handle(bot: Bot, event: Event):
@@ -176,11 +157,11 @@ class add:
         msg = str(event.get_message())
         user_name = msg.split(' ')[2]
 
-        state = whitelist_add(user_name)
-        if state == False:
-            await bot.send(event, Message(f"错误"))
-        else:
-            await bot.send(event, Message(f"{user_name} 已被添加白名单"))
+        mc_user = UserMCMapper.get(user_name=user_name)
+        if mc_user:
+            await bot.send(event, Message(f"{user_name} 玩家不存在"))
+        UserMCMapper.add_whitelist(mc_user.id)
+        await bot.send(event, Message(f"{user_name} 已被添加白名单"))
 
 class get:
     async def handle(bot: Bot, event: Event):
@@ -192,13 +173,13 @@ class get:
         userbyname = None
         if len(match.groups()) == 2:
             match = match.groups()[1].strip()
-            userbyname = UserMapper.get(user_name=match)
+            userbyname = UserMCMapper.get(user_name=match)
 
         userbyqq = None
         match = re.search('([0-9]{8,12})', msg)
         if match != None:
             match = match.groups()[0].strip()
-            userbyqq = UserMapper.get(qq_num=match)
+            userbyqq = UserMCMapper.get(qq_num=match)
 
         if userbyname is None and userbyqq is None:
             await bot.send(event, Message((f"[CQ:at,qq={user_id}] 查无此人, 请检查id或者qq是否有误")))
@@ -209,22 +190,6 @@ class get:
         if userbyqq != None:
             await dispaly_user(bot, event, userbyqq)
             return      
-
-# 与remove不同, 删除该玩家的数据库记录
-class delete:
-    async def handle(bot: Bot, event: Event):
-        # 设置使用权限
-        if not await auth_user(bot, event, auth_qq_list): return
-        print("---------------whitelist delete ---------------------")
-
-        msg = str(event.get_message())
-        user_name = msg.split(' ')[2]
-
-        state = whitelist_delete(user_name)
-        if state == False:
-            await bot.send(event, Message(f"错误"))
-        else:
-            await bot.send(event, Message(f"{user_name} 该玩家的数据库记录已被删除"))
 
 # 将玩家插入数据库
 class insert:
@@ -240,11 +205,14 @@ class insert:
         qq_num = sp[2]
         user_name = sp[3]
 
-        state = whitelist_insert(qq_num, user_name)
-        if state == False:
-            await bot.send(event, Message(f"错误"))
-        else:
-            await bot.send(event, Message(f"{user_name} 玩家插入成功"))
+        # 不存在数据库记录, 则将将玩家添加到数据库
+        try:
+            id = UserMapper.insert(User(email=qq_num + "@qq.com", permission=1))
+            mc_user = MCUser(id, qq_num, data.user_name, data.display_name, data.mc_uuid, 'true', data.last_login_time)
+            UserMCMapper.insert(mc_user)
+        except MyException as e:
+            await bot.send(event, Message(f"{e}"))
+        await bot.send(event, Message(f"{user_name} 玩家插入成功"))
 
 class remarke:
     async def handle(bot: Bot, event: Event):
@@ -254,33 +222,36 @@ class remarke:
         msg = str(event.get_message())
         splite = msg.split(' ')
         if len(splite) == 2:
-            user = UserMapper.get(user_id)
+            user = UserMCMapper.get(user_id)
             if user != None:
-                if user.user_info != None and user.user_info != '无':
-                    if user_id in auth_qq_list:
-                        UserMapper.update_info_by_qq(user_id, splite[1])
-                        await bot.send(event, Message((f"[CQ:at,qq={user_id}] {user.display_name} 的备注已设置为 {splite[1]}")))
-                    else:
-                        await bot.send(event, Message((f"[CQ:at,qq={user_id}] 错误, 你只有已经设置过备注")))
-                else:
-                    UserMapper.update_info_by_qq(user_id, splite[1])
-                    if len(splite[1].encode('utf-8')) > 90:
+                # if user.user_info != None and user.user_info != '无':
+                #     if user_id in auth_qq_list:
+                #         UserMCMapper.update_remark_by_qq(user_id, splite[1])
+                #         await bot.send(event, Message((f"[CQ:at,qq={user_id}] {user.display_name} 的备注已设置为 {splite[1]}")))
+                #     else:
+                #         await bot.send(event, Message((f"[CQ:at,qq={user_id}] 错误, 你只有已经设置过备注")))
+                # else:
+                    remake = ""
+                    for i in range(1, len(splite)): 
+                        remake += splite[i]
+                    if len(splite[1].encode('utf-8')) > 100:
                         await bot.send(event, Message((f"[CQ:at,qq={user_id}] 备注过长, 30字以内")))
                         return
+                    UserMCMapper.update_remark_by_qq(user_id, remake)
                     await bot.send(event, Message((f"[CQ:at,qq={user_id}] {user.display_name} 的备注已设置为 {splite[1]}")))
             else:
                 await bot.send(event, Message((f"[CQ:at,qq={user_id}] 你还没有绑定白名单")))
         else:
             if user_id in auth_qq_list:
-                user = UserMapper.get(user_name=splite[1])
+                user = UserMCMapper.get(user_name=splite[1])
                 if user == None:
-                    user = UserMapper.get(qq_num=splite[1])
+                    user = UserMCMapper.get(qq_num=splite[1])
                 if user == None:
                     await bot.send(event, Message((f"[CQ:at,qq={user_id}] 错误, 未找到此人")))
                     return
                 
-                user.user_info = ""
+                user.remark = ""
                 for i in range(2, len(splite)):
-                    user.user_info += splite[i]
-                UserMapper.update_user(user)
+                    user.remark += splite[i]
+                UserMCMapper.update_remark_by_qq(user.qq_num, user.remark)
                 await bot.send(event, Message((f"[CQ:at,qq={user_id}] {user.display_name} 的备注已设置为 {splite[2]}")))

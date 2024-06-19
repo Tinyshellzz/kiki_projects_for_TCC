@@ -11,15 +11,15 @@ from datetime import datetime
 from .config.config import *
 from .core import server
 import re
-from .tools import transfer_db
-from .tools.tools import *
+from .utils import transfer_db
+from .utils import tools
 
 matcher=on_message()
 cooldown_dicts = []
 
 # [正则, 方法, 冷却(s)]  (会默认调用status.py里面的 handle(bot, event) 方法)
 match_rules = [
-    ['^test$', no_action, 0],
+    ['^test$', tools.no_action, 0],
     ['^/{0,1}(help|帮助)$', replies.help, 10],              # 帮助
     ['^/{0,1}status$', status, 10],                         # 查看服务器状态
     ['^/ban (.*)$', server.ban, 0],                         # 封禁玩家
@@ -28,9 +28,8 @@ match_rules = [
     ['^/whitelist sync$', whitelist.sync, 0],               # 同步minecraft官方的白名单
     ['^/whitelist load$', whitelist.load, 0],               # 从 excels 文件夹加载审核结果
     ['^/whitelist remove .*$', whitelist.remove, 0],        # 从白名单移除玩家
-    ['^/whitelist delete .*$', whitelist.delete, 0],        # 与remove不同, 删除该玩家的数据库记录
     ['^/whitelist add .*$', whitelist.add, 0],              # 添加玩家到白名单
-    ['^/whitelist (insert|bind) .*$', whitelist.insert, 0],        # 将玩家插入数据库
+    ['^/mcuser (insert|bind) .*$', whitelist.insert, 0],        # 将玩家插入数据库
     ['^(找人|search).*$', whitelist.get, 0],                # 万能查询
     ['^(备注|remarke).+$', whitelist.remarke, 0],           # 添加备注
     ['^(踢|kick).+$', group.kick, 0],                       # 移出群聊

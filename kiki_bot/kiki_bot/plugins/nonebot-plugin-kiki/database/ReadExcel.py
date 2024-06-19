@@ -4,8 +4,8 @@ from pathlib import Path
 import os
 from os import listdir
 from os.path import isfile, join
-from . import UserMapper 
-from .User import User
+from .UserMapper import User, UserMapper
+from .UserMCMapper import MCUser, UserMCMapper
 from ..config.config import *
 
 plugin_dir = str(Path(__file__).resolve().parents[5])
@@ -18,7 +18,8 @@ def read_excel(fpath):
     for index, row in xls.iterrows():
         # 将所有通过的都插入数据库
         if row['passed'] == '☑':
-            UserMapper.insert(User(row['qq_num'], row['user_name']))
+            id = UserMapper.insert(User(email=row['qq_num'] + "@qq.com", permission=1))
+            UserMCMapper.insert(MCUser(id, row['qq_num'], row['user_name']))
             ret.append(row)
     
     return ret
