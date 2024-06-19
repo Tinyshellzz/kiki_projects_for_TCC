@@ -2,7 +2,7 @@ import mcrcon
 import re
 from ..config.config import *
 from nonebot.adapters.onebot.v11 import Bot
-from ..database.WhitelistCodeMapper import WhitelistCodeMapper
+from ..database.CodeMCMapper import CodeMCMapper
 from nonebot.adapters.onebot.v11 import Bot, Event
 from .authorization import *
 from ..database.UserMapper import User, UserMapper
@@ -11,12 +11,13 @@ from ..database.ReadExcel import *
 from ..utils import tools
 import json
 from ..utils.MyException import MyException
+from datetime import datetime
 
 
 # 展示user
-async def dispaly_user(bot: Bot, event: Event, user: User):
+async def dispaly_user(bot: Bot, event: Event, user: MCUser):
     user_id = str(event.get_user_id())
-    messages = [tools.to_msg_node(f"qq: {user.qq_num}\n游戏昵称: {user.get_display_name()}\n白名单: {user.whitelisted}\n上次登录: {user.last_login_time}\n备注: {user.user_info}")]
+    messages = [tools.to_msg_node(f"qq: {user.qq_num}\n游戏昵称: {user.display_name}\nUUID: {user.mc_uuid}上次登录: {user.last_login_time}\n备注: {user.remark}")]
     await tools.send_forward_msg(bot, event, messages)
 
 
@@ -29,36 +30,36 @@ def whitelist_update(qq_nums):
             UserMCMapper.add_whitelist(user.id, True)
 
 
-class sync():
-    async def handle(bot: Bot, event: Event):
-        users = UserMCMapper.get_all_user()
+# class sync():
+#     async def handle(bot: Bot, event: Event):
+#         users = UserMCMapper.get_all_user()
 
-        if os.path.exists(server_whitelist):
-            whitelist = "["
+#         if os.path.exists(server_whitelist):
+#             whitelist = "["
             
-            for user in users:
-                whitelist = whitelist + json.dumps({"uuid": user.mc_uuid, "name": user.user_name}) + ','
+#             for user in users:
+#                 whitelist = whitelist + json.dumps({"uuid": user.mc_uuid, "name": user.user_name}) + ','
             
-            l = len(whitelist)
-            if whitelist[l-1] ==',':
-                whitelist = whitelist[:-1] + ']'
-            else:
-                whitelist = whitelist + ']'
+#             l = len(whitelist)
+#             if whitelist[l-1] ==',':
+#                 whitelist = whitelist[:-1] + ']'
+#             else:
+#                 whitelist = whitelist + ']'
 
-            # 直接将白名单写入 whitelist.json
-            with open(server_whitelist, "w") as text_file:
-                text_file.write(whitelist)
+#             # 直接将白名单写入 whitelist.json
+#             with open(server_whitelist, "w") as text_file:
+#                 text_file.write(whitelist)
             
-            # reload 使白名单生效
-            rcon = mcrcon.MCRcon(server_ip, rcon_password, rcon_port, timeout=2)
-            try:
-                rcon.connect()
-                response = rcon.command('whitelist reload')
-                logger.info(response)
-            except Exception as e:
-                logger.warning(e)
-            finally:
-                rcon.disconnect()
+#             # reload 使白名单生效
+#             rcon = mcrcon.MCRcon(server_ip, rcon_password, rcon_port, timeout=2)
+#             try:
+#                 rcon.connect()
+#                 response = rcon.command('whitelist reload')
+#                 logger.info(response)
+#             except Exception as e:
+#                 logger.warning(e)
+#             finally:
+#                 rcon.disconnect()
 
 
 # mc的白名单验证码
@@ -75,7 +76,7 @@ class code:
         code = code.groups()[0].lower()
 
         # 从验证码数据库获取验证码数据
-        data = WhitelistCodeMapper.get(code)
+        data = CodeMCMapper.get(code)
         if UserMCMapper.exists_qq_id(user_id):
             user = UserMCMapper.get(qq_num=user_id)
             if user.mc_uuid != data.mc_uuid:
@@ -97,9 +98,16 @@ class code:
                     await bot.send(event, Message(f'[CQ:at,qq={user_id}]『{data.display_name}』是吧，我在服务器等你嗷！来了服务器指定没你好果汁吃！'))
                     return
             # 不存在数据库记录, 则将将玩家添加到数据库
-            id = UserMapper.insert(User(email=user_id + "@qq.com", permission=1))
-            mc_user = MCUser(id, user_id, data.user_name, data.display_name, data.mc_uuid, 'true', data.last_login_time)
+            id = None
+            email = user_id + "@qq.com"
+            if(UserMapper.exits_email_user(email=email)):
+                user = UserMapper.get_user_by_email(email)
+                id = user.id
+            else:
+                id = UserMapper.insert(User(email=email, permission=1))
+            mc_user = MCUser(id, user_id, data.user_name, data.display_name, data.mc_uuid, datetime.now())
             UserMCMapper.insert(mc_user)
+            UserMCMapper.add_whitelist(mc_user.id)
             await bot.send(event, Message(f'[CQ:at,qq={user_id}]『{data.display_name}』是吧，我在服务器等你嗷！来了服务器指定没你好果汁吃！'))
         else:
             await bot.send(event, Message(f'[CQ:at,qq={user_id}] 验证码有误，请返回服务器检查'))
@@ -144,7 +152,7 @@ class remove:
         user_name = msg.split(' ')[2]
 
         mc_user = UserMCMapper.get(user_name=user_name)
-        if mc_user:
+        if mc_user == None:
             await bot.send(event, Message(f"{user_name} 玩家不存在"))
         UserMCMapper.remove_whitelist(mc_user.id)
         await bot.send(event, Message(f"{user_name} 已被移除白名单"))

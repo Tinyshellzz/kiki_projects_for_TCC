@@ -7,7 +7,7 @@ from .authorization import *
 from ..database import UserMapper
 
 def excute(command):
-    rcon = mcrcon.MCRcon(serIP, rconPw, rconPort, timeout=2)
+    rcon = mcrcon.MCRcon(server_ip, rcon_password, rcon_port, timeout=2)
     response  = None
     try:
         rcon.connect()

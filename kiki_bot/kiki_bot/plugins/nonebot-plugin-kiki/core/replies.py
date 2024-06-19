@@ -3,7 +3,7 @@ from nonebot.adapters.onebot.v11 import Bot, Event, GroupMessageEvent
 from nonebot.adapters.onebot.v11.message import Message
 from pathlib import Path
 from ..config.config import *
-from ..tools.async_tools import *
+from ..utils import tools
 import requests
 import json
 from random import randrange
@@ -32,15 +32,15 @@ class ip:
             "https://docs.qq.com/aio/DZGZrVFVqTERCTmNn&#34")
 
         messages = []
-        messages.append(to_msg_node(msg))
-        await send_forward_msg(bot, event, messages)
+        messages.append(tools.to_msg_node(msg))
+        await tools.send_forward_msg(bot, event, messages)
 
 
 class fly:
     async def handle(bot: Bot, event: Event):
         messages = []
-        messages.append(to_msg_node("【服务器指令-飞行】\n-----------\n在游戏对话框输入/fly开/关飞行\n提示:只在节假日和周五晚上开放\n-----------\n更多请查阅【TCC玩家手册】\nhttps://docs.qq.com/aio/DZGZrVFVqTERCTmNn&#34"))
-        await send_forward_msg(bot, event, messages)
+        messages.append(tools.to_msg_node("【服务器指令-飞行】\n-----------\n在游戏对话框输入/fly开/关飞行\n提示:只在节假日和周五晚上开放\n-----------\n更多请查阅【TCC玩家手册】\nhttps://docs.qq.com/aio/DZGZrVFVqTERCTmNn&#34"))
+        await tools.send_forward_msg(bot, event, messages)
 
 class dns:
     async def handle(bot: Bot, event: Event):
@@ -79,8 +79,8 @@ class online:
         msg = response['online']
 
         messages = []
-        messages.append(to_msg_node(msg))
-        await send_forward_msg(bot, event, messages)
+        messages.append(tools.to_msg_node(msg))
+        await tools.send_forward_msg(bot, event, messages)
 
 at_self_replies = [
     "找我干嘛！",

@@ -4,8 +4,8 @@ from nonebot.adapters.onebot.v11 import Bot, Event
 from nonebot.adapters.onebot.v11.event import GroupIncreaseNoticeEvent, GroupDecreaseNoticeEvent
 from nonebot.adapters.onebot.v11.message import Message
 from .core.whitelist import *
-from .tools.async_tools import *
-from .database import UserMapper
+from .utils import tools
+from .database.UserMCMapper import UserMCMapper
 from datetime import datetime
 import re
 
@@ -29,7 +29,7 @@ class GroupIncreaseNotice:
 
         current_time = datetime.now()
         current = current_time.strftime("%Y-%m-%d %H:%M:%S")
-        nickname = await get_nick_name(bot, event, event.user_id)
+        nickname = await tools.get_nick_name(bot, event, event.user_id)
         text_lines = [
             f"@新同学 {nickname}",
             f"\n",
@@ -45,13 +45,13 @@ class GroupIncreaseNotice:
         # 进入的群号
         group_id = event.group_id
         
-        url = draw_text_lines('welcome', text_lines)
+        url = tools.draw_text_lines('welcome', text_lines)
         user_id = str(event.user_id)
         await bot.send_group_msg(group_id=group_id, message=Message(f"[CQ:at,qq={user_id}] [CQ:image,file={url}]"))
 
         # 将玩家添加到白名单
-        user_name = UserMapper.get(str(event.get_user_id()))
-        whitelist_add(user_name)
+        mc_user = UserMCMapper.get(str(event.get_user_id()))
+        UserMCMapper.add_whitelist(mc_user.id)
 
 
 class GroupDecreaseNotice:
@@ -66,7 +66,8 @@ class GroupDecreaseNotice:
         # await bot.send_group_msg(group_id=group_id, message=Message(f"qq={event.user_id}] 退出群聊"))
 
         # 删除白名单
-        user_name = UserMapper.get(str(event.get_user_id()))
-        whitelist_remove(user_name)
+        mc_user = UserMCMapper.get(str(event.get_user_id()))
+        mc_user = UserMCMapper.get(str(event.get_user_id()))
+        UserMCMapper.remove_whitelist(mc_user.id)
 
 

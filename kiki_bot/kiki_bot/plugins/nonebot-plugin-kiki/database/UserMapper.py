@@ -87,7 +87,7 @@ class UserMapper:
 
         return True
     
-    def get_user_by_id(id):
+    def get_user_by_id(id: int):
         db = connect()
         c = db.cursor()
         db.commit()
@@ -99,6 +99,18 @@ class UserMapper:
         r = res[0]
         return User(int(r[0]), r[1], r[2], None, r[4])
     
+    def get_user_by_email(email):
+        db = connect()
+        c = db.cursor()
+        db.commit()
+        c.execute("SELECT * FROM users WHERE email=%s", (email,))
+        res = c.fetchall()
+        c.close()
+        db.close()
+
+        r = res[0]
+        return User(int(r[0]), r[1], r[2], None, r[4])
+
     def get_id_by_email(email):
         db = connect()
         c = db.cursor()

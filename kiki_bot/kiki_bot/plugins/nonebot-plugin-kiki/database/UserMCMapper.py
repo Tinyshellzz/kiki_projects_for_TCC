@@ -38,13 +38,17 @@ except:
 
 class MCUser:
     def __init__(self, id, qq_num, user_name: str, display_name = None, mc_uuid = None, last_login_time = None, remark:str = None):
+        if last_login_time != None:
+            last_login_time.strftime("%Y-%m-%d %H:%M:%S")
+            last_login_time = last_login_time.replace(microsecond=0)
+
         self.id = id
         self.qq_num = qq_num
         self.user_name = user_name.lower()
         self.display_name = display_name
         self.mc_uuid = mc_uuid
         self.last_login_time = last_login_time
-        self.remark = remark.replace("\"", "").replace("//", "").replace("\'", "")
+        self.remark = None if remark == None else remark.replace("\"", "").replace("//", "").replace("\'", "")
     def __repr__(self) -> str:
         return json.dumps(self.__dict__, default=str)
     
@@ -138,7 +142,7 @@ class UserMCMapper:
 
         db = connect() 
         c = db.cursor()
-        c.execute("INSERT INTO users_mc VALUES (?, ?, ?, ?, ?, ?, ?)", (user.id, user.qq_num, user.user_name, user.display_name, user.mc_uuid, user.last_login_time, user.remark))
+        c.execute("INSERT INTO users_mc VALUES (%s, %s, %s, %s, %s, %s, %s)", (user.id, user.qq_num, user.user_name, user.display_name, user.mc_uuid, user.last_login_time, user.remark))
         db.commit()
         c.close()
         db.close()
@@ -200,7 +204,7 @@ class UserMCMapper:
     def exists_whitelist(id: int):
         db = connect() 
         c = db.cursor()
-        c.execute("INSERT INTO whitelist VALUES (?)", (id,))
+        c.execute("SELECT * FROM whitelist WHERE id=%s", (id,))
         res = c.fetchall()
         db.commit()
         c.close()
@@ -212,7 +216,7 @@ class UserMCMapper:
         try:
             db = connect() 
             c = db.cursor()
-            c.execute("INSERT INTO whitelist VALUES (?)", (id,))
+            c.execute("INSERT INTO whitelist VALUES (%s)", (id,))
             db.commit()
             c.close()
             db.close()
@@ -230,7 +234,7 @@ class UserMCMapper:
     def update_remark_by_qq(qq_num: str, remark: str):
         db = connect() 
         c = db.cursor()
-        c.execute("UPDATE users SET remark=%s WHERE qq_num=%s", (remark, qq_num))
+        c.execute("UPDATE users_mc SET remark=%s WHERE qq_num=%s", (remark, qq_num))
         db.commit()
         c.close()
         db.close()
@@ -239,7 +243,7 @@ class UserMCMapper:
         db = connect() 
         c = db.cursor()
         db.commit()
-        c.execute("SELECT * FROM users")
+        c.execute("SELECT * FROM users_mc")
         res = c.fetchall()
         c.close()
         db.close()
@@ -257,11 +261,11 @@ class UserMCMapper:
         c = db.cursor()
         db.commit()
         if qq_num != None:
-            c.execute("SELECT * FROM users WHERE qq_num=%s", (qq_num,))
+            c.execute("SELECT * FROM users_mc WHERE qq_num=%s", (qq_num,))
         elif user_name != None:
-            c.execute("SELECT * FROM users WHERE user_name=%s", (user_name,))
+            c.execute("SELECT * FROM users_mc WHERE user_name=%s", (user_name,))
         elif mc_uuid != None:
-            c.execute("SELECT * FROM users WHERE mc_uuid=%s", (mc_uuid,))
+            c.execute("SELECT * FROM users_mc WHERE mc_uuid=%s", (mc_uuid,))
         
         res = c.fetchall()
         c.close()

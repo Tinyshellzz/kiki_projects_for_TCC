@@ -2,7 +2,7 @@ from pathlib import Path
 import sqlite3
 from ..config.config import *
 from ..core.authorization import *
-from ..tools.tools import *
+from . import tools
 from nonebot.adapters.onebot.v11 import Bot, Event
 
 async def handle(bot: Bot, event: Event):

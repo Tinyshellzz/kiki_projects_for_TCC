@@ -25,11 +25,11 @@ match_rules = [
     ['^/ban (.*)$', server.ban, 0],                         # 封禁玩家
     ['^/unban (.*)$', server.unban, 0],                     # 解封玩家
     ['^/whitelist update$', whitelist.update, 0],           # 将 在数据库 且 在qq群中 的账号全部添加到白名单
-    ['^/whitelist sync$', whitelist.sync, 0],               # 同步minecraft官方的白名单
+    # ['^/whitelist sync$', whitelist.sync, 0],             # 同步minecraft官方的白名单
     ['^/whitelist load$', whitelist.load, 0],               # 从 excels 文件夹加载审核结果
     ['^/whitelist remove .*$', whitelist.remove, 0],        # 从白名单移除玩家
     ['^/whitelist add .*$', whitelist.add, 0],              # 添加玩家到白名单
-    ['^/mcuser (insert|bind) .*$', whitelist.insert, 0],        # 将玩家插入数据库
+    ['^/mcuser (insert|bind) .*$', whitelist.insert, 0],    # 将玩家插入数据库
     ['^(找人|search).*$', whitelist.get, 0],                # 万能查询
     ['^(备注|remarke).+$', whitelist.remarke, 0],           # 添加备注
     ['^(踢|kick).+$', group.kick, 0],                       # 移出群聊

@@ -4,7 +4,7 @@ import re
 from ..database import UserMapper
 from ..config.config import *
 from .authorization import *
-from ..tools.async_tools import *
+from ..utils import tools
 
 class kick:
     async def handle(bot: Bot, event: Event):
@@ -41,7 +41,7 @@ class kick:
         if match == None:
             await bot.send(event, Message((f"[CQ:at,qq={user_id}] 指令格式错误")))
             return
-        data = await get_user_info(bot, event, int(match))
+        data = await tools.get_user_info(bot, event, int(match))
         if data == None:
             await bot.send(event, Message((f"[CQ:at,qq={user_id}] 错误, 该玩家不存在")))
         else:

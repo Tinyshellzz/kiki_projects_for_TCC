@@ -8,8 +8,7 @@ import json
 from .authorization import *
 import os
 from ..config.config import *
-from ..tools.tools import *
-from ..tools.async_tools import *
+from ..utils import tools
 import uuid
 
 plugin_dir = str(Path(__file__).resolve().parents[1])
@@ -51,7 +50,7 @@ async def send_picture(bot: Bot, event: Event):
         f"唤起时间: {_current_time}",
     ]
     
-    url = draw_text_lines('status', text_lines)
+    url = tools.draw_text_lines('status', text_lines)
     
     # 发送图片
     await bot.send(event, Message(f"[CQ:image,file={url}]"))

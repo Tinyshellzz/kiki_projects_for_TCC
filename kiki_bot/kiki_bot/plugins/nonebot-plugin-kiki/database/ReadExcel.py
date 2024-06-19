@@ -8,8 +8,8 @@ from .UserMapper import User, UserMapper
 from .UserMCMapper import MCUser, UserMCMapper
 from ..config.config import *
 
-plugin_dir = str(Path(__file__).resolve().parents[5])
-excels_dir = plugin_dir + '/excels'
+project_dir = str(Path(__file__).resolve().parents[5])
+excels_dir = project_dir + '/excels'
 
 def read_excel(fpath):
     xls = pd.read_excel(fpath)
@@ -18,8 +18,14 @@ def read_excel(fpath):
     for index, row in xls.iterrows():
         # 将所有通过的都插入数据库
         if row['passed'] == '☑':
-            id = UserMapper.insert(User(email=row['qq_num'] + "@qq.com", permission=1))
-            UserMCMapper.insert(MCUser(id, row['qq_num'], row['user_name']))
+            email = row['qq_num'] + "@qq.com"
+            if(UserMapper.exits_email_user(email=email)):
+                user = UserMapper.get_user_by_email(email)
+                id = user.id
+            else:
+                id = UserMapper.insert(User(email=email, permission=1))
+            id = UserMapper.insert(User(email=email, permission=1))
+            UserMCMapper.insert(MCUser(id, email))
             ret.append(row)
     
     return ret

@@ -1,7 +1,7 @@
 import mcrcon
 from mcstatus import JavaServer
 from time import sleep
-import config
+from config import *
 import re
 import logging
 import psutil
@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 # 获取服务器 tps
 def get_tps():
     tps_value = None
-    rcon = mcrcon.MCRcon(config.serIP, config.rconPw, config.rconPort, timeout=2)
+    rcon = mcrcon.MCRcon(server_ip, rcon_password, rcon_port, timeout=2)
     try:
         rcon.connect()
         response = rcon.command('tps')
@@ -48,7 +48,7 @@ def get_system_status():
 # 获取 (在线人数, 查询延迟, 服务器版本)
 def get_mc_status():
     try:
-        server = JavaServer.lookup('{0}:{1}'.format(config.serIP, config.serPort), 200)
+        server = JavaServer.lookup('{0}:{1}'.format(server_ip, server_port), 200)
         serstatus = server.status()
         onlinePlayers = serstatus.players.online
         queryLatency = round(serstatus.latency, 3)  # 保留三位小数
@@ -61,7 +61,7 @@ def get_mc_status():
 
 def get_online_players():
     online = None
-    rcon = mcrcon.MCRcon(config.serIP, config.rconPw, config.rconPort, timeout=2)
+    rcon = mcrcon.MCRcon(server_ip, rcon_password, rcon_port, timeout=2)
     try:
         rcon.connect()
         response = rcon.command('list')
