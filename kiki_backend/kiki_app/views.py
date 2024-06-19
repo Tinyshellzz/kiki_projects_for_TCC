@@ -17,7 +17,7 @@ def mcstatus(request):
 
 def mcstatusOnline(request):
     online = myMcstatus.get_online_players()
-    return HttpResponse(json.dumps(online,ensure_ascii=False),content_type="application/json,charset=utf-8")
+    return HttpResponse(json.dumps(online, ensure_ascii=False), content_type="application/json,charset=utf-8")
 
 def mcstatusTps(request):
     tps = myMcstatus.get_tps()
