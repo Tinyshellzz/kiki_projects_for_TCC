@@ -183,7 +183,7 @@ class get:
         msg = str(event.get_message())
         print(msg)
         
-        match = re.search('^(找人|search)(.*$)', msg)
+        match = re.search('^/{0,1}(找人|search)(.*$)', msg)
         userbyname = None
         if len(match.groups()) == 2:
             match = match.groups()[1].strip()

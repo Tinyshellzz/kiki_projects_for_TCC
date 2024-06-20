@@ -11,7 +11,7 @@ class kick:
         if not await auth_user(bot, event, auth_qq_list): return
         user_id = str(event.get_user_id())
         msg = str(event.get_message())
-        match = re.search('^(踢|kick)(.*$)', msg)
+        match = re.search('^/{0,1}(踢|kick)(.*$)', msg)
 
         userbyname = None
         if len(match.groups()) == 2:
