@@ -27,6 +27,7 @@ with open(project_dir + '/config.yml', 'r', encoding='utf8') as f:
     data = yaml.load(f, Loader=yaml.FullLoader)
 
 db_host=data['db_host']
+db_port=int(data['db_port'])
 db_user=data['db_user']
 db_passwd=data['db_passwd']
 db_database=data['db_database']

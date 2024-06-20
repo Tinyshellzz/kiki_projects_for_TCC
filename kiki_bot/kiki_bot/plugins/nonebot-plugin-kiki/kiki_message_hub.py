@@ -17,6 +17,7 @@ from .utils import tools
 matcher=on_message()
 cooldown_dicts = []
 
+# pip install pymysql-pool pymysql pymysql
 # [正则, 方法, 冷却(s)]  (会默认调用status.py里面的 handle(bot, event) 方法)
 match_rules = [
     ['^test$', transfer_db, 0],

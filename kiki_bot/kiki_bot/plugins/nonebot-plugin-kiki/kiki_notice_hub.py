@@ -51,7 +51,7 @@ class GroupIncreaseNotice:
 
         # 将玩家添加到白名单
         mc_user = UserMCMapper.get(str(event.get_user_id()))
-        UserMCMapper.add_whitelist(mc_user.id)
+        if mc_user != None: UserMCMapper.add_whitelist(mc_user.id)
 
 
 class GroupDecreaseNotice:
@@ -68,6 +68,6 @@ class GroupDecreaseNotice:
         # 删除白名单
         mc_user = UserMCMapper.get(str(event.get_user_id()))
         mc_user = UserMCMapper.get(str(event.get_user_id()))
-        UserMCMapper.remove_whitelist(mc_user.id)
+        if mc_user != None: UserMCMapper.remove_whitelist(mc_user.id)
 
 

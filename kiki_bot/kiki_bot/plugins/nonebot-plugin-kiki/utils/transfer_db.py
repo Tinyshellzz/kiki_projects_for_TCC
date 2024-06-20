@@ -30,7 +30,7 @@ async def handle(bot: Bot, event: Event):
             last_login_time = None
             if r[5] != None:
                 last_login_time = datetime.datetime.strptime(r[5], "%Y-%m-%dT%H:%M:%S")
-            UserMCMapper.insert(MCUser(id, r[0], r[1], r[2], r[3], last_login_time, r[6]))
+            UserMCMapper.insert(MCUser(id, r[0], r[1], r[2], r[3].replace("-", ""), last_login_time, r[6]))
             if r[4]=='true': UserMCMapper.add_whitelist(id)
             print(f'转移{r[2]}成功')
         except Exception as e:

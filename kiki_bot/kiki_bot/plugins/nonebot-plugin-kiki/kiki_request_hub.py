@@ -3,7 +3,8 @@ from nonebot import on_request
 from nonebot.adapters.onebot.v11 import Bot, Event
 from nonebot.adapters.onebot.v11.event import GroupRequestEvent
 import re
-from .database import UserMapper
+from .database.UserMCMapper import UserMCMapper
+from .database.BanlistMapper import BanlistMapper
 from .config.config import *
 
 matcher=on_request()
@@ -29,12 +30,12 @@ class GroupRequest:
         # 申请者的QQ号
         user_id = str(event.get_user_id())
         # QQ号再数据库中, 就同意入群
-        if UserMapper.exists_qq_id(user_id):
-            user = UserMapper.get(user_id)
-            if user.whitelisted != "ban":
+        if UserMCMapper.exists_qq_id(user_id):
+            user = UserMCMapper.get(user_id)
+            if not BanlistMapper.exists_mc_uuid(user.mc_uuid):
                 await bot.set_group_add_request(flag = event.flag, approve=True)
             else:
-                await bot.set_group_add_request(flag = event.flag, approve=False, reason='你不允许加入该群')
+                await bot.set_group_add_request(flag = event.flag, approve=False, reason='你已被封禁, 不允许加入该群')
         else:
             # False拒绝申请, True就是同意
             pass
