@@ -20,10 +20,10 @@ async def dispaly_user(bot: Bot, event: Event, user: MCUser):
     user_id = str(event.get_user_id())
     ban_user: BanlistUser = BanlistMapper.get_user_by_mc_uuid(user.mc_uuid)
     if ban_user != None and ban_user.unban_date > datetime.datetime.now():
-        messages = [tools.to_msg_node(f"qq: {user.qq_num}\n游戏昵称: {user.display_name}\nUUID: {user.mc_uuid}\n上次登录: {user.last_login_time}\n封禁理由: {ban_user.reason}\n解封时间: {ban_user.unban_date}")]
+        messages = [tools.to_msg_node(f"qq: {user.qq_num}\n游戏昵称: {user.display_name}\n上次登录: {user.last_login_time}\n封禁理由: {ban_user.reason}\n解封时间: {ban_user.unban_date}")]
         await tools.send_forward_msg(bot, event, messages)
     else:
-        messages = [tools.to_msg_node(f"qq: {user.qq_num}\n游戏昵称: {user.display_name}\nUUID: {user.mc_uuid}\n上次登录: {user.last_login_time}\n备注: {user.remark}")]
+        messages = [tools.to_msg_node(f"qq: {user.qq_num}\n游戏昵称: {user.display_name}\n上次登录: {user.last_login_time}\n备注: {user.remark}")]
         await tools.send_forward_msg(bot, event, messages)
 
 
@@ -83,17 +83,18 @@ class code:
 
         # 从验证码数据库获取验证码数据
         data = CodeMCMapper.get(code)
-        if UserMCMapper.exists_qq_id(user_id):
-            user = UserMCMapper.get(qq_num=user_id)
-            if user.mc_uuid != data.mc_uuid:
-                await bot.send(event, Message(f'[CQ:at,qq={user_id}] 老东西，你已经绑定了账号『{user.get_display_name()}』无法重复绑定'))
-                return
+
+                
+        if data != None:
+            if UserMCMapper.exists_qq_id(user_id):
+                user = UserMCMapper.get(qq_num=user_id)
+                if user.mc_uuid != data.mc_uuid:
+                    await bot.send(event, Message(f'[CQ:at,qq={user_id}] 老东西，你已经绑定了账号『{user.display_name}』无法重复绑定'))
+                    return
             else:
                 UserMCMapper.add_whitelist(user.id)
                 await bot.send(event, Message(f'[CQ:at,qq={user_id}]『{data.display_name}』是吧，我在服务器等你嗷！来了服务器指定没你好果汁吃！'))
                 return
-                
-        if data != None:
             if UserMCMapper.exists_mc_uuid(data.mc_uuid):
                 user = UserMCMapper.get(mc_uuid=data.mc_uuid)
                 if user.qq_num != user_id:
@@ -117,6 +118,9 @@ class code:
             await bot.send(event, Message(f'[CQ:at,qq={user_id}]『{data.display_name}』是吧，我在服务器等你嗷！来了服务器指定没你好果汁吃！'))
         else:
             await bot.send(event, Message(f'[CQ:at,qq={user_id}] 验证码有误，请返回服务器检查'))
+            if UserMCMapper.exists_qq_id(user_id):
+                user = UserMCMapper.get(qq_num=user_id)
+                await bot.send(event, Message(f'[CQ:at,qq={user_id}] 老东西，你已经绑定了账号『{user.display_name}』无法重复绑定'))
 
 # 更新服务器的白名单
 class update:
