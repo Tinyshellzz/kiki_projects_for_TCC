@@ -10,6 +10,7 @@ import threading
 import datetime
 from os import listdir
 from os.path import isfile, join
+import asyncio
 
 background = Image.open(plugin_dir+"/resources/status.png")
 font = ImageFont.truetype(plugin_dir+"/resources/YeZiGongChangAoYeHei-2.ttf", 36)
@@ -95,11 +96,6 @@ def draw_text_lines(name, text_lines):
 
     return url
 
-from nonebot.adapters.onebot.v11.message import Message, MessageSegment
-from nonebot.adapters.onebot.v11 import Bot, Event
-import os
-import asyncio
-from time import sleep
 
 async def send_forward_msg(bot: Bot, event: Event, messages):
     res_id = await bot.call_api("send_forward_msg", group_id=event.group_id, messages=messages)

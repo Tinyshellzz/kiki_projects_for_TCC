@@ -12,14 +12,14 @@ from ..database.ReadExcel import *
 from ..utils import tools
 import json
 from ..utils.MyException import MyException
-from datetime import datetime
+import datetime
 
 
 # 展示user
 async def dispaly_user(bot: Bot, event: Event, user: MCUser):
     user_id = str(event.get_user_id())
     ban_user: BanlistUser = BanlistMapper.get_user_by_mc_uuid(user.mc_uuid)
-    if ban_user != None:
+    if ban_user != None and ban_user.unban_date < datetime.datetime.now():
         messages = [tools.to_msg_node(f"qq: {user.qq_num}\n游戏昵称: {user.display_name}\nUUID: {user.mc_uuid}\n上次登录: {user.last_login_time}\n封禁理由: {ban_user.reason}\n解封时间: {ban_user.unban_date}")]
         await tools.send_forward_msg(bot, event, messages)
     else:
@@ -111,7 +111,7 @@ class code:
                 id = user.id
             else:
                 id = UserMapper.insert(User(email=email, permission=1))
-            mc_user = MCUser(id, user_id, data.user_name, data.display_name, data.mc_uuid, datetime.now())
+            mc_user = MCUser(id, user_id, data.user_name, data.display_name, data.mc_uuid, datetime.datetime.now())
             UserMCMapper.insert(mc_user)
             UserMCMapper.add_whitelist(mc_user.id)
             await bot.send(event, Message(f'[CQ:at,qq={user_id}]『{data.display_name}』是吧，我在服务器等你嗷！来了服务器指定没你好果汁吃！'))
