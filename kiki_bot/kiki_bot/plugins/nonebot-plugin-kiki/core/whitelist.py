@@ -100,7 +100,7 @@ class code:
             # 不存在数据库记录, 则将将玩家添加到数据库
             id = None
             email = user_id + "@qq.com"
-            if(UserMapper.exits_email_user(email=email)):
+            if(UserMapper.exits_email(email=email)):
                 user = UserMapper.get_user_by_email(email)
                 id = user.id
             else:

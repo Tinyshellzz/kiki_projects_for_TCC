@@ -51,11 +51,14 @@ class UserMapper:
             values
             (%s, %s, MD5(%s), %s)""", (user.email, user.phone, user.password, user.permission ))
         db.commit()
+        c = db.cursor()
         res = None
         if user.email != None:
-            res = c.execute("SELECT * FROM users WHERE email=%s", (user.email,))
+            c.execute("SELECT * FROM users WHERE email=%s", (user.email,))
+            res = c.fetchall()
         else:
             res = c.execute("SELECT * FROM users WHERE phone=%s", (user.phone,))
+            res = c.fetchall()
         c.close()
         db.close()
 
@@ -96,6 +99,7 @@ class UserMapper:
         c.close()
         db.close()
 
+        if len(res) == 0: return None
         r = res[0]
         return User(int(r[0]), r[1], r[2], None, r[4])
     
@@ -108,6 +112,7 @@ class UserMapper:
         c.close()
         db.close()
 
+        if len(res) == 0: return None
         r = res[0]
         return User(int(r[0]), r[1], r[2], None, r[4])
 
@@ -120,6 +125,7 @@ class UserMapper:
         c.close()
         db.close()
 
+        if len(res) == 0: return None
         id = res[0][0]
         return id
     
@@ -132,9 +138,7 @@ class UserMapper:
         c.close()
         db.close()
 
-        if len(res) != 0:
-            return True
-        return False
+        return len(res)!=0
     
     def exits_email_user(email: str):
         db = connect()
@@ -159,7 +163,5 @@ class UserMapper:
         c.close()
         db.close()
 
-        if len(res) != 0:
-            return True
-        return False
+        return res != None and len(res) != 0
     

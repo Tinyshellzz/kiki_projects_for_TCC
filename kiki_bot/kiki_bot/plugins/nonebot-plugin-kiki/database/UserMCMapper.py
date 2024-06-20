@@ -1,6 +1,7 @@
 from .db_config import *
 import json
 from ..utils import tools
+import datetime
 
 try:
     db = connect()
@@ -10,7 +11,7 @@ try:
         qq_num BigInt UNSIGNED,
         user_name Varchar(48),
         display_name Varchar(48),
-        mc_uuid Char(36),
+        mc_uuid Char(32),
         last_login_time Datetime,
         remark Text,
         PRIMARY KEY (id),
@@ -19,12 +20,6 @@ try:
         KEY (display_name),
         UNIQUE KEY (mc_uuid),
         KEY (last_login_time)
-    ) ENGINE=InnoDB CHARACTER SET=utf8;""")
-    c.execute("""CREATE TABLE IF NOT EXISTS banlist (
-        id BigInt UNSIGNED,
-        reason TEXT,
-        unban_date Datetime,
-        PRIMARY KEY (id)
     ) ENGINE=InnoDB CHARACTER SET=utf8;""")
     c.execute("""CREATE TABLE IF NOT EXISTS whitelist (
         id BigInt UNSIGNED,
@@ -37,7 +32,7 @@ except:
     pass
 
 class MCUser:
-    def __init__(self, id, qq_num, user_name: str, display_name = None, mc_uuid = None, last_login_time = None, remark:str = None):
+    def __init__(self, id, qq_num, user_name: str, display_name = None, mc_uuid = None, last_login_time: datetime.datetime = None, remark:str = None):
         if last_login_time != None:
             last_login_time.strftime("%Y-%m-%d %H:%M:%S")
             last_login_time = last_login_time.replace(microsecond=0)
@@ -213,15 +208,15 @@ class UserMCMapper:
         return len(res) != 0
 
     def add_whitelist(id: int):
-        try:
-            db = connect() 
-            c = db.cursor()
-            c.execute("INSERT INTO whitelist VALUES (%s)", (id,))
-            db.commit()
-            c.close()
-            db.close()
-        except:
-            pass
+        if UserMCMapper.exists_whitelist(id):
+            return
+        db = connect() 
+        c = db.cursor()
+        c.execute("INSERT INTO whitelist VALUES (%s)", (id,))
+        db.commit()
+        c.close()
+        db.close()
+
 
     def remove_whitelist(id: int):
         db = connect() 

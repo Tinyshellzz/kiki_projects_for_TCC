@@ -4,7 +4,6 @@ import mcrcon
 import re
 from ..config.config import *
 from .authorization import *
-from ..database import UserMapper
 
 def excute(command):
     rcon = mcrcon.MCRcon(server_ip, rcon_password, rcon_port, timeout=2)
@@ -30,8 +29,7 @@ class ban:
         command = match.groups()[0]
         name = command.split(' ')[0]
 
-        response = excute(f'ban {command}')
-        UserMapper.update_whitelisted_by_name(name, "ban")
+        response = excute(f'iban {command}')
 
         await bot.send(event, Message(f'{response}--完成'))
 
@@ -43,8 +41,7 @@ class unban:
         user_name = re.search('^/unban (.*)$', msg)
         user_name = user_name.groups()[0]
 
-        response = excute(f'pardon {user_name}')
-        UserMapper.update_whitelisted_by_name(user_name, None)
+        response = excute(f'iunban {user_name}')
 
         await bot.send(event, Message(f'{response}--完成'))
 

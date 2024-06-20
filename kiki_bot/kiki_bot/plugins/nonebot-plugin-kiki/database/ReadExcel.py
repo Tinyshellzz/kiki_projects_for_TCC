@@ -19,12 +19,12 @@ def read_excel(fpath):
         # 将所有通过的都插入数据库
         if row['passed'] == '☑':
             email = row['qq_num'] + "@qq.com"
-            if(UserMapper.exits_email_user(email=email)):
+            id = None
+            if(UserMapper.exits_email(email=email)):
                 user = UserMapper.get_user_by_email(email)
                 id = user.id
             else:
                 id = UserMapper.insert(User(email=email, permission=1))
-            id = UserMapper.insert(User(email=email, permission=1))
             UserMCMapper.insert(MCUser(id, email))
             ret.append(row)
     

@@ -1,6 +1,6 @@
 from .db_config import *
 import json
-from datetime import datetime
+import datetime
 import re
 
 # codes_mc:
@@ -44,5 +44,6 @@ class CodeMCMapper:
         if len(res) == 0:
             return None
         
+        if res == None or len(res) == 0: return None
         r = res[0]
         return mc_code(r[0], r[1], r[2], r[3])

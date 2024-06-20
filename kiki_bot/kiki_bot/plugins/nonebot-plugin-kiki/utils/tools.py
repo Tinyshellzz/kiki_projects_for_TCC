@@ -7,7 +7,7 @@ from PIL import Image, ImageDraw, ImageFont
 import os
 import time
 import threading
-from datetime import datetime
+import datetime
 from os import listdir
 from os.path import isfile, join
 
@@ -24,8 +24,7 @@ def get_uuid_by_name(user_name):
         return None
     
     mc_uuid = data['id']
-    ret = mc_uuid[0:8] + '-' + mc_uuid[8:12] + '-' + mc_uuid[12:16] + '-' + mc_uuid[16:20] + '-' + mc_uuid[20:]
-    return ret
+    return mc_uuid
 
 def get_name_and_uuid_by_name(user_name):
     url = f'https://api.mojang.com/users/profiles/minecraft/{user_name}?'
@@ -36,8 +35,7 @@ def get_name_and_uuid_by_name(user_name):
         return None
     
     mc_uuid = data['id']
-    ret = mc_uuid[0:8] + '-' + mc_uuid[8:12] + '-' + mc_uuid[12:16] + '-' + mc_uuid[16:20] + '-' + mc_uuid[20:]
-    return (data['name'], ret)
+    return (data['name'], mc_uuid)
 
 def get_name_by_uuid(uuid):
     uuid = uuid.replace('-', '')
@@ -57,8 +55,8 @@ class no_action:
         pass
 
 def draw_text_lines(name, text_lines):
-    current_time = datetime.now()
-    current_time_str = current_time.strftime("%Y-%m-%dT%H_%M_%S")
+    current_time = datetime.datetime.now()
+    current_time_str = current_time.strftime("%Y-%m-%dT%H:%M:%S")
 
     file_name = f"{name}_{current_time_str}.png"
     url = plugin_dir + '/' + file_name
