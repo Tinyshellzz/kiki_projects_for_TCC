@@ -1,5 +1,4 @@
 
-import mysql.connector
 import pymysql
 from ..config.config import *
 import pymysqlpool

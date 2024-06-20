@@ -59,7 +59,7 @@ class UserMapper:
         else:
             res = c.execute("SELECT * FROM users WHERE phone=%s", (user.phone,))
             res = c.fetchall()
-        c.close()
+
         db.close()
 
         return res[0][0]
@@ -70,7 +70,7 @@ class UserMapper:
         db.commit()
         c.execute("SELECT * FROM users WHERE email=%s AND password=MD5(%s)", (email,password))
         res = c.fetchall()
-        c.close()
+
         db.close()
 
         if len(res) != 0:
@@ -85,7 +85,7 @@ class UserMapper:
             SET password=MD5(%s)
             WHERE email=%s""", (password, email))
         db.commit()
-        c.close()
+
         db.close()
 
         return True
@@ -96,7 +96,7 @@ class UserMapper:
         db.commit()
         c.execute("SELECT * FROM users WHERE id=%s", (id,))
         res = c.fetchall()
-        c.close()
+
         db.close()
 
         if len(res) == 0: return None
@@ -109,7 +109,7 @@ class UserMapper:
         db.commit()
         c.execute("SELECT * FROM users WHERE email=%s", (email,))
         res = c.fetchall()
-        c.close()
+
         db.close()
 
         if len(res) == 0: return None
@@ -122,7 +122,7 @@ class UserMapper:
         db.commit()
         c.execute("SELECT * FROM users WHERE email=%s", (email,))
         res = c.fetchall()
-        c.close()
+
         db.close()
 
         if len(res) == 0: return None
@@ -135,7 +135,7 @@ class UserMapper:
         db.commit()
         c.execute("SELECT * FROM users WHERE email=%s", (email,))
         res = c.fetchall()
-        c.close()
+
         db.close()
 
         return len(res)!=0
@@ -146,7 +146,7 @@ class UserMapper:
         db.commit()
         c.execute("SELECT * FROM users WHERE email=%s", (email,))
         res = c.fetchall()
-        c.close()
+
         db.close()
 
         if len(res) != 0:
@@ -160,7 +160,7 @@ class UserMapper:
         db.commit()
         c.execute("SELECT * FROM users WHERE phone=%s", (phone,))
         res = c.fetchall()
-        c.close()
+
         db.close()
 
         return res != None and len(res) != 0
