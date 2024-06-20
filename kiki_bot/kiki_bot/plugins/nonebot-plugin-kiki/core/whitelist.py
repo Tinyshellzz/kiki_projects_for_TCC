@@ -7,6 +7,7 @@ from nonebot.adapters.onebot.v11 import Bot, Event
 from .authorization import *
 from ..database.UserMapper import User, UserMapper
 from ..database.UserMCMapper import MCUser, UserMCMapper
+from ..database.BanlistMapper import BanlistMapper, BanlistUser
 from ..database.ReadExcel import *
 from ..utils import tools
 import json
@@ -17,8 +18,13 @@ from datetime import datetime
 # 展示user
 async def dispaly_user(bot: Bot, event: Event, user: MCUser):
     user_id = str(event.get_user_id())
-    messages = [tools.to_msg_node(f"qq: {user.qq_num}\n游戏昵称: {user.display_name}\nUUID: {user.mc_uuid}上次登录: {user.last_login_time}\n备注: {user.remark}")]
-    await tools.send_forward_msg(bot, event, messages)
+    ban_user: BanlistUser = BanlistMapper.get_user_by_mc_uuid(user.mc_uuid)
+    if ban_user != None:
+        messages = [tools.to_msg_node(f"qq: {user.qq_num}\n游戏昵称: {user.display_name}\nUUID: {user.mc_uuid}\n上次登录: {user.last_login_time}\n封禁理由: {ban_user.reason}\n解封时间: {ban_user.unban_date}")]
+        await tools.send_forward_msg(bot, event, messages)
+    else:
+        messages = [tools.to_msg_node(f"qq: {user.qq_num}\n游戏昵称: {user.display_name}\nUUID: {user.mc_uuid}\n上次登录: {user.last_login_time}\n备注: {user.remark}")]
+        await tools.send_forward_msg(bot, event, messages)
 
 
 # 检查列表里所有的QQ号, 已经数据库中的记录, 据此更改 whitelist

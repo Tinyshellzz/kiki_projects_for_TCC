@@ -43,7 +43,7 @@ class BanlistMapper:
 
         db = connect() 
         c = db.cursor()
-        c.execute("INSERT INTO banlist VALUES (%s, %s, %s, %s, %s)", (user.id, user.qq_num, user.user_name, user.display_name, user.mc_uuid, user.last_login_time, user.remark))
+        c.execute("INSERT INTO banlist VALUES (%s, %s, %s, %s, %s)", (user.mc_uuid, user.user_name, user.display_name, user.unban_date, user.reason))
         db.commit()
         c.close()
         db.close()
@@ -58,6 +58,20 @@ class BanlistMapper:
         db.close()
 
         return len(res) != 0
+    
+    def get_user_by_mc_uuid(mc_uuid: str) -> BanlistUser:
+        db = connect()
+        c = db.cursor()
+        db.commit()
+        c.execute("SELECT * FROM banlist WHERE mc_uuid=%s", (mc_uuid,))
+        res = c.fetchall()
+        c.close()
+        db.close()
+
+        if len(res) == 0:
+            return None
+        r = res[0]
+        return BanlistUser(r[0], r[1], r[2], r[3], r[4])
 
     def update(user: BanlistUser):
         db = connect() 
