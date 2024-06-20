@@ -56,7 +56,7 @@ class no_action:
 
 def draw_text_lines(name, text_lines):
     current_time = datetime.datetime.now()
-    current_time_str = current_time.strftime("%Y-%m-%dT%H:%M:%S")
+    current_time_str = current_time.strftime("%Y-%m-%dT%H_%M_%S")
 
     file_name = f"{name}_{current_time_str}.png"
     url = plugin_dir + '/' + file_name

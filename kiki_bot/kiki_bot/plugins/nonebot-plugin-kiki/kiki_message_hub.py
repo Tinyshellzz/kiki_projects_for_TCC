@@ -20,7 +20,7 @@ cooldown_dicts = []
 # pip install pymysql-pool pymysql
 # [正则, 方法, 冷却(s)]  (会默认调用status.py里面的 handle(bot, event) 方法)
 match_rules = [
-    ['^test$', transfer_db, 0],
+    ['^test$', tools.no_action, 0],
     ['^/{0,1}(help|帮助)$', replies.help, 10],              # 帮助
     ['^/{0,1}status$', status, 10],                         # 查看服务器状态
     ['^/{0,1}ban (.*)$', server.ban, 0],                         # 封禁玩家
