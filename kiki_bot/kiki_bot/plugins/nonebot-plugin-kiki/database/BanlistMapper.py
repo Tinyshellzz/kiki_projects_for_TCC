@@ -45,7 +45,7 @@ class BanlistMapper:
         c = db.cursor()
         c.execute("INSERT INTO banlist VALUES (%s, %s, %s, %s, %s)", (user.id, user.qq_num, user.user_name, user.display_name, user.mc_uuid, user.last_login_time, user.remark))
         db.commit()
-
+        c.close()
         db.close()
 
     def exists_mc_uuid(mc_uuid: str):
@@ -54,7 +54,7 @@ class BanlistMapper:
         db.commit()
         c.execute("SELECT * FROM banlist WHERE mc_uuid=%s", (mc_uuid,))
         res = c.fetchall()
-
+        c.close()
         db.close()
 
         return len(res) != 0
@@ -64,5 +64,5 @@ class BanlistMapper:
         c = db.cursor()
         c.execute("UPDATE banlist SET user_name=%s, display_name=%s, unban_date=%s, reason=%s WHERE mc_uuid=%s", (user.user_name, user.display_name, user.unban_date, user.reason, user.mc_uuid))
         db.commit()
-
+        c.close()
         db.close()

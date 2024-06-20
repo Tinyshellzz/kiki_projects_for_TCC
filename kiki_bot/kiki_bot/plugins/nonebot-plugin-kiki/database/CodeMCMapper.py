@@ -38,7 +38,7 @@ class CodeMCMapper:
         db.commit()
         c.execute("SELECT * FROM codes_mc WHERE code=%s", (code,))
         res = c.fetchall()
-
+        c.close()
 
         # 没找到
         if len(res) == 0:

@@ -54,7 +54,7 @@ class UserMCMapper:
         db.commit()
         c.execute("SELECT COUNT(*) FROM whitelist")
         res = c.fetchall()
-
+        c.close()
         db.close()
 
         return res[0][0]
@@ -70,7 +70,7 @@ class UserMCMapper:
         offset = (page-1)*size
         c.execute("SELECT * from users_mc, whitelist WHERE users_mc.id=whitelist.id LIMIT %s OFFSET %s", (size, offset))
         res = c.fetchall()
-
+        c.close()
         db.close()
 
         users_mc = []
@@ -91,7 +91,7 @@ class UserMCMapper:
         offset = (page-1)*size
         c.execute("SELECT * from users_mc, whitelist WHERE users_mc.id=whitelist.id AND (user_name LIKE %s OR qq_num LIKE %s) LIMIT %s OFFSET %s", ("%"+user_name+"%", "%"+keyword+"%", size, offset))
         res = c.fetchall()
-
+        c.close()
         db.close()
 
         users_mc = []
@@ -106,7 +106,7 @@ class UserMCMapper:
         db.commit()
         c.execute("SELECT COUNT(*) from users_mc, whitelist WHERE users_mc.id=whitelist.id AND (user_name LIKE %s OR qq_num LIKE %s)", ("%"+user_name+"%", "%"+keyword+"%"))
         res = c.fetchall()
-
+        c.close()
         db.close()
 
         return res[0][0]
@@ -139,7 +139,7 @@ class UserMCMapper:
         c = db.cursor()
         c.execute("INSERT INTO users_mc VALUES (%s, %s, %s, %s, %s, %s, %s)", (user.id, user.qq_num, user.user_name, user.display_name, user.mc_uuid, user.last_login_time, user.remark))
         db.commit()
-
+        c.close()
         db.close()
         
         tools.info(f"user_name:{user.user_name} 已被被添加到数据库")
@@ -152,7 +152,7 @@ class UserMCMapper:
         db.commit()
         c.execute("SELECT * FROM users_mc WHERE qq_num=%s", (qq_num,))
         res = c.fetchall()
-
+        c.close()
         db.close()
 
         return len(res)!=0
@@ -163,7 +163,7 @@ class UserMCMapper:
         db.commit()
         c.execute("SELECT * FROM users_mc WHERE user_name=%s", (user_name,))
         res = c.fetchall()
-
+        c.close()
         db.close()
 
         return len(res)!=0
@@ -174,7 +174,7 @@ class UserMCMapper:
         db.commit()
         c.execute("SELECT * FROM users_mc WHERE mc_uuid=%s", (mc_uuid,))
         res = c.fetchall()
-
+        c.close()
         db.close()
 
         return len(res)!=0
@@ -193,7 +193,7 @@ class UserMCMapper:
             UserMCMapper.remove_whitelist(id)
 
         db.commit()
-
+        c.close()
         db.close()
 
     def exists_whitelist(id: int):
@@ -202,7 +202,7 @@ class UserMCMapper:
         c.execute("SELECT * FROM whitelist WHERE id=%s", (id,))
         res = c.fetchall()
         db.commit()
-
+        c.close()
         db.close()
 
         return len(res) != 0
@@ -214,7 +214,7 @@ class UserMCMapper:
         c = db.cursor()
         c.execute("INSERT INTO whitelist VALUES (%s)", (id,))
         db.commit()
-
+        c.close()
         db.close()
 
 
@@ -223,7 +223,7 @@ class UserMCMapper:
         c = db.cursor()
         c.execute("DELETE FROM whitelist WHERE id=%s", (id,))
         db.commit()
-
+        c.close()
         db.close()
 
     def update_remark_by_qq(qq_num: str, remark: str):
@@ -231,7 +231,7 @@ class UserMCMapper:
         c = db.cursor()
         c.execute("UPDATE users_mc SET remark=%s WHERE qq_num=%s", (remark, qq_num))
         db.commit()
-
+        c.close()
         db.close()
 
     def get_all_user():
@@ -240,7 +240,7 @@ class UserMCMapper:
         db.commit()
         c.execute("SELECT * FROM users_mc")
         res = c.fetchall()
-
+        c.close()
         db.close()
 
         mc_users = []
@@ -263,7 +263,7 @@ class UserMCMapper:
             c.execute("SELECT * FROM users_mc WHERE mc_uuid=%s", (mc_uuid,))
         
         res = c.fetchall()
-
+        c.close()
         db.close()
 
         if len(res) == 0:
