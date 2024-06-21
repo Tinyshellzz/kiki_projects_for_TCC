@@ -41,32 +41,28 @@ class BanlistMapper:
         if BanlistMapper.exists_mc_uuid(user.mc_uuid): 
             BanlistMapper.update(user)
 
-        db = connect() 
-        c = db.cursor()
-        c.execute("INSERT INTO banlist VALUES (%s, %s, %s, %s, %s)", (user.mc_uuid, user.user_name, user.display_name, user.unban_date, user.reason))
-        db.commit()
-        c.close()
-        db.close()
+        with connect() as db:
+            with db.cursor() as c:
+                c.execute("INSERT INTO banlist VALUES (%s, %s, %s, %s, %s)", (user.mc_uuid, user.user_name, user.display_name, user.unban_date, user.reason))
+                db.commit()
 
     def exists_mc_uuid(mc_uuid: str):
-        db = connect()
-        c = db.cursor()
-        db.commit()
-        c.execute("SELECT * FROM banlist WHERE mc_uuid=%s", (mc_uuid,))
-        res = c.fetchall()
-        c.close()
-        db.close()
+        res = None
+        with connect() as db:
+            with db.cursor() as c:
+                db.commit()
+                c.execute("SELECT * FROM banlist WHERE mc_uuid=%s", (mc_uuid,))
+                res = c.fetchall()
 
         return len(res) != 0
     
     def get_user_by_mc_uuid(mc_uuid: str) -> BanlistUser:
-        db = connect()
-        c = db.cursor()
-        db.commit()
-        c.execute("SELECT * FROM banlist WHERE mc_uuid=%s", (mc_uuid,))
-        res = c.fetchall()
-        c.close()
-        db.close()
+        res = None
+        with connect() as db:
+            with db.cursor() as c:
+                db.commit()
+                c.execute("SELECT * FROM banlist WHERE mc_uuid=%s", (mc_uuid,))
+                res = c.fetchall()
 
         if len(res) == 0:
             return None
@@ -74,9 +70,7 @@ class BanlistMapper:
         return BanlistUser(r[0], r[1], r[2], r[3], r[4])
 
     def update(user: BanlistUser):
-        db = connect() 
-        c = db.cursor()
-        c.execute("UPDATE banlist SET user_name=%s, display_name=%s, unban_date=%s, reason=%s WHERE mc_uuid=%s", (user.user_name, user.display_name, user.unban_date, user.reason, user.mc_uuid))
-        db.commit()
-        c.close()
-        db.close()
+        with connect() as db:
+            with db.cursor() as c:
+                c.execute("UPDATE banlist SET user_name=%s, display_name=%s, unban_date=%s, reason=%s WHERE mc_uuid=%s", (user.user_name, user.display_name, user.unban_date, user.reason, user.mc_uuid))
+                db.commit()

@@ -33,12 +33,12 @@ class mc_code:
 
 class CodeMCMapper:
     def get(code):
-        db = connect()
-        c = db.cursor()
-        db.commit()
-        c.execute("SELECT * FROM codes_mc WHERE code=%s", (code,))
-        res = c.fetchall()
-        c.close()
+        res = None
+        with connect() as db:
+            with db.cursor() as c:
+                db.commit()
+                c.execute("SELECT * FROM codes_mc WHERE code=%s", (code,))
+                res = c.fetchall()
 
         # 没找到
         if len(res) == 0:

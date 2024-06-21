@@ -39,7 +39,7 @@ class MCUser:
 
         self.id = id
         self.qq_num = qq_num
-        self.user_name = user_name.lower()
+        self.user_name = None if user_name == None else user_name.lower()
         self.display_name = display_name
         self.mc_uuid = mc_uuid
         self.last_login_time = last_login_time
@@ -49,13 +49,12 @@ class MCUser:
     
 class UserMCMapper:
     def get_user_amount():
-        db = connect()
-        c = db.cursor()
-        db.commit()
-        c.execute("SELECT COUNT(*) FROM whitelist")
-        res = c.fetchall()
-        c.close()
-        db.close()
+        res = None
+        with connect() as db:
+            with db.cursor() as c:
+                db.commit()
+                c.execute("SELECT COUNT(*) FROM whitelist")
+                res = c.fetchall()
 
         return res[0][0]
     
@@ -64,14 +63,13 @@ class UserMCMapper:
         if page <= 0:
             raise Exception({'errorCode': 'userMapper_get_page_zero'})
 
-        db = connect() 
-        c = db.cursor()
-        db.commit()
-        offset = (page-1)*size
-        c.execute("SELECT * from users_mc, whitelist WHERE users_mc.id=whitelist.id LIMIT %s OFFSET %s", (size, offset))
-        res = c.fetchall()
-        c.close()
-        db.close()
+        res = None
+        with connect() as db:
+            with db.cursor() as c:
+                db.commit()
+                offset = (page-1)*size
+                c.execute("SELECT * from users_mc, whitelist WHERE users_mc.id=whitelist.id LIMIT %s OFFSET %s", (size, offset))
+                res = c.fetchall()
 
         users_mc = []
         for r in res:
@@ -85,14 +83,13 @@ class UserMCMapper:
         if page <= 0:
             raise Exception({'errorCode': 'userMapper_get_page_zero'})
 
-        db = connect() 
-        c = db.cursor()
-        db.commit()
-        offset = (page-1)*size
-        c.execute("SELECT * from users_mc, whitelist WHERE users_mc.id=whitelist.id AND (user_name LIKE %s OR qq_num LIKE %s) LIMIT %s OFFSET %s", ("%"+user_name+"%", "%"+keyword+"%", size, offset))
-        res = c.fetchall()
-        c.close()
-        db.close()
+        res = None
+        with connect() as db:
+            with db.cursor() as c:
+                db.commit()
+                offset = (page-1)*size
+                c.execute("SELECT * from users_mc, whitelist WHERE users_mc.id=whitelist.id AND (user_name LIKE %s OR qq_num LIKE %s) LIMIT %s OFFSET %s", ("%"+user_name+"%", "%"+keyword+"%", size, offset))
+                res = c.fetchall()
 
         users_mc = []
         for r in res:
@@ -101,13 +98,12 @@ class UserMCMapper:
     
     def get_users_amount_like(keyword: str):
         user_name = keyword.lower()
-        db = connect() 
-        c = db.cursor()
-        db.commit()
-        c.execute("SELECT COUNT(*) from users_mc, whitelist WHERE users_mc.id=whitelist.id AND (user_name LIKE %s OR qq_num LIKE %s)", ("%"+user_name+"%", "%"+keyword+"%"))
-        res = c.fetchall()
-        c.close()
-        db.close()
+        res = None
+        with connect() as db:
+            with db.cursor() as c:
+                db.commit()
+                c.execute("SELECT COUNT(*) from users_mc, whitelist WHERE users_mc.id=whitelist.id AND (user_name LIKE %s OR qq_num LIKE %s)", ("%"+user_name+"%", "%"+keyword+"%"))
+                res = c.fetchall()
 
         return res[0][0]
     
@@ -135,55 +131,54 @@ class UserMCMapper:
             tools.exception(f"uuid:{user.mc_uuid} 已被绑定")
             return False
 
-        db = connect() 
-        c = db.cursor()
-        c.execute("INSERT INTO users_mc VALUES (%s, %s, %s, %s, %s, %s, %s)", (user.id, user.qq_num, user.user_name, user.display_name, user.mc_uuid, user.last_login_time, user.remark))
-        db.commit()
-        c.close()
-        db.close()
+        res = None
+        with connect() as db:
+            with db.cursor() as c:
+                c.execute("INSERT INTO users_mc VALUES (%s, %s, %s, %s, %s, %s, %s)", (user.id, user.qq_num, user.user_name, user.display_name, user.mc_uuid, user.last_login_time, user.remark))
+                db.commit()
         
         tools.info(f"user_name:{user.user_name} 已被被添加到数据库")
         return True
     
 
     def exists_qq_id(qq_num: str):
-        db = connect() 
-        c = db.cursor()
-        db.commit()
-        c.execute("SELECT * FROM users_mc WHERE qq_num=%s", (qq_num,))
-        res = c.fetchall()
-        c.close()
-        db.close()
+        res = None
+        with connect() as db:
+            with db.cursor() as c:
+                db.commit()
+                c.execute("SELECT * FROM users_mc WHERE qq_num=%s", (qq_num,))
+                res = c.fetchall()
 
         return len(res)!=0
     
     def exists_user_name(user_name: str):
-        db = connect() 
-        c = db.cursor()
-        db.commit()
-        c.execute("SELECT * FROM users_mc WHERE user_name=%s", (user_name,))
-        res = c.fetchall()
-        c.close()
-        db.close()
+        res = None
+        with connect() as db:
+            with db.cursor() as c:
+                db.commit()
+                c.execute("SELECT * FROM users_mc WHERE user_name=%s", (user_name,))
+                res = c.fetchall()
 
         return len(res)!=0
     
     def exists_mc_uuid(mc_uuid: str):
-        db = connect() 
-        c = db.cursor()
-        db.commit()
-        c.execute("SELECT * FROM users_mc WHERE mc_uuid=%s", (mc_uuid,))
-        res = c.fetchall()
-        c.close()
-        db.close()
+        res = None
+        with connect() as db:
+            with db.cursor() as c:
+                db.commit()
+                c.execute("SELECT * FROM users_mc WHERE mc_uuid=%s", (mc_uuid,))
+                res = c.fetchall()
 
         return len(res)!=0
     
     def update_whitelisted_by_qq(qq_num, whitelisted):
-        db = connect() 
-        c = db.cursor()
-        c.execute("SELECT * FROM users_mc WHERE qq_num=%s", qq_num)
-        res = c.fetchall()
+        res = None
+        with connect() as db:
+            with db.cursor() as c:
+                db.commit()
+                c.execute("SELECT * FROM users_mc WHERE qq_num=%s", qq_num)
+                res = c.fetchall()
+
         if (len(res) == 0):
             return
         id = res[0][0]
@@ -197,51 +192,44 @@ class UserMCMapper:
         db.close()
 
     def exists_whitelist(id: int):
-        db = connect() 
-        c = db.cursor()
-        c.execute("SELECT * FROM whitelist WHERE id=%s", (id,))
-        res = c.fetchall()
-        db.commit()
-        c.close()
-        db.close()
+        res = None
+        with connect() as db:
+            with db.cursor() as c:
+                db.commit()
+                c.execute("SELECT * FROM whitelist WHERE id=%s", (id,))
+                res = c.fetchall()
 
         return len(res) != 0
 
     def add_whitelist(id: int):
         if UserMCMapper.exists_whitelist(id):
             return
-        db = connect() 
-        c = db.cursor()
-        c.execute("INSERT INTO whitelist VALUES (%s)", (id,))
-        db.commit()
-        c.close()
-        db.close()
+
+        with connect() as db:
+            with db.cursor() as c:
+                c.execute("INSERT INTO whitelist VALUES (%s)", (id,))
+                db.commit()
 
 
     def remove_whitelist(id: int):
-        db = connect() 
-        c = db.cursor()
-        c.execute("DELETE FROM whitelist WHERE id=%s", (id,))
-        db.commit()
-        c.close()
-        db.close()
+        with connect() as db:
+            with db.cursor() as c:
+                c.execute("DELETE FROM whitelist WHERE id=%s", (id,))
+                db.commit()
 
     def update_remark_by_qq(qq_num: str, remark: str):
-        db = connect() 
-        c = db.cursor()
-        c.execute("UPDATE users_mc SET remark=%s WHERE qq_num=%s", (remark, qq_num))
-        db.commit()
-        c.close()
-        db.close()
+        with connect() as db:
+            with db.cursor() as c:
+                c.execute("UPDATE users_mc SET remark=%s WHERE qq_num=%s", (remark, qq_num))
+                db.commit()
 
     def get_all_user():
-        db = connect() 
-        c = db.cursor()
-        db.commit()
-        c.execute("SELECT * FROM users_mc")
-        res = c.fetchall()
-        c.close()
-        db.close()
+        res = None
+        with connect() as db:
+            with db.cursor() as c:
+                db.commit()
+                c.execute("SELECT * FROM users_mc")
+                res = c.fetchall()
 
         mc_users = []
         for r in res:
@@ -252,19 +240,19 @@ class UserMCMapper:
         # 通过 qq_num 或 user_name 或 mc_uuid, 查找数据库
     def get(qq_num = None, user_name: str = None, mc_uuid = None) -> MCUser:
         if user_name != None: user_name = user_name.lower()
-        db = connect() 
-        c = db.cursor()
-        db.commit()
-        if qq_num != None:
-            c.execute("SELECT * FROM users_mc WHERE qq_num=%s", (qq_num,))
-        elif user_name != None:
-            c.execute("SELECT * FROM users_mc WHERE user_name=%s", (user_name,))
-        elif mc_uuid != None:
-            c.execute("SELECT * FROM users_mc WHERE mc_uuid=%s", (mc_uuid,))
-        
-        res = c.fetchall()
-        c.close()
-        db.close()
+
+        res = None
+        with connect() as db:
+            with db.cursor() as c:
+                db.commit()
+                if qq_num != None:
+                    c.execute("SELECT * FROM users_mc WHERE qq_num=%s", (qq_num,))
+                elif user_name != None:
+                    c.execute("SELECT * FROM users_mc WHERE user_name=%s", (user_name,))
+                elif mc_uuid != None:
+                    c.execute("SELECT * FROM users_mc WHERE mc_uuid=%s", (mc_uuid,))
+                
+                res = c.fetchall()
 
         if len(res) == 0:
             return None
