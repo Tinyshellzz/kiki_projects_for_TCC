@@ -71,7 +71,7 @@ def whitelist_update(qq_nums):
 # mc的白名单验证码
 class code:
     async def handle(bot: Bot, event: Event):
-        if not await auth_group(bot, event, auth_group_list): return
+        if not await auth_group(bot, event): return
         print('####################whitelist code start########################')
         user_id = str(event.get_user_id())
 
@@ -127,7 +127,7 @@ class code:
 class update:
     async def handle(bot: Bot, event: Event):
         # 设置使用权限
-        if not await auth_user(bot, event, auth_qq_list): return
+        if not await auth_qq(bot, event): return
 
         await bot.send(event, Message(f"白名单更新中...(耗时可能较长)"))
         qq_nums = set()
@@ -142,7 +142,7 @@ class update:
 class load:
     async def handle(bot: Bot, event: Event):
         # 设置使用权限
-        if not await auth_user(bot, event, auth_qq_list): return
+        if not await auth_qq(bot, event): return
         
         await bot.send(event, Message(f"excel 读取中... (耗时较长)"))
         # 向所有通过审核的人发送通知
@@ -157,7 +157,7 @@ class load:
 class remove:
     async def handle(bot: Bot, event: Event):
         # 设置使用权限
-        if not await auth_user(bot, event, auth_qq_list): return
+        if not await auth_qq(bot, event): return
 
         msg = str(event.get_message())
         user_name = msg.split(' ')[2]
@@ -171,7 +171,7 @@ class remove:
 class add:
     async def handle(bot: Bot, event: Event):
         # 设置使用权限
-        if not await auth_user(bot, event, auth_qq_list): return
+        if not await auth_qq(bot, event): return
 
         msg = str(event.get_message())
         user_name = msg.split(' ')[2]
@@ -214,7 +214,7 @@ class get:
 class insert:
     async def handle(bot: Bot, event: Event):
         # 设置使用权限
-        if not await auth_user(bot, event, auth_qq_list): return
+        if not await auth_qq(bot, event): return
 
         msg = str(event.get_message())
         sp = msg.split(' ')

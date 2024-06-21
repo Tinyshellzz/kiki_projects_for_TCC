@@ -21,7 +21,7 @@ def excute(command):
 
 class ban:
     async def handle(bot: Bot, event: Event):
-        if not await auth_user(bot, event): return
+        if not await auth_qq(bot, event): return
         print('------------server ban-------------')
         msg = str(event.get_message())
         
@@ -35,7 +35,7 @@ class ban:
 
 class unban:
     async def handle(bot: Bot, event: Event):
-        if not await auth_user(bot, event): return
+        if not await auth_qq(bot, event): return
         msg = str(event.get_message())
         
         user_name = re.search('^/{0,1}unban (.*)$', msg)

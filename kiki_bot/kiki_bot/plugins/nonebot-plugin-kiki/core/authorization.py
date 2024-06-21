@@ -4,12 +4,12 @@ from nonebot.adapters.onebot.v11.message import Message
 from ..config.config import *
 
 # 验证权限
-async def auth(bot: Bot, event: Event, user_list=None, group_list=None):
-    if not await auth_user(bot, event, user_list): return False
+async def auth(bot: Bot, event: Event, user_list=auth_qq_list, group_list=auth_group_list):
+    if not await auth_qq(bot, event, user_list): return False
     if not await auth_group(bot, event, group_list): return False
     return True
 
-async def auth_user(bot: Bot, event: Event, user_list=auth_qq_list):
+async def auth_qq(bot: Bot, event: Event, user_list=auth_qq_list):
     if user_list == None: return True
 
     user_id = str(event.get_user_id())

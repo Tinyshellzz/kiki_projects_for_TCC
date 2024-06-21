@@ -9,7 +9,7 @@ from ..utils import tools
 
 class ban:
     async def handle(bot: Bot, event: Event):
-        if not await auth_user(bot, event, auth_qq_list): return
+        if not await auth_qq(bot, event, auth_qq_list): return
         print('####################ban start########################')
         user_id = str(event.get_user_id())
 

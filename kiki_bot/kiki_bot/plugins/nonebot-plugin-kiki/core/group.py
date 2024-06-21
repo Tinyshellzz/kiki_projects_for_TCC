@@ -8,7 +8,7 @@ from ..utils import tools
 
 class kick:
     async def handle(bot: Bot, event: Event):
-        if not await auth_user(bot, event, auth_qq_list): return
+        if not await auth_qq(bot, event, auth_qq_list): return
         user_id = str(event.get_user_id())
         msg = str(event.get_message())
         match = re.search('^/{0,1}(踢|kick)(.*$)', msg)

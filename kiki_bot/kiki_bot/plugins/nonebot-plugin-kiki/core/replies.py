@@ -7,6 +7,7 @@ from ..utils import tools
 import requests
 import json
 from random import randrange
+from .authorization import *
 
 plugin_dir = str(Path(__file__).resolve().parents[1])
 
@@ -14,6 +15,7 @@ plugin_dir = str(Path(__file__).resolve().parents[1])
 class ip:
     async def handle(bot: Bot, event: Event):
         # 判断是否是群组事件, 不是就返回
+        if not await auth_group(bot, event): return
         if not isinstance(event, GroupMessageEvent): return
 
         user_id = str(event.user_id)

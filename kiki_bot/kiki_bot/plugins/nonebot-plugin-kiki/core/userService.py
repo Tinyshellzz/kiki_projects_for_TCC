@@ -4,9 +4,12 @@ from ..database.UserMapper import User, UserMapper
 from ..database.UserMCMapper import MCUser, UserMCMapper
 from ..database.BanlistMapper import BanlistMapper, BanlistUser
 import re
+from .authorization import *
 
 class delete:
     async def handle(bot: Bot, event: Event):
+        if not await auth_qq(bot, event): return
+
         user_id = str(event.get_user_id())
         msg = str(event.get_message())
         print(msg)
