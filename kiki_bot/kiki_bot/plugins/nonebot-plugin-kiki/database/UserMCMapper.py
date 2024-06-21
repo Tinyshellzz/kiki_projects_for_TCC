@@ -258,3 +258,11 @@ class UserMCMapper:
             return None
         r = res[0]
         return MCUser(r[0], r[1], r[2], r[3], r[4], r[5], r[6])
+    
+    def delete_by_qq(qq_num):
+        with connect() as db:
+            with db.cursor() as c:
+                c.execute("DELETE FROM users_mc WHERE qq_num=%s", (qq_num,))
+                db.commit()
+
+        return True

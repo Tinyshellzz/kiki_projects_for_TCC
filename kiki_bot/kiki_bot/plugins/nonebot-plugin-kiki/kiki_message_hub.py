@@ -31,6 +31,7 @@ match_rules = [
     ['^/{0,1}whitelist remove .*$', whitelist.remove, 0],        # 从白名单移除玩家
     ['^/{0,1}whitelist add .*$', whitelist.add, 0],              # 添加玩家到白名单
     ['^/{0,1}mcuser (insert|bind) .*$', whitelist.insert, 0],    # 将玩家插入数据库
+    ['^/{0,1}user delete .*$', whitelist.insert, 0],    # 将玩家插入数据库
     ['^/{0,1}(找人|search).*$', whitelist.get, 0],                # 万能查询
     ['^/{0,1}(备注|remarke).+$', whitelist.remarke, 0],           # 添加备注
     ['^/{0,1}(踢|kick).+$', group.kick, 0],                       # 移出群聊

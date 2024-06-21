@@ -156,3 +156,10 @@ class UserMapper:
 
         return res != None and len(res) != 0
     
+    def delete_by_email(email: str):
+        with connect() as db:
+            with db.cursor() as c:
+                c.execute("DELETE FROM users WHERE email=%s", (email,))
+                db.commit()
+
+        return True
