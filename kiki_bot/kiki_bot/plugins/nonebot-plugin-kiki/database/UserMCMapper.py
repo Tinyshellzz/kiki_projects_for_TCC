@@ -38,7 +38,7 @@ class MCUser:
             last_login_time = last_login_time.replace(microsecond=0)
 
         self.id = id
-        self.qq_num = qq_num
+        self.qq_num = None if qq_num == None else str(qq_num)
         self.user_name = None if user_name == None else user_name.lower()
         self.display_name = display_name
         self.mc_uuid = mc_uuid
