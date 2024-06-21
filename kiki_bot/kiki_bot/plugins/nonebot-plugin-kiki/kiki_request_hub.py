@@ -33,7 +33,8 @@ class GroupRequest:
         if UserMCMapper.exists_qq_id(user_id):
             user = UserMCMapper.get(user_id)
             if not BanlistMapper.exists_mc_uuid(user.mc_uuid):
-                await bot.set_group_add_request(flag = event.flag, approve=True)
+                pass
+                # await bot.set_group_add_request(flag = event.flag, approve=True)
             else:
                 await bot.set_group_add_request(flag = event.flag, approve=False, reason='你已被封禁, 不允许加入该群')
         else:

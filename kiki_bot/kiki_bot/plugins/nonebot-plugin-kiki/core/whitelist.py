@@ -117,10 +117,11 @@ class code:
             UserMCMapper.add_whitelist(mc_user.id)
             await bot.send(event, Message(f'[CQ:at,qq={user_id}]『{data.display_name}』是吧，我在服务器等你嗷！来了服务器指定没你好果汁吃！'))
         else:
-            await bot.send(event, Message(f'[CQ:at,qq={user_id}] 验证码有误，请返回服务器检查'))
             if UserMCMapper.exists_qq_id(user_id):
                 user = UserMCMapper.get(qq_num=user_id)
                 await bot.send(event, Message(f'[CQ:at,qq={user_id}] 老东西，你已经绑定了账号『{user.display_name}』无法重复绑定'))
+            else:
+                await bot.send(event, Message(f'[CQ:at,qq={user_id}] 验证码有误，请返回服务器检查'))
 
 # 更新服务器的白名单
 class update:
