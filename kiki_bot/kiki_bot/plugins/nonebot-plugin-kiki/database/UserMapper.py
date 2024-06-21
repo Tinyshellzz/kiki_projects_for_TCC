@@ -54,6 +54,7 @@ class UserMapper:
         res = None
         with connect() as db:
             with db.cursor() as c:
+                db.commit()
                 if user.email != None:
                     c.execute("SELECT * FROM users WHERE email=%s", (user.email,))
                     res = c.fetchall()
