@@ -91,10 +91,10 @@ class code:
                 if user.mc_uuid != data.mc_uuid:
                     await bot.send(event, Message(f'[CQ:at,qq={user_id}] 老东西，你已经绑定了账号『{user.display_name}』无法重复绑定'))
                     return
-            else:
-                UserMCMapper.add_whitelist(user.id)
-                await bot.send(event, Message(f'[CQ:at,qq={user_id}]『{data.display_name}』是吧，我在服务器等你嗷！来了服务器指定没你好果汁吃！'))
-                return
+                else:
+                    UserMCMapper.add_whitelist(user.id)
+                    await bot.send(event, Message(f'[CQ:at,qq={user_id}]『{data.display_name}』是吧，我在服务器等你嗷！来了服务器指定没你好果汁吃！'))
+                    return
             if UserMCMapper.exists_mc_uuid(data.mc_uuid):
                 user = UserMCMapper.get(mc_uuid=data.mc_uuid)
                 if user.qq_num != user_id:
