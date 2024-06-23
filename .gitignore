@@ -10,3 +10,5 @@ config - 副本.yml
 config.yml
 appsettings.json
 device.json
+.vscode
+.idea
