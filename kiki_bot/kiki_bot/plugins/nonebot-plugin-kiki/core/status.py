@@ -17,7 +17,7 @@ last_url = None
 # 入口函数
 async def handle(bot: Bot, event: Event):
     # 进行权限验证
-    if not await auth(bot, event, group_list=auth_group_list): return
+    if not await auth_group(bot, event): return
     print("##############status start##############")
 
     # 发送图片
