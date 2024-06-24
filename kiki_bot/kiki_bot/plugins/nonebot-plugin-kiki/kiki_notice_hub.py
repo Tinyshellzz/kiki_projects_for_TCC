@@ -28,7 +28,7 @@ class GroupIncreaseNotice:
         user_id = str(event.user_id)
         print("-----------------welcome start-------------------")
 
-        if str(event.group_id) == '': 
+        if str(event.group_id) == '875633563': 
             current_time = datetime.now()
             current = current_time.strftime("%Y-%m-%d %H:%M:%S")
             nickname = await tools.get_nick_name(bot, event, event.user_id)
