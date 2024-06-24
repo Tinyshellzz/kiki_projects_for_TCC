@@ -50,10 +50,11 @@ class GroupIncreaseNotice:
             url = tools.draw_text_lines('welcome', text_lines)
             await bot.send_group_msg(group_id=group_id, message=Message(f"[CQ:at,qq={user_id}] [CQ:image,file={url}]"))
         else:
-            await bot.send_group_msg(group_id=group_id, message=Message(f"[CQ:at,qq={user_id}] 欢迎入群~"))
             # 将玩家添加到白名单
             mc_user = UserMCMapper.get(str(event.get_user_id()))
             if mc_user != None: UserMCMapper.add_whitelist(mc_user.id)
+            await bot.send_group_msg(group_id=group_id, message=Message(f"[CQ:at,qq={user_id}] 欢迎入群~"))
+           
         
 
 

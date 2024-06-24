@@ -8,6 +8,7 @@ from .authorization import *
 from ..database.UserMapper import User, UserMapper
 from ..database.UserMCMapper import MCUser, UserMCMapper
 from ..database.BanlistMapper import BanlistMapper, BanlistUser
+from ..database.InvitationMapper import InvitationMapper
 from ..database.ReadExcel import *
 from ..utils import tools
 import json
@@ -111,7 +112,7 @@ class code:
                 user = UserMapper.get_user_by_email(email)
                 id = user.id
             else:
-                id = UserMapper.insert(User(email=email, permission=1))
+                id = UserMapper.insert(User(email=email, permission=2))
             mc_user = MCUser(id, user_id, data.user_name, data.display_name, data.mc_uuid, datetime.datetime.now())
             UserMCMapper.insert(mc_user)
             UserMCMapper.add_whitelist(mc_user.id)
@@ -210,11 +211,10 @@ class get:
             await dispaly_user(bot, event, userbyqq)
             return      
 
-# 将玩家插入数据库
-class insert:
+# 邀请好友
+class invite:
     async def handle(bot: Bot, event: Event):
-        # 设置使用权限
-        if not await auth_qq(bot, event): return
+        user_id = str(event.get_user_id())
 
         msg = str(event.get_message())
         sp = msg.split(' ')
@@ -222,16 +222,79 @@ class insert:
             bot.send(event, Message(f"参数不足, /whiteliste insert QQ号 游戏昵称"))
         
         qq_num = sp[2]
-        user_name = sp[3]
+        user_name = sp[3].lower()
+
+        inviter = UserMapper.get_user_by_email(user_id + "qq.com")
+        if inviter == None or inviter.permission < 2:
+            await bot.send(event, Message(f'[CQ:at,qq={user_id}] 你没有邀请权限'))
+            return
+        if InvitationMapper.get_times(user_id) >= 3:
+            await bot.send(event, Message(f'[CQ:at,qq={user_id}] 你的邀请次数已用完'))
+            return
+        if UserMCMapper.exists_qq_id(qq_num):
+            await bot.send(event, Message(f'[CQ:at,qq={user_id}] 绑定失败: QQ『qq_num』已被绑定'))
+            return
+        if UserMCMapper.exists_mc_uuid(user_name):
+            await bot.send(event, Message(f'[CQ:at,qq={user_id}] 绑定失败: 用户『user_name』已被绑定'))
+            return
+        
+        ret = tools.get_name_and_uuid_by_name(user_name)
+        if ret == None:
+            await bot.send(event, Message(f'[CQ:at,qq={user_id}] 绑定失败: 用户名『user_name』不存在'))
+            return
+        (display_name, mc_uuid) = ret
 
         # 不存在数据库记录, 则将将玩家添加到数据库
-        try:
-            id = UserMapper.insert(User(email=qq_num + "@qq.com", permission=1))
-            mc_user = MCUser(id, qq_num, data.user_name, data.display_name, data.mc_uuid, 'true', data.last_login_time)
-            UserMCMapper.insert(mc_user)
-        except MyException as e:
-            await bot.send(event, Message(f"{e}"))
-        await bot.send(event, Message(f"{user_name} 玩家插入成功"))
+        id = None
+        email = qq_num + "@qq.com"
+        if(UserMapper.exits_email(email=email)):
+            user = UserMapper.get_user_by_email(email)
+            id = user.id
+        else:
+            id = UserMapper.insert(User(email=email, permission=1))
+        mc_user = MCUser(id, qq_num, user_name, display_name, mc_uuid, datetime.datetime.now())
+        UserMCMapper.insert(mc_user)
+        InvitationMapper.insert(mc_user.id, inviter.id)
+        await bot.send(event, Message(f'[CQ:at,qq={user_id}]『{display_name}』已被邀请成功'))
+
+
+class relation:
+    async def handle(bot: Bot, event: Event):
+        user_id = str(event.get_user_id())
+        msg = str(event.get_message())
+        print(msg)
+        
+        match = re.search('^/{0,1}relation(.*$)', msg)
+        user = None
+        if len(match.groups()) == 1:
+            match = match.groups()[1].strip()
+            user = UserMCMapper.get(user_name=match)
+
+        if user == None:
+            match = re.search('([0-9]{8,12})', msg)
+            if match != None:
+                match = match.groups()[0].strip()
+                user = UserMCMapper.get(qq_num=match)
+
+        if user is None:
+            await bot.send(event, Message((f"[CQ:at,qq={user_id}] 查无此人, 请检查id或者qq是否有误")))
+            return
+        
+        res = InvitationMapper.get_relations(user.id)
+        if res == None:
+            await bot.send(event, Message((f"[CQ:at,qq={user_id}] 该用户不存在邀请信息")))
+            return
+        
+        msg = f"[CQ:at,qq={user_id}] 『{UserMCMapper.get_user_by_id(res[0]).display_name}』邀请了："
+        for i in range(1, len(res)):
+            msg += UserMapper.get_user_by_id(res[i]).display_name
+            msg += ","
+        if msg[len(msg) - 1] == ',': 
+            msg = msg[:-1]
+
+        await bot.send(event, Message(msg))
+
+
 
 class remarke:
     async def handle(bot: Bot, event: Event):

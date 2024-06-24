@@ -37,7 +37,7 @@ class MCUser:
             last_login_time.strftime("%Y-%m-%d %H:%M:%S")
             last_login_time = last_login_time.replace(microsecond=0)
 
-        self.id = id
+        self.id = int(id)
         self.qq_num = None if qq_num == None else str(qq_num)
         self.user_name = None if user_name == None else user_name.lower()
         self.display_name = display_name
@@ -57,7 +57,7 @@ class UserMCMapper:
                 res = c.fetchall()
 
         return res[0][0]
-    
+        
     def get_users(page: int, size: int = 12):
         page = round(page)
         if page <= 0:
@@ -106,6 +106,18 @@ class UserMCMapper:
                 res = c.fetchall()
 
         return res[0][0]
+    
+    def get_user_by_id(id: int):
+        res = None
+        with connect() as db:
+            with db.cursor() as c:
+                db.commit()
+                c.execute("SELECT * FROM users_mc WHERE id=%s", id)
+                res = c.fetchall()
+
+        if len(res) == 0: return None
+        r = res[0]
+        return MCUser(r[0], r[1], r[2], r[3], r[4], r[5], r[6]);
     
     def insert(user: MCUser):
         # user_name 已被绑定 

@@ -22,22 +22,24 @@ cooldown_dicts = []
 # [正则, 方法, 冷却(s)]  (会默认调用status.py里面的 handle(bot, event) 方法)
 match_rules = [
     ['^test$', tools.no_action, 0],
-    ['^/{0,1}(help|帮助)$', replies.help, 10],              # 帮助
-    ['^/{0,1}status$', status, 10],                         # 查看服务器状态
+    ['^/{0,1}(help|帮助)$', replies.help, 10],                   # 帮助
+    ['^/{0,1}status$', status, 10],                              # 查看服务器状态
     ['^/{0,1}ban (.*)$', server.ban, 0],                         # 封禁玩家
     ['^/{0,1}unban (.*)$', server.unban, 0],                     # 解封玩家
     ['^/{0,1}whitelist update$', whitelist.update, 0],           # 将 在数据库 且 在qq群中 的账号全部添加到白名单
-    # ['^/whitelist sync$', whitelist.sync, 0],             # 同步minecraft官方的白名单
+    # ['^/whitelist sync$', whitelist.sync, 0],                 # 同步minecraft官方的白名单
     ['^/{0,1}whitelist load$', whitelist.load, 0],               # 从 excels 文件夹加载审核结果
     ['^/{0,1}whitelist remove .*$', whitelist.remove, 0],        # 从白名单移除玩家
     ['^/{0,1}whitelist add .*$', whitelist.add, 0],              # 添加玩家到白名单
-    ['^/{0,1}mcuser (insert|bind) .*$', whitelist.insert, 0],    # 将玩家插入数据库
-    ['^/{0,1}user delete .*$', userService.delete, 0],    # 将玩家插入数据库
+    # ['^/{0,1}mcuser (insert|bind) .*$', whitelist.insert, 0],    # 将玩家插入数据库
+    ['^/{0,1}user delete .*$', userService.delete, 0],            # 从数据库将玩家删除
     ['^/{0,1}(找人|search).*$', whitelist.get, 0],                # 万能查询
     ['^/{0,1}(备注|remarke).+$', whitelist.remarke, 0],           # 添加备注
-    ['^/{0,1}(踢|kick).+$', group.kick, 0],                       # 移出群聊
-    ['^川川$', heChuan.hi, 0],                                # 川川
-    ['^online$', replies.online, 0],                        # 查看在线晚间
+    ['^/{0,1}(邀请|invite).+$', whitelist.invite, 0],               # 邀请自己的好友, 注封禁的时候会一起封禁, 一个人只能邀请3人
+    ['^/{0,1}(relatioin).+$', whitelist.relation, 0],               # 查看邀请关系
+    # ['^/{0,1}(踢|kick).+$', group.kick, 0],                       # 移出群聊
+    ['^川川$', heChuan.hi, 0],                                      # 川川
+    ['^online$', replies.online, 0],                                # 查看在线晚间
     ['^.*' + code_prefix + '[0-9a-zA-Z]{6}.*$', whitelist.code, 10],   # 白名单验证码
     ['(3975252362|3624128565)', replies.at_self, 10],   # 艾特回复
     ['(怎么进服|服务器地址|怎么玩)', replies.ip, 10],
