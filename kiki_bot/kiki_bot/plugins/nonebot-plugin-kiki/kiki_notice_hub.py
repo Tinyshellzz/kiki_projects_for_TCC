@@ -25,33 +25,37 @@ class GroupIncreaseNotice:
         # 判断是否是新成员入群事件
         if not isinstance(event, GroupIncreaseNoticeEvent): return
         if not (str(event.group_id) in auth_group_list): return
+        user_id = str(event.user_id)
         print("-----------------welcome start-------------------")
 
-        current_time = datetime.now()
-        current = current_time.strftime("%Y-%m-%d %H:%M:%S")
-        nickname = await tools.get_nick_name(bot, event, event.user_id)
-        text_lines = [
-            f"@新同学 {nickname}",
-            f"\n",
-            f"~欢迎新同学加入咱Tcc服务器~",
-            f"~请查看群内公告填写审核表呀~",
-            f"~别忘记给我们的宣传片三连噢~",
-            f"~审核务必详细阅读玩家手册~",
-            f"~我们的官方网页:Tcc-mc.com~",
-            f"\n",
-            f"生成时间:{current}",
-        ]
+        if str(event.group_id) == '': 
+            current_time = datetime.now()
+            current = current_time.strftime("%Y-%m-%d %H:%M:%S")
+            nickname = await tools.get_nick_name(bot, event, event.user_id)
+            text_lines = [
+                f"@新同学 {nickname}",
+                f"\n",
+                f"~欢迎新同学加入咱Tcc服务器~",
+                f"~请查看群内公告填写审核表呀~",
+                f"~别忘记给我们的宣传片三连噢~",
+                f"~审核务必详细阅读玩家手册~",
+                f"~我们的官方网页:Tcc-mc.com~",
+                f"\n",
+                f"生成时间:{current}",
+            ]
 
-        # 进入的群号
-        group_id = event.group_id
+            # 进入的群号
+            group_id = event.group_id
+            
+            url = tools.draw_text_lines('welcome', text_lines)
+            await bot.send_group_msg(group_id=group_id, message=Message(f"[CQ:at,qq={user_id}] [CQ:image,file={url}]"))
+        else:
+            await bot.send_group_msg(group_id=group_id, message=Message(f"[CQ:at,qq={user_id}] 欢迎入群~"))
+            # 将玩家添加到白名单
+            mc_user = UserMCMapper.get(str(event.get_user_id()))
+            if mc_user != None: UserMCMapper.add_whitelist(mc_user.id)
         
-        url = tools.draw_text_lines('welcome', text_lines)
-        user_id = str(event.user_id)
-        await bot.send_group_msg(group_id=group_id, message=Message(f"[CQ:at,qq={user_id}] [CQ:image,file={url}]"))
 
-        # 将玩家添加到白名单
-        mc_user = UserMCMapper.get(str(event.get_user_id()))
-        if mc_user != None: UserMCMapper.add_whitelist(mc_user.id)
 
 
 class GroupDecreaseNotice:
