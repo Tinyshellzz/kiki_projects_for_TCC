@@ -235,15 +235,15 @@ class invite:
             await bot.send(event, Message(f'[CQ:at,qq={user_id}] 你还未加入游戏'))
             return
         if UserMCMapper.exists_qq_num(qq_num):
-            await bot.send(event, Message(f'[CQ:at,qq={user_id}] 绑定失败: QQ『qq_num』已被绑定'))
+            await bot.send(event, Message(f'[CQ:at,qq={user_id}] 绑定失败: QQ『{qq_num}』已被绑定'))
             return
         if UserMCMapper.exists_user_name(user_name):
-            await bot.send(event, Message(f'[CQ:at,qq={user_id}] 绑定失败: 用户『user_name』已被绑定'))
+            await bot.send(event, Message(f'[CQ:at,qq={user_id}] 绑定失败: 用户『{user_name}』已被绑定'))
             return
         
         ret = tools.get_name_and_uuid_by_name(user_name)
         if ret == None:
-            await bot.send(event, Message(f'[CQ:at,qq={user_id}] 绑定失败: 用户名『user_name』不存在'))
+            await bot.send(event, Message(f'[CQ:at,qq={user_id}] 绑定失败: 用户名『{user_name}』不存在'))
             return
         (display_name, mc_uuid) = ret
 
@@ -258,7 +258,7 @@ class invite:
         mc_user = MCUser(id, qq_num, user_name, display_name, mc_uuid, datetime.datetime.now())
         UserMCMapper.insert(mc_user)
         InvitationMapper.insert(mc_user.id, inviter.id)
-        await bot.send(event, Message(f'[CQ:at,qq={user_id}]『{display_name}』邀请成功'))
+        await bot.send(event, Message(f'[CQ:at,qq={user_id}] 邀请『{display_name}』成功'))
 
 
 class relation:
