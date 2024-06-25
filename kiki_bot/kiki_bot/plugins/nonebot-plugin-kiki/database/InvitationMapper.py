@@ -1,6 +1,7 @@
 from .db_config import *
 import json
 from ..utils import tools
+from .UserMCMapper import UserMCMapper
 
 try:
     db = connect()
@@ -57,7 +58,7 @@ class InvitationMapper:
                 c.execute("SELECT * FROM invitations WHERE inviter=%s", id)
                 res = c.fetchall()
         
-        return len(res[0]) > 0
+        return len(res) != 0
     
     def get_inviter(id: int):
         res = None
@@ -85,8 +86,8 @@ class InvitationMapper:
                 c.execute("SELECT * FROM invitations WHERE inviter=%s", id)
                 res = c.fetchall()
 
-        ret = [int(inviter)]
+        ret = [UserMCMapper.get_user_by_id(int(inviter))]
         for r in res:
-            ret.append(int(r[0]))
+            ret.append(UserMCMapper.get_user_by_id(int(r[0])))
 
         return ret

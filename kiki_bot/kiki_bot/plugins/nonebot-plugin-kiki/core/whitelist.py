@@ -87,7 +87,7 @@ class code:
 
                 
         if data != None:
-            if UserMCMapper.exists_qq_id(user_id):
+            if UserMCMapper.exists_qq_num(user_id):
                 user = UserMCMapper.get(qq_num=user_id)
                 if user.mc_uuid != data.mc_uuid:
                     await bot.send(event, Message(f'[CQ:at,qq={user_id}] 老东西，你已经绑定了账号『{user.display_name}』无法重复绑定'))
@@ -118,7 +118,7 @@ class code:
             UserMCMapper.add_whitelist(mc_user.id)
             await bot.send(event, Message(f'[CQ:at,qq={user_id}]『{data.display_name}』是吧，我在服务器等你嗷！来了服务器指定没你好果汁吃！'))
         else:
-            if UserMCMapper.exists_qq_id(user_id):
+            if UserMCMapper.exists_qq_num(user_id):
                 user = UserMCMapper.get(qq_num=user_id)
                 await bot.send(event, Message(f'[CQ:at,qq={user_id}] 老东西，你已经绑定了账号『{user.display_name}』无法重复绑定'))
             else:
@@ -189,7 +189,7 @@ class get:
         msg = str(event.get_message())
         print(msg)
         
-        match = re.search('^/{0,1}(找人|search)(.*$)', msg)
+        match = re.search('^/{0,1}(找人|search)(.+$)', msg)
         userbyname = None
         if len(match.groups()) == 2:
             match = match.groups()[1].strip()
@@ -218,20 +218,23 @@ class invite:
 
         msg = str(event.get_message())
         sp = msg.split(' ')
-        if len(sp) < 4: 
-            bot.send(event, Message(f"参数不足, /whiteliste insert QQ号 游戏昵称"))
+        if len(sp) < 3: 
+            bot.send(event, Message(f"参数不足, /invite QQ号 游戏昵称"))
         
-        qq_num = sp[2]
-        user_name = sp[3].lower()
+        qq_num = sp[1]
+        user_name = sp[2].lower()
 
-        inviter = UserMapper.get_user_by_email(user_id + "qq.com")
+        inviter = UserMapper.get_user_by_email(user_id + "@qq.com")
         if inviter == None or inviter.permission < 2:
             await bot.send(event, Message(f'[CQ:at,qq={user_id}] 你没有邀请权限'))
             return
         if InvitationMapper.get_times(user_id) >= 3:
             await bot.send(event, Message(f'[CQ:at,qq={user_id}] 你的邀请次数已用完'))
             return
-        if UserMCMapper.exists_qq_id(qq_num):
+        if not UserMCMapper.exists_id(inviter.id):
+            await bot.send(event, Message(f'[CQ:at,qq={user_id}] 你还未加入游戏'))
+            return
+        if UserMCMapper.exists_qq_num(qq_num):
             await bot.send(event, Message(f'[CQ:at,qq={user_id}] 绑定失败: QQ『qq_num』已被绑定'))
             return
         if UserMCMapper.exists_mc_uuid(user_name):
@@ -264,10 +267,11 @@ class relation:
         msg = str(event.get_message())
         print(msg)
         
-        match = re.search('^/{0,1}relation(.*$)', msg)
+        match = re.search('^/{0,1}(relation|关系)(.+$)', msg)
         user = None
-        if len(match.groups()) == 1:
+        if len(match.groups()) == 2:
             match = match.groups()[1].strip()
+            print(match)
             user = UserMCMapper.get(user_name=match)
 
         if user == None:
@@ -281,13 +285,13 @@ class relation:
             return
         
         res = InvitationMapper.get_relations(user.id)
-        if res == None:
+        if res == None or len(res) < 2:
             await bot.send(event, Message((f"[CQ:at,qq={user_id}] 该用户不存在邀请信息")))
             return
         
-        msg = f"[CQ:at,qq={user_id}] 『{UserMCMapper.get_user_by_id(res[0]).display_name}』邀请了："
+        msg = f"[CQ:at,qq={user_id}] 『{res[0].display_name}』邀请了："
         for i in range(1, len(res)):
-            msg += UserMapper.get_user_by_id(res[i]).display_name
+            msg += f"『{res[i].display_name}』"
             msg += ","
         if msg[len(msg) - 1] == ',': 
             msg = msg[:-1]

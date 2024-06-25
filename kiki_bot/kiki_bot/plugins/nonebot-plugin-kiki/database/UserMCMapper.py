@@ -125,7 +125,7 @@ class UserMCMapper:
             tools.exception(f"user_name:{user.user_name} 已被绑定")
             return
         # qq 已被绑定
-        if UserMCMapper.exists_qq_id(user.qq_num): 
+        if UserMCMapper.exists_qq_num(user.qq_num): 
             tools.exception(f"qq:{user.qq_num} 已被绑定")
             return
         # 验证 uuid
@@ -153,12 +153,22 @@ class UserMCMapper:
         return True
     
 
-    def exists_qq_id(qq_num: str):
+    def exists_qq_num(qq_num: str):
         res = None
         with connect() as db:
             with db.cursor() as c:
                 db.commit()
                 c.execute("SELECT * FROM users_mc WHERE qq_num=%s", (qq_num,))
+                res = c.fetchall()
+
+        return len(res)!=0
+    
+    def exists_id(id):
+        res = None
+        with connect() as db:
+            with db.cursor() as c:
+                db.commit()
+                c.execute("SELECT * FROM users_mc WHERE id=%s", (id,))
                 res = c.fetchall()
 
         return len(res)!=0
