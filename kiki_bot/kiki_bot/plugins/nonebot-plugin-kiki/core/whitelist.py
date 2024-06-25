@@ -228,7 +228,7 @@ class invite:
         if inviter == None or inviter.permission < 2:
             await bot.send(event, Message(f'[CQ:at,qq={user_id}] 你没有邀请权限'))
             return
-        if InvitationMapper.get_times(user_id) >= 3:
+        if InvitationMapper.get_times(inviter) >= 3:
             await bot.send(event, Message(f'[CQ:at,qq={user_id}] 你的邀请次数已用完'))
             return
         if not UserMCMapper.exists_id(inviter.id):

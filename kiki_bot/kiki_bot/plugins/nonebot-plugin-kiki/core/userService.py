@@ -3,6 +3,7 @@ from nonebot.adapters.onebot.v11.message import Message
 from ..database.UserMapper import User, UserMapper
 from ..database.UserMCMapper import MCUser, UserMCMapper
 from ..database.BanlistMapper import BanlistMapper, BanlistUser
+from ..database.InvitationMapper import InvitationMapper
 import re
 from .authorization import *
 
@@ -32,19 +33,23 @@ class delete:
         if userbyname is None and userbyqq is None:
             await bot.send(event, Message(f"[CQ:at,qq={user_id}] 查无此人, 请检查id或者qq是否有误"))
             return
+        
         if userbyname != None:
             UserMCMapper.remove_whitelist(userbyname.id)
+            InvitationMapper.delete_by_id(userbyname.id)
             UserMCMapper.delete_by_qq(userbyname.qq_num)
             UserMapper.delete_by_email(userbyname.qq_num + "@qq.com")
             await bot.send(event, Message(f"[CQ:at,qq={user_id}] 成功删除玩家 {userbyname.display_name} 的账号"))
             return
         if userbyqq != None:
             UserMCMapper.remove_whitelist(userbyqq.id)
+            InvitationMapper.delete_by_id(userbyqq.id)
             UserMCMapper.delete_by_qq(userbyqq.qq_num)
             UserMapper.delete_by_email(userbyqq.qq_num + "@qq.com")
             await bot.send(event, Message(f"[CQ:at,qq={user_id}] 成功删除玩家 {userbyqq.display_name} 的账号"))
         if userbyqq_2 != None:
             UserMCMapper.remove_whitelist(userbyqq_2.id)
+            InvitationMapper.delete_by_id(userbyqq_2.id)
             UserMapper.delete_by_email(userbyqq_2.email)
             await bot.send(event, Message(f"[CQ:at,qq={user_id}] 成功删除玩家 {userbyqq_2.email} 的账号"))
             return   

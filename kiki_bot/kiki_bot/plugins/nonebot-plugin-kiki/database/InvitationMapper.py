@@ -50,6 +50,12 @@ class InvitationMapper:
         
         return len(res[0]) > 0
     
+    def delete_by_id(id): 
+        with connect() as db:
+            with db.cursor() as c:
+                c.execute("DELETE FROM invitations WHERE id=%s", id)
+                db.commit()
+    
     def exists_inviter(inviter: int):
         res = None
         with connect() as db:
@@ -74,6 +80,7 @@ class InvitationMapper:
     def get_relations(id: int):
         inviter = None
         inviter = InvitationMapper.get_inviter(id)
+        print(inviter)
         if inviter == None:
             if InvitationMapper.exists_inviter(id):
                 return None

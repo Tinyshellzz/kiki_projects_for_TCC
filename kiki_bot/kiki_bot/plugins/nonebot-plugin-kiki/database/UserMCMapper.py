@@ -15,7 +15,7 @@ try:
         last_login_time Datetime,
         remark Text,
         PRIMARY KEY (id),
-        UNIQUE KEY (qq_num),
+        KEY (qq_num),
         KEY (user_name),
         KEY (display_name),
         UNIQUE KEY (mc_uuid),
