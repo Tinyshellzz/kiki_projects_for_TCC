@@ -237,15 +237,15 @@ class invite:
         if UserMCMapper.exists_qq_num(qq_num):
             await bot.send(event, Message(f'[CQ:at,qq={user_id}] 绑定失败: QQ『{qq_num}』已被绑定'))
             return
-        if UserMCMapper.exists_user_name(user_name):
-            await bot.send(event, Message(f'[CQ:at,qq={user_id}] 绑定失败: 用户『{user_name}』已被绑定'))
-            return
-        
+
         ret = tools.get_name_and_uuid_by_name(user_name)
         if ret == None:
             await bot.send(event, Message(f'[CQ:at,qq={user_id}] 绑定失败: 用户名『{user_name}』不存在'))
             return
         (display_name, mc_uuid) = ret
+        if UserMCMapper.exists_mc_uuid(mc_uuid):
+            await bot.send(event, Message(f'[CQ:at,qq={user_id}] 绑定失败: 用户『{display_name}』已被绑定'))
+            return
 
         # 不存在数据库记录, 则将将玩家添加到数据库
         id = None
