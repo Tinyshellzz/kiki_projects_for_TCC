@@ -39,7 +39,7 @@ class unban:
         msg = str(event.get_message())
         
         user_name = re.search('^/{0,1}unban (.*)$', msg)
-        user_name = user_name.groups()[0]
+        user_name = user_name.groups()[0].strip()
 
         response = excute(f'iunban {user_name}')
 
