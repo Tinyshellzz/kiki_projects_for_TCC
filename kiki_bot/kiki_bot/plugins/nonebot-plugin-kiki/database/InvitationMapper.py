@@ -35,7 +35,7 @@ class InvitationMapper:
         with connect() as db:
             with db.cursor() as c:
                 db.commit()
-                c.execute("SELECT COUNT(*) FROM invitations WHERE inviter=%s", id)
+                c.execute("SELECT COUNT(*) FROM invitations WHERE inviter=%s", inviter)
                 res = c.fetchall()
         
         return res[0][0]
