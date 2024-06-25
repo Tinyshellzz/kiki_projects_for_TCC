@@ -30,7 +30,7 @@ class GroupRequest:
 
         # 申请者的QQ号
         user_id = str(event.get_user_id())
-        # QQ号再数据库中, 就同意入群
+        # QQ号再数据库中
         if UserMCMapper.exists_qq_id(user_id):
             user = UserMCMapper.get(user_id)
             # 拒绝, 被封禁的玩家
