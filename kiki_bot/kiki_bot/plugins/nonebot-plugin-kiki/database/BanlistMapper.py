@@ -10,10 +10,12 @@ try:
         mc_uuid Char(32),
         user_name Varchar(48), 
         display_name Varchar(48), 
+        source Varchar(100),
         unban_date Datetime,
         reason TEXT,
         PRIMARY KEY (mc_uuid),
-        KEY (user_name)
+        KEY (user_name),
+        KEY (source)
     ) ENGINE=InnoDB CHARACTER SET=utf8;""")
     db.commit()
     c.close()
@@ -22,7 +24,7 @@ except:
     pass
 
 class BanlistUser:
-    def __init__(self, mc_uuid, user_name, display_name, unban_date: datetime.datetime = None, reason:str = None):
+    def __init__(self, mc_uuid, user_name, display_name, source: str, unban_date: datetime.datetime = None, reason:str = None):
         if unban_date != None:
             unban_date.strftime("%Y-%m-%d %H:%M:%S")
             unban_date = unban_date.replace(microsecond=0)
@@ -30,6 +32,7 @@ class BanlistUser:
         self.mc_uuid = mc_uuid
         self.user_name = user_name
         self.display_name = display_name
+        self.source = source
         self.unban_date = unban_date
         self.reason = reason
 
@@ -43,7 +46,7 @@ class BanlistMapper:
 
         with connect() as db:
             with db.cursor() as c:
-                c.execute("INSERT INTO banlist VALUES (%s, %s, %s, %s, %s)", (user.mc_uuid, user.user_name, user.display_name, user.unban_date, user.reason))
+                c.execute("INSERT INTO banlist VALUES (%s, %s, %s, %s, %s, %s)", (user.mc_uuid, user.user_name, user.display_name, user.source, user.unban_date, user.reason))
                 db.commit()
 
     def exists_mc_uuid(mc_uuid: str):
@@ -72,5 +75,5 @@ class BanlistMapper:
     def update(user: BanlistUser):
         with connect() as db:
             with db.cursor() as c:
-                c.execute("UPDATE banlist SET user_name=%s, display_name=%s, unban_date=%s, reason=%s WHERE mc_uuid=%s", (user.user_name, user.display_name, user.unban_date, user.reason, user.mc_uuid))
+                c.execute("UPDATE banlist SET user_name=%s, display_name=%s, source=%s, unban_date=%s, reason=%s WHERE mc_uuid=%s", (user.user_name, user.display_name, user.source, user.unban_date, user.reason, user.mc_uuid))
                 db.commit()
