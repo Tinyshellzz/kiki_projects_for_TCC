@@ -70,7 +70,7 @@ class BanlistMapper:
         if len(res) == 0:
             return None
         r = res[0]
-        return BanlistUser(r[0], r[1], r[2], r[3], r[4])
+        return BanlistUser(r[0], r[1], r[2], r[3], r[4], r[5])
 
     def update(user: BanlistUser):
         with connect() as db:
