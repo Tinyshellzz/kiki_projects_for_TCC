@@ -86,6 +86,7 @@ class InvitationMapper:
                 c.execute("SELECT * FROM invitations WHERE inviter=%s", id)
                 res = c.fetchall()
 
+        if len(res) == 0: return None
         ret = [UserMCMapper.get_user_by_id(int(inviter))]
         for r in res:
             ret.append(UserMCMapper.get_user_by_id(int(r[0])))
