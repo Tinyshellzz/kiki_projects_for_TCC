@@ -80,7 +80,6 @@ class InvitationMapper:
     def get_relations(id: int):
         inviter = None
         inviter = InvitationMapper.get_inviter(id)
-        print(inviter)
         if inviter == None:
             if InvitationMapper.exists_inviter(id):
                 return None
@@ -90,12 +89,11 @@ class InvitationMapper:
         with connect() as db:
             with db.cursor() as c:
                 db.commit()
-                c.execute("SELECT * FROM invitations WHERE inviter=%s", id)
+                c.execute("SELECT * FROM invitations WHERE inviter=%s", inviter)
                 res = c.fetchall()
 
         if len(res) == 0: return None
         ret = [UserMCMapper.get_user_by_id(int(inviter))]
         for r in res:
             ret.append(UserMCMapper.get_user_by_id(int(r[0])))
-        print(ret)
         return ret

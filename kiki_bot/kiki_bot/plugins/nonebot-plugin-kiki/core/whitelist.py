@@ -271,7 +271,6 @@ class relation:
         user = None
         if len(match.groups()) == 2:
             match = match.groups()[1].strip()
-            print(match)
             user = UserMCMapper.get(user_name=match)
 
         if user == None:
@@ -285,7 +284,6 @@ class relation:
             return
         
         res = InvitationMapper.get_relations(user.id)
-        print(res)
         if res == None or len(res) < 2:
             await bot.send(event, Message((f"[CQ:at,qq={user_id}] 该用户不存在邀请信息")))
             return
