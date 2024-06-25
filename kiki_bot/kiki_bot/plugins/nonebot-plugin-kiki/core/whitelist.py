@@ -235,16 +235,16 @@ class invite:
             await bot.send(event, Message(f'[CQ:at,qq={user_id}] 你还未加入游戏'))
             return
         if UserMCMapper.exists_qq_num(qq_num):
-            await bot.send(event, Message(f'[CQ:at,qq={user_id}] 绑定失败: QQ『{qq_num}』已被绑定'))
+            await bot.send(event, Message(f'[CQ:at,qq={user_id}] 绑定失败: QQ {qq_num} 已被绑定'))
             return
 
         ret = tools.get_name_and_uuid_by_name(user_name)
         if ret == None:
-            await bot.send(event, Message(f'[CQ:at,qq={user_id}] 绑定失败: 用户名『{user_name}』不存在'))
+            await bot.send(event, Message(f'[CQ:at,qq={user_id}] 绑定失败: 用户名 {user_name} 不存在'))
             return
         (display_name, mc_uuid) = ret
         if UserMCMapper.exists_mc_uuid(mc_uuid):
-            await bot.send(event, Message(f'[CQ:at,qq={user_id}] 绑定失败: 用户『{display_name}』已被绑定'))
+            await bot.send(event, Message(f'[CQ:at,qq={user_id}] 绑定失败: 用户 {display_name} 已被绑定'))
             return
 
         # 不存在数据库记录, 则将将玩家添加到数据库
@@ -258,7 +258,7 @@ class invite:
         mc_user = MCUser(id, qq_num, user_name, display_name, mc_uuid, datetime.datetime.now())
         UserMCMapper.insert(mc_user)
         InvitationMapper.insert(mc_user.id, inviter.id)
-        await bot.send(event, Message(f'[CQ:at,qq={user_id}] 邀请『{display_name}』成功'))
+        await bot.send(event, Message(f'[CQ:at,qq={user_id}] 邀请 {display_name} 成功'))
 
 
 class relation:
@@ -285,13 +285,14 @@ class relation:
             return
         
         res = InvitationMapper.get_relations(user.id)
+        print(res)
         if res == None or len(res) < 2:
             await bot.send(event, Message((f"[CQ:at,qq={user_id}] 该用户不存在邀请信息")))
             return
         
-        msg = f"[CQ:at,qq={user_id}] 『{res[0].display_name}』邀请了："
+        msg = f"[CQ:at,qq={user_id}] {res[0].display_name}邀请了："
         for i in range(1, len(res)):
-            msg += f"『{res[i].display_name}』"
+            msg += f"{res[i].display_name}"
             msg += ","
         if msg[len(msg) - 1] == ',': 
             msg = msg[:-1]

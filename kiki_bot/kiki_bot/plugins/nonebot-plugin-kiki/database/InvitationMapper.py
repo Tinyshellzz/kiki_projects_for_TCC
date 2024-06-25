@@ -97,5 +97,5 @@ class InvitationMapper:
         ret = [UserMCMapper.get_user_by_id(int(inviter))]
         for r in res:
             ret.append(UserMCMapper.get_user_by_id(int(r[0])))
-
+        print(ret)
         return ret
