@@ -228,11 +228,15 @@ class invite:
         if inviter == None or inviter.permission < 2:
             await bot.send(event, Message(f'[CQ:at,qq={user_id}] 你没有邀请权限'))
             return
-        if InvitationMapper.get_times(inviter) >= 3:
+        if InvitationMapper.get_times(inviter.id) >= 3:
             await bot.send(event, Message(f'[CQ:at,qq={user_id}] 你的邀请次数已用完'))
             return
         if not UserMCMapper.exists_id(inviter.id):
             await bot.send(event, Message(f'[CQ:at,qq={user_id}] 你还未加入游戏'))
+            return
+        _user = UserMCMapper.get_user_by_id(inviter.id)
+        if _user.mc_uuid != None and BanlistMapper.exists_mc_uuid(_user.mc_uuid):
+            await bot.send(event, Message(f'[CQ:at,qq={user_id}] 你已被ban, 无法邀请'))
             return
         if UserMCMapper.exists_qq_num(qq_num):
             await bot.send(event, Message(f'[CQ:at,qq={user_id}] 绑定失败: QQ {qq_num} 已被绑定'))
