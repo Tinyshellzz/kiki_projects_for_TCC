@@ -178,7 +178,7 @@ class add:
         user_name = msg.split(' ')[2]
 
         mc_user = UserMCMapper.get(user_name=user_name)
-        if mc_user:
+        if mc_user == None:
             await bot.send(event, Message(f"{user_name} 玩家不存在"))
         UserMCMapper.add_whitelist(mc_user.id)
         await bot.send(event, Message(f"{user_name} 已被添加白名单"))
