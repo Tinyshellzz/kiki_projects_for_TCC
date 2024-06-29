@@ -30,6 +30,7 @@ class ban:
         name = command.split(' ')[0]
 
         response = excute(f'iban {command}')
+        excute(f'ban {command}')
 
         await bot.send(event, Message(f'{response}--完成'))
 
@@ -42,6 +43,7 @@ class unban:
         user_name = user_name.groups()[0].strip()
 
         response = excute(f'iunban {user_name}')
+        excute(f'unban {user_name}')
 
         await bot.send(event, Message(f'{response}--完成'))
 
