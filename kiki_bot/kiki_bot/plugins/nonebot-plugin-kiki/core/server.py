@@ -30,11 +30,12 @@ class ban:
         name = command.split(' ')[0]
 
         response = excute(f'iban {command}')
-        excute(f'ap sendbossbar @a 180 progress drain red 封禁')
-        excute(f'ap sendtitle @a 1 2 1 {response}')
+        res_splite = response.split(' ')
+        excute(f'ap sendbossbar @a 180 progress drain red {res_splite[0]}')
+        excute(f'ap sendtitle @a 1 2 1 {res_splite[1]} {res_splite[2]}')
         excute(f'ban {command}')
 
-        await bot.send(event, Message(f'{response}--完成'))
+        await bot.send(event, Message(f'{response}'))
 
 class unban:
     async def handle(bot: Bot, event: Event):
@@ -47,7 +48,7 @@ class unban:
         response = excute(f'iunban {user_name}')
         excute(f'unban {user_name}')
 
-        await bot.send(event, Message(f'{response}--完成'))
+        await bot.send(event, Message(f'{response}'))
 
 class ban_syn:
     async def handle(bot: Bot, event: Event):
