@@ -35,7 +35,7 @@ class ban:
         excute(f'ap sendtitle @a 1 2 1 {res_splite[1]} {res_splite[2]}')
         excute(f'ban {command}')
 
-        await bot.send(event, Message(f'{response}'))
+        await bot.send(event, Message(f'{res_splite[0]} {res_splite[2]}'))
 
 class unban:
     async def handle(bot: Bot, event: Event):
