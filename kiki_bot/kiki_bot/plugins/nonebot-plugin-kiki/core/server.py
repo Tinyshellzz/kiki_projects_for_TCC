@@ -31,7 +31,7 @@ class ban:
 
         response = excute(f'iban {command}')
         res_splite = response.split(' ')
-        excute(f'ap sendbossbar @a 180 progress drain red {res_splite[0]}')
+        excute(f'ap sendbossbar @a 60 progress drain red {res_splite[0]}')
         excute(f'ap sendtitle @a 1 2 1 {res_splite[1]} {res_splite[2]}')
         excute(f'ban {command}')
 
