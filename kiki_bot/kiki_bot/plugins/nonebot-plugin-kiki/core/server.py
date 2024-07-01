@@ -30,6 +30,8 @@ class ban:
         name = command.split(' ')[0]
 
         response = excute(f'iban {command}')
+        excute(f'ap sendbossbar @a 180 progress drain red 封禁')
+        excute(f'ap sendtitle @a 1 2 1 {response}')
         excute(f'ban {command}')
 
         await bot.send(event, Message(f'{response}--完成'))
