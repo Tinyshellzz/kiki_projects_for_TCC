@@ -9,9 +9,16 @@ def run():
     response = re.sub('§.', '', response)
     matches = re.findall('\[离开\](.*?),', response, re.DOTALL)
     for m in matches:
-        logger.debug(m)
-        r = excute(f"matrix reset {m}")
-        logger.debug(r)
+        rcon = mcrcon.MCRcon(server_ip, rcon_password, rcon_port, timeout=2)
+        response  = None
+        try:
+            rcon.connect()
+            response = rcon.command("matrix reset {m}")
+            logger.info(response)
+        except Exception as e:
+            logger.warning(e)
+        finally:
+            rcon.disconnect()
     
     # 计算到第二天 1 点的秒数
     x = datetime.now()
