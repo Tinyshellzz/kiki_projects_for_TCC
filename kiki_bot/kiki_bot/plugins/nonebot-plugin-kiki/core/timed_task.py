@@ -9,6 +9,7 @@ def run():
     response = re.sub('§.', '', response)
     matches = re.findall('[离开](.*?),', response, re.DOTALL)
     for m in matches:
+        logger.debug(m)
         r = excute(f"matrix reset {m}")
         logger.debug(r)
     
