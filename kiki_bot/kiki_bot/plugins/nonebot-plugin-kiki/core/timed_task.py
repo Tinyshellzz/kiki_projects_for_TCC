@@ -5,20 +5,19 @@ from .server import *
 import sched, time
 
 def run():
-    response = excute("list")
-    response = re.sub('§.', '', response)
-    matches = re.findall('\[离开\](.*?),', response, re.DOTALL)
-    for m in matches:
-        rcon = mcrcon.MCRcon(server_ip, rcon_password, rcon_port, timeout=2)
-        response  = None
-        try:
-            rcon.connect()
-            response = rcon.command("matrix reset {m}")
-            logger.info(response)
-        except Exception as e:
-            logger.warning(e)
-        finally:
-            rcon.disconnect()
+    rcon = mcrcon.MCRcon(server_ip, rcon_password, rcon_port, timeout=2)
+    response  = None
+    try:
+        rcon.connect()
+        response = rcon.command("list")
+        response = re.sub('§.', '', response)
+        matches = re.findall('\[离开\](.*?),', response, re.DOTALL)
+        for m in matches:
+            rcon.command("matrix reset {m}")
+    except Exception as e:
+        logger.warning(e)
+    finally:
+        rcon.disconnect()
     
     # 计算到第二天 1 点的秒数
     x = datetime.now()
