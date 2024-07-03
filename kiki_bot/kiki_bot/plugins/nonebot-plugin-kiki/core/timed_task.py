@@ -11,7 +11,7 @@ def run():
         rcon.connect()
         response = rcon.command("list")
         response = re.sub('§.', '', response)
-        matches = re.findall('\[离开\](.*?),', response, re.DOTALL)
+        matches = re.findall('\[离开\](.*?)[,\n]', response, re.DOTALL)
         for m in matches:
             print(m)
             r = rcon.command("matrix reset {m}")
