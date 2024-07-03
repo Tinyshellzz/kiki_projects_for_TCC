@@ -14,9 +14,11 @@ from .core import server
 import re
 from .utils import transfer_db
 from .utils import tools
+from .core import timed_task
 
 matcher=on_message()
 cooldown_dicts = []
+timed_task.run()
 
 # pip install pymysql-pool pymysql
 # [正则, 方法, 冷却(s)]  (会默认调用status.py里面的 handle(bot, event) 方法)
