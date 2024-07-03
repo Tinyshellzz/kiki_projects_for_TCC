@@ -9,7 +9,8 @@ def run():
     response = re.sub('§.', '', response)
     matches = re.findall('[离开](.*?),', response, re.DOTALL)
     for m in matches:
-        excute(f"matrix reset {m}")
+        r = excute(f"matrix reset {m}")
+        logger.debug(r)
     
     # 计算到第二天 1 点的秒数
     x = datetime.now()
