@@ -134,7 +134,7 @@ async def get_nick_name(bot: Bot, event: Event, user_id):
     return info.get('nickname')
 
 def get_args(msg: str):
-    l = len(str)
+    l = len(msg)
     L = 0
     R = 0
     ret = []
@@ -143,7 +143,7 @@ def get_args(msg: str):
         ret.append(msg[L, R])
         if R == l: break
         L = R
-        
+
         while R < l and msg[R] == ' ': R+=1
         if R == l: break
         L = R

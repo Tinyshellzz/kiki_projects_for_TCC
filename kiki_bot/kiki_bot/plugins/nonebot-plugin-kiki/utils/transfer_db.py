@@ -10,7 +10,7 @@ from ..database.UserMCMapper import UserMCMapper, MCUser
 
 async def handle(bot: Bot, event: Event):
     print('转移开始')
-    if not await auth_user(bot, event, auth_qq_list): return
+    if not await auth_qq(bot, event, auth_qq_list): return
 
     project_dir = str(Path(__file__).resolve().parents[5])
     source = sqlite3.connect(project_dir + '/user.db')
