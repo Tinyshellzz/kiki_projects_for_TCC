@@ -306,12 +306,12 @@ class add_relation:
         user_id = str(event.get_user_id())
         msg = str(event.get_message())
 
-        sp = msg.split(' ')
-        if len(sp) < 3:
+        args = tools.get_args(msg)
+        if len(args) < 3:
             await bot.send(event, Message("参数不足"))
             return
-        user_name_1 = sp[1]
-        user_name_2 = sp[2]
+        user_name_1 = args[1]
+        user_name_2 = args[2]
         print(user_name_1)
         print(user_name_2)
 
