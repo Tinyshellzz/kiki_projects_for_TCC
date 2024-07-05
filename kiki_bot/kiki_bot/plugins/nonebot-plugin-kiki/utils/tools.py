@@ -140,7 +140,7 @@ def get_args(msg: str):
     ret = []
     while True:
         while R < l and msg[R] != ' ': R += 1
-        ret.append(msg[L, R])
+        ret.append(msg[L:R])
         if R == l: break
         L = R
 
