@@ -316,7 +316,7 @@ class add_relation:
         try:
             InvitationService.add_relation(user_name_1, user_name_2)
         except Exception as e:
-            await bot.send(event, e)
+            await bot.send(event, e.__str__())
         
         await bot.send(event, "添加成功")
 
