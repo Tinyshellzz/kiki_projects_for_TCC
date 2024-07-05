@@ -13,9 +13,7 @@ def run():
         response = re.sub('§.', '', response)
         matches = re.findall('\[离开\](.*?)[,\n]', response, re.DOTALL)
         for m in matches:
-            print(m)
             r = rcon.command(f"matrix reset {m}")
-            print(r)
     except Exception as e:
         logger.warning(e)
     finally:
