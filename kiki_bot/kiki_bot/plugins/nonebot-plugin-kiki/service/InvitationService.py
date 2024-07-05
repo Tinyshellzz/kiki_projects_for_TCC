@@ -14,4 +14,4 @@ class InvitationService:
         if user_2 == None:
             raise tools.exception(f"{user_name_2} 不存在")
         
-        InvitationMapper.insert(user_1.id, user_2.id)
+        InvitationMapper.insert(user_2.id, user_1.id)
