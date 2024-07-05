@@ -9,6 +9,7 @@ from ..database.UserMapper import User, UserMapper
 from ..database.UserMCMapper import MCUser, UserMCMapper
 from ..database.BanlistMapper import BanlistMapper, BanlistUser
 from ..database.InvitationMapper import InvitationMapper
+from ..service.InvitationService import InvitationService
 from ..database.ReadExcel import *
 from ..utils import tools
 import json
@@ -269,7 +270,6 @@ class relation:
     async def handle(bot: Bot, event: Event):
         user_id = str(event.get_user_id())
         msg = str(event.get_message())
-        print(msg)
         
         match = re.search('^/{0,1}(relation|关系)(.+$)', msg)
         user = None
@@ -301,7 +301,24 @@ class relation:
 
         await bot.send(event, Message(msg))
 
+class add_relation:
+    async def handle(bot: Bot, event: Event):
+        user_id = str(event.get_user_id())
+        msg = str(event.get_message())
 
+        sp = msg.split(' ')
+        if len(sp) < 3:
+            await bot.send(event, Message("参数不足"))
+            return
+        user_name_1 = sp[1]
+        user_name_2 = sp[2]
+
+        try:
+            InvitationService.add_relation(user_name_1, user_name_2)
+        except Exception as e:
+            await bot.send(event, e)
+        
+        await bot.send(event, "添加成功")
 
 class remarke:
     async def handle(bot: Bot, event: Event):

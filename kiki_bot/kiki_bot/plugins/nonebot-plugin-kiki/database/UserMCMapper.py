@@ -117,6 +117,18 @@ class UserMCMapper:
 
         if len(res) == 0: return None
         r = res[0]
+        return MCUser(r[0], r[1], r[2], r[3], r[4], r[5], r[6])
+    
+    def get_user_by_name(user_name: int):
+        res = None
+        with connect() as db:
+            with db.cursor() as c:
+                db.commit()
+                c.execute("SELECT * FROM users_mc WHERE user_name=%s", user_name)
+                res = c.fetchall()
+
+        if len(res) == 0: return None
+        r = res[0]
         return MCUser(r[0], r[1], r[2], r[3], r[4], r[5], r[6]);
     
     def insert(user: MCUser):
