@@ -119,7 +119,8 @@ class UserMCMapper:
         r = res[0]
         return MCUser(r[0], r[1], r[2], r[3], r[4], r[5], r[6])
     
-    def get_user_by_name(user_name: int):
+    def get_user_by_name(user_name: str):
+        user_name = user_name.lower()
         res = None
         with connect() as db:
             with db.cursor() as c:

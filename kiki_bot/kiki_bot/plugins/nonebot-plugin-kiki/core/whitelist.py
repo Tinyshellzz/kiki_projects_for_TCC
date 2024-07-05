@@ -312,11 +312,14 @@ class add_relation:
             return
         user_name_1 = sp[1]
         user_name_2 = sp[2]
+        print(user_name_1)
+        print(user_name_2)
 
         try:
             InvitationService.add_relation(user_name_1, user_name_2)
         except Exception as e:
             await bot.send(event, e.__str__())
+            return
         
         await bot.send(event, "添加成功")
 
