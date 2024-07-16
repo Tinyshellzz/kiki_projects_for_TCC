@@ -2,7 +2,7 @@
 TCC 是一个国内的公益原版Minecraft服务器, 这个工程实现了群内的qq聊天机器人
 
 
-## 1.配置运行环境
+## 1.配置运行环境, 使用Python 3.11.x
 ```
 python -m venv .venv
 ```
