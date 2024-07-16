@@ -12,3 +12,4 @@ appsettings.json
 device.json
 .vscode
 .idea
+.venv
