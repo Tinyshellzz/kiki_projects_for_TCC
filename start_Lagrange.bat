@@ -1,3 +1,3 @@
-title start_Lagrange
+title start_all
 cd "Lagrange.OneBot"
-start /min "Lagrange" "Lagrange.OneBot.exe" -i
+start /min "" "Lagrange.OneBot.exe" -i
