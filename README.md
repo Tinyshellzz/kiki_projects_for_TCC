@@ -15,7 +15,7 @@ python -m pip install -r requirements.txt
 
 ## 2.安装mysql数据库
 
-## 3.修改配置文件 config.yml
+## 3.将 config - Copy.yml 改名为 config.yml, 并修改 config.yml
 
 ## 4.安装bukkit插件, 以使用白名单验证码功能
 https://github.com/TinyShellzz/KikiWhitelist
