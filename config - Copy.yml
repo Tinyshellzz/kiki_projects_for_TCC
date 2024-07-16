@@ -2,8 +2,11 @@ server_ip: '127.0.0.1'    # minecraft 地址
 server_port: 25565        # minecraft 端口
 rcon_port: 25575          # minecraft rcon 端口
 rcon_password: '8888'     # minecraft rcon 密码
-server_whitelist: "D:/Learning/game tips/MineCraft/server/whitelist.json"   # 服务器白名单位置
-kiki_whitelist_db: "D:/Learning/game tips/MineCraft/server/plugins/KikiWhitelist/code.db"  # minecraft服务器白名单数据库的位置, 见 KikiWhitelist插件
+db_host: "localhost"      # mysql地址
+db_port: 3360             # mysql端口
+db_user: "tcc"              # mysql用户名
+db_passwd: "TccServer2024@"   # mysql密码
+db_database: "tcc"        # 所用数据库
 auth_group_list:          # bot工作qq群, 这些群里的人必须都是服务器玩家
   - '296472922'
   - '318190410'
