@@ -10,7 +10,7 @@ python -m venv .venv
 call .venv\Scripts\activate.bat
 ```
 ```
-python -m pip install requirements.txt
+python -m pip install -r requirements.txt
 ```
 
 ## 2.安装mysql数据库
