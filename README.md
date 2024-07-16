@@ -12,7 +12,8 @@ call .venv\Scripts\activate.bat
 ```
 python -m pip install requirements.txt
 ```
-```
+
+## 2.安装mysql数据库
 
 ## 3.修改配置文件 config.yml
 
@@ -20,7 +21,7 @@ python -m pip install requirements.txt
 https://github.com/TinyShellzz/KikiWhitelist
 
 ## 5.运行工程
-双击start_all.bat即可运行
+运行 kiki_start.exe
 
 ## 6.登录你的QQ
 第一次运行, 需要扫Lagrange.OneBot文件夹里的r-0.png.png
