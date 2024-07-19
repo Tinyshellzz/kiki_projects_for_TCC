@@ -7,6 +7,7 @@ from .SignMapper import SignMapper, SignUser
 
 
 async def handle(bot: Bot, event: Event):
+    print("----------sign start------------")
     user_id = event.get_user_id()
     
     if SignMapper.is_signed(user_id):

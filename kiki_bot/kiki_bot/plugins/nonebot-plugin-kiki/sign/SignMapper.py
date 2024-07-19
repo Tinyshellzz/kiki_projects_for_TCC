@@ -12,6 +12,7 @@ try:
                 qq_num BigInt UNSIGNED,
                 code Char(6),
                 timestamp Datetime,
+                redeemed Tinyint,
                 KEY (qq_num),
                 KEY(code)
             )
@@ -21,7 +22,7 @@ except:
     pass
 
 class SignUser:
-    def __init__(self, qq_num, code, timestamp = datetime.datetime.now()):
+    def __init__(self, qq_num, code, timestamp = datetime.datetime.now(), redeemed = 0):
         if timestamp != None:
             timestamp.strftime("%Y-%m-%d %H:%M:%S")
             timestamp = timestamp.replace(microsecond=0)
@@ -29,13 +30,13 @@ class SignUser:
         self.qq_num = qq_num
         self.code = code
         self.timestamp = timestamp
-    
+        self.redeemed = redeemed
 
 class SignMapper:
     def insert(user: SignUser):
         with connect() as db:
             with db.cursor() as c:
-                c.execute("INSERT INTO signdata VALUES (%s, %s, %s)", (user.qq_num, user.code, user.timestamp))
+                c.execute("INSERT INTO signdata VALUES (%s, %s, %s, %s)", (user.qq_num, user.code, user.timestamp, user.redeemed))
                 db.commit()
 
     def get_sign_rank(qq_num):
@@ -48,7 +49,7 @@ class SignMapper:
         with connect() as db:
             with db.cursor() as c:
                 db.commit()
-                c.execute("SELECT COUNT(*) FROM signdata WHERE timestamp<%s AND timestamp>%s", (now, today))
+                c.execute("SELECT COUNT(*) FROM signdata WHERE timestamp>=%s", (today))
                 res = c.fetchall()
 
         return res[0][0]
@@ -63,7 +64,7 @@ class SignMapper:
         with connect() as db:
             with db.cursor() as c:
                 db.commit()
-                c.execute("SELECT * FROM signdata WHERE qq_num=%s AND timestamp<%s AND timestamp>%s", (qq_num, now, today))
+                c.execute("SELECT * FROM signdata WHERE qq_num=%s AND timestamp>=%s", (qq_num, today))
                 res = c.fetchall()
 
         return len(res)!=0
@@ -78,8 +79,8 @@ class SignMapper:
         res = None
         with connect() as db:
             with db.cursor() as c:
-                db.commit()
                 c.execute("DELETE FROM signdata WHERE qq_num=%s AND code=%s", (qq_num, code))
+                db.commit()
                 res = c.fetchall()
 
         return len(res)!=0
@@ -90,9 +91,10 @@ class SignMapper:
         now = now.replace(microsecond=0)
 
         now_month = now.replace(day=1, hour=0, minute=0, second=0)
+        now_day = now.replace(hour=0, minute=0, second=0)
         with connect() as db:
             with db.cursor() as c:
-                c.execute("DELETE FROM signdata WHERE timestamp<%s", (now_month))
+                c.execute("DELETE FROM signdata WHERE timestamp<%s OR (timestamp<%s AND redeemed=1)", (now_month, now_day))
                 db.commit()
 
 # 定时清理数据库
