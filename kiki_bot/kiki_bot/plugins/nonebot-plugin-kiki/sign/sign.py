@@ -2,23 +2,18 @@ from nonebot.plugin import on_command
 from nonebot.typing import T_State
 from nonebot.adapters import Bot, Event
 from nonebot.adapters.onebot.v11.message import Message, MessageSegment
-from .SignMapper import SignMapper
+from .SignMapper import SignMapper, SignUser
 import uuid
 
-# 插件命令
-sign_cmd = on_command("sign", priority=5)
 
-
-@sign_cmd.handle()
-async def handle_first_receive(bot: Bot, event: Event, state: T_State):
+async def handle(bot: Bot, event: Event):
     user_id = event.get_user_id()
-
     
     if SignMapper.is_signed(user_id):
-        await sign_cmd.finish(f"您今天已经签到过了喵\n请明天中午12.00后再次签到")
+        await bot.send(event, f"您今天已经签到过了喵\n请明天凌晨00.00后再次签到")
     else:
         code = uuid.uuid4().hex[:6]
-        SignMapper.insert(SignMapper(user_id, code))
+        SignMapper.insert(SignUser(user_id, code))
         sign_rank = SignMapper.get_sign_rank(user_id)
         messages = [
             {

@@ -49,7 +49,7 @@ class SignMapper:
                 c.execute("SELECT COUNT(*) FROM signdata WHERE timestamp<%s AND timestamp>%s", (now, today))
                 res = c.fetchall()
 
-        return res
+        return res[0][0]
     
     def is_signed(qq_num):
         res = None
@@ -61,7 +61,7 @@ class SignMapper:
         with connect() as db:
             with db.cursor() as c:
                 db.commit()
-                c.execute("SELECT * FROM signdata WHERE qq_num=%s timestamp<%s AND timestamp>%s", (qq_num, now, today))
+                c.execute("SELECT * FROM signdata WHERE qq_num=%s AND timestamp<%s AND timestamp>%s", (qq_num, now, today))
                 res = c.fetchall()
 
         return len(res)!=0
