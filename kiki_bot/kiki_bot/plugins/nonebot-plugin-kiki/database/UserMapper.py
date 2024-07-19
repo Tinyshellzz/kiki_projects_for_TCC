@@ -1,4 +1,4 @@
-from .db_config import *
+from ..config.db_config import *
 import json
 from ..utils import tools
 
