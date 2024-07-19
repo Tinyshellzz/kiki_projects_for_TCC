@@ -3,7 +3,7 @@ from nonebot.typing import T_State
 from nonebot.adapters import Bot, Event
 from nonebot.adapters.onebot.v11.message import Message, MessageSegment
 from .SignMapper import SignMapper, SignUser
-import uuid
+
 
 
 async def handle(bot: Bot, event: Event):
@@ -12,7 +12,7 @@ async def handle(bot: Bot, event: Event):
     if SignMapper.is_signed(user_id):
         await bot.send(event, f"您今天已经签到过了喵\n请明天凌晨00.00后再次签到")
     else:
-        code = uuid.uuid4().hex[:6]
+        code = SignMapper.generate_code(user_id)
         SignMapper.insert(SignUser(user_id, code))
         sign_rank = SignMapper.get_sign_rank(user_id)
         messages = [

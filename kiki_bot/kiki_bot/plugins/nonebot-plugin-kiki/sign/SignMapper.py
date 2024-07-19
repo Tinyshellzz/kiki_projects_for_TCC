@@ -1,5 +1,8 @@
 from ..config.db_config import *
 import datetime
+import uuid
+from datetime import datetime, timedelta
+import threading
 
 try:
     with connect() as db:
@@ -17,6 +20,18 @@ try:
 except:
     pass
 
+# 定时清理数据库
+def clean():
+    SignMapper.clean_up()
+    
+    # 计算到第二天 0 点的秒数
+    x = datetime.now()
+    y = x + timedelta(days=1)
+    y = y.replace(hour=0, minute=0, second=0, microsecond=0)
+    secs = (y-x).total_seconds()
+        
+    threading.Timer(secs, clean).start()    # 每隔10秒执行一次
+clean()
 
 class SignUser:
     def __init__(self, qq_num, code, timestamp = datetime.datetime.now()):
@@ -65,4 +80,31 @@ class SignMapper:
                 res = c.fetchall()
 
         return len(res)!=0
+    
+    def generate_code(qq_num):
+        code = uuid.uuid4().hex[:6]
+        while SignMapper.exists_code(qq_num, code):
+            code = uuid.uuid4().hex[:6]
+        return code
+
+    def exists_code(qq_num, code):
+        res = None
+        with connect() as db:
+            with db.cursor() as c:
+                db.commit()
+                c.execute("SELECT * FROM signdata WHERE qq_num=%s AND code=%s", (qq_num, code))
+                res = c.fetchall()
+
+        return len(res)!=0
+    
+    def clean_up():
+        now = datetime.datetime.now()
+        now.strftime("%Y-%m-%d %H:%M:%S")
+        now = now.replace(microsecond=0)
+
+        now_month = now.replace(day=0, hour=0, minute=0, second=0)
+        with connect() as db:
+            with db.cursor() as c:
+                c.execute("DELETE * FROM signdata WHERE timestamp<%s", (now_month))
+                db.commit()
 
