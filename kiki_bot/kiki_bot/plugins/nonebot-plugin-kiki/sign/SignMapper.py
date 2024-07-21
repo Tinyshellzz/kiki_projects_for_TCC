@@ -63,7 +63,7 @@ class SignMapper:
     
     def get_sign_day(qq_num):
         res = None
-        now = now.replace(microsecond=0)
+        now = datetime.datetime.now()
 
         today = now.replace(hour=0, minute=0, second=0)
         with connect() as db:
