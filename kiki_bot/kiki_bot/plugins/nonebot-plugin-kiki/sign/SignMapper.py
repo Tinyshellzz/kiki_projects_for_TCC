@@ -43,7 +43,7 @@ class SignMapper:
         with connect() as db:
             with db.cursor() as c:
                 db.commit()
-                c.execute("SELECT COUNT(*) FROM signdata WHERE timestamp>=%s", (today))
+                c.execute("SELECT COUNT(*) FROM signdata WHERE timestamp>=%s", (today.__str__()[:19]))
                 res = c.fetchall()
 
         return res[0][0]
@@ -56,7 +56,7 @@ class SignMapper:
         with connect() as db:
             with db.cursor() as c:
                 db.commit()
-                c.execute("SELECT * FROM signdata WHERE qq_num=%s AND timestamp>=%s", (qq_num, today))
+                c.execute("SELECT * FROM signdata WHERE qq_num=%s AND timestamp>=%s", (qq_num, today.__str__()[:19]))
                 res = c.fetchall()
 
         return len(res)!=0
@@ -69,7 +69,7 @@ class SignMapper:
         with connect() as db:
             with db.cursor() as c:
                 db.commit()
-                c.execute("SELECT COUNT(*) FROM signdata WHERE timestamp<=%s AND qq_num=%s", (today, qq_num))
+                c.execute("SELECT COUNT(*) FROM signdata WHERE timestamp<=%s AND qq_num=%s", (today.__str__()[:19], qq_num))
                 res = c.fetchall()
 
         return res[0][0]
@@ -97,7 +97,7 @@ class SignMapper:
         now_day = now.replace(hour=0, minute=0, second=0)
         with connect() as db:
             with db.cursor() as c:
-                c.execute("DELETE FROM signdata WHERE timestamp<%s", (now_month))
+                c.execute("DELETE FROM signdata WHERE timestamp<%s", (now_month.__str__()[:19]))
                 db.commit()
 
 # 定时清理数据库
