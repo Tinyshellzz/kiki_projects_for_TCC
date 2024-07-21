@@ -23,13 +23,9 @@ except:
 
 class SignUser:
     def __init__(self, qq_num, code, timestamp = datetime.datetime.now(), redeemed = 0):
-        if timestamp != None:
-            timestamp.strftime("%Y-%m-%d %H:%M:%S")
-            timestamp = timestamp.replace(microsecond=0)
-
         self.qq_num = qq_num
         self.code = code
-        self.timestamp = timestamp
+        self.timestamp = timestamp.__str__()[:19]
         self.redeemed = redeemed
 
 class SignMapper:
@@ -57,8 +53,6 @@ class SignMapper:
     def is_signed(qq_num):
         res = None
         now = datetime.datetime.now()
-        now.strftime("%Y-%m-%d %H:%M:%S")
-        now = now.replace(microsecond=0)
 
         today = now.replace(hour=0, minute=0, second=0)
         with connect() as db:
@@ -87,8 +81,6 @@ class SignMapper:
     
     def clean_up():
         now = datetime.datetime.now()
-        now.strftime("%Y-%m-%d %H:%M:%S")
-        now = now.replace(microsecond=0)
 
         now_month = now.replace(day=1, hour=0, minute=0, second=0)
         now_day = now.replace(hour=0, minute=0, second=0)

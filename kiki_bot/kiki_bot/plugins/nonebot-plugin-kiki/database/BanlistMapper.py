@@ -24,16 +24,12 @@ except:
     pass
 
 class BanlistUser:
-    def __init__(self, mc_uuid, user_name, display_name, source: str, unban_date: datetime.datetime = None, reason:str = None):
-        if unban_date != None:
-            unban_date.strftime("%Y-%m-%d %H:%M:%S")
-            unban_date = unban_date.replace(microsecond=0)
-
+    def __init__(self, mc_uuid, user_name, display_name, source: str, unban_date: datetime.datetime = datetime.datetime.strptime("9999-12-31 23:59:59", "%Y-%m-%d %H:%M:%S"), reason:str = None):
         self.mc_uuid = mc_uuid
         self.user_name = user_name
         self.display_name = display_name
         self.source = source
-        self.unban_date = unban_date
+        self.unban_date = unban_date.__str__()[0:19]
         self.reason = reason
 
     def __repr__(self) -> str:

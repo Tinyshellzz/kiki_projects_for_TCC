@@ -33,16 +33,12 @@ except:
 
 class MCUser:
     def __init__(self, id, qq_num, user_name: str, display_name = None, mc_uuid = None, last_login_time: datetime.datetime = None, remark:str = None):
-        if last_login_time != None:
-            last_login_time.strftime("%Y-%m-%d %H:%M:%S")
-            last_login_time = last_login_time.replace(microsecond=0)
-
         self.id = int(id)
         self.qq_num = None if qq_num == None else str(qq_num)
         self.user_name = None if user_name == None else user_name.lower()
         self.display_name = display_name
         self.mc_uuid = mc_uuid
-        self.last_login_time = last_login_time
+        self.last_login_time = last_login_time.__str__()[:19]
         self.remark = None if remark == None else remark.replace("\"", "").replace("//", "").replace("\'", "")
     def __repr__(self) -> str:
         return json.dumps(self.__dict__, default=str)
