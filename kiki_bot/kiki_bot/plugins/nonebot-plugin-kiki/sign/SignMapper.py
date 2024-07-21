@@ -86,7 +86,7 @@ class SignMapper:
         now_day = now.replace(hour=0, minute=0, second=0)
         with connect() as db:
             with db.cursor() as c:
-                c.execute("DELETE FROM signdata WHERE timestamp<%s OR (timestamp<%s AND redeemed=1)", (now_month, now_day))
+                c.execute("DELETE FROM signdata WHERE timestamp<%s", (now_month))
                 db.commit()
 
 # 定时清理数据库
