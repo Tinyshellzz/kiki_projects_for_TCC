@@ -110,5 +110,5 @@ def clean():
     y = y.replace(hour=0, minute=0, second=0, microsecond=0)
     secs = (y-x).total_seconds()
         
-    threading.Timer(secs, clean).start()    # 每隔10秒执行一次
+    threading.Timer(secs, clean).start()    # 每隔secs秒执行一次
 clean()
