@@ -38,8 +38,6 @@ class SignMapper:
     def get_sign_rank(qq_num):
         res = None
         now = datetime.datetime.now()
-        now.strftime("%Y-%m-%d %H:%M:%S")
-        now = now.replace(microsecond=0)
 
         today = now.replace(hour=0, minute=0, second=0)
         with connect() as db:
@@ -63,6 +61,19 @@ class SignMapper:
 
         return len(res)!=0
     
+    def get_sign_day(qq_num):
+        res = None
+        now = now.replace(microsecond=0)
+
+        today = now.replace(hour=0, minute=0, second=0)
+        with connect() as db:
+            with db.cursor() as c:
+                db.commit()
+                c.execute("SELECT COUNT(*) FROM signdata WHERE timestamp<=%s AND qq_num=%s", (today, qq_num))
+                res = c.fetchall()
+
+        return res[0][0]
+
     def generate_code(qq_num):
         code = uuid.uuid4().hex[:6]
         while SignMapper.exists_code(qq_num, code):
