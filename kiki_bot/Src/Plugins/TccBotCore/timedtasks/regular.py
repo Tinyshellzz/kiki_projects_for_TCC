@@ -10,5 +10,5 @@ async def messages():
     await bot.send_msg(
         message_type="group",
         group_id=296472922,
-        message='/sign签到已刷新喵!\n快在群内使用/sign来签到获取物品!'
+        message='/sign签到功能已刷新喵!\n快在群内使用/sign来签到获取物品!'
     )
