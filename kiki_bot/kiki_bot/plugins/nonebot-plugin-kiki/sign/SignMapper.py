@@ -16,7 +16,7 @@ try:
                 KEY (qq_num),
                 KEY (code),
                 KEY (timestamp)
-            )
+            ) ENGINE=InnoDB CHARACTER SET=utf8;
             """)
             db.commit()
 except:
