@@ -14,7 +14,8 @@ try:
                 timestamp Datetime,
                 redeemed Tinyint,
                 KEY (qq_num),
-                KEY(code)
+                KEY (code),
+                KEY (timestamp)
             )
             """)
             db.commit()
