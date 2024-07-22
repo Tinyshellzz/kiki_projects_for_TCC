@@ -69,7 +69,7 @@ class help:
                "online: 查看在线玩家\n" +
                "search <昵称>: 找人\n" +
                "remarke <内容>: 添加备注\n" +
-               "red: 获取每日签到兑换码\n"
+               "sign: 获取每日签到兑换码\n"
                )
         if user_id in auth_qq_list:
             msg = msg + ("")
