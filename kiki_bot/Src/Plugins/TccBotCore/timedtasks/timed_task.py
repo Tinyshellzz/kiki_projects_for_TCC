@@ -27,4 +27,3 @@ def run():
     secs = (y-x).total_seconds()
         
     threading.Timer(10, run).start()    # 每隔10秒执行一次
-run()
