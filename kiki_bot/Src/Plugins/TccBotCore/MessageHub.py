@@ -15,10 +15,13 @@ import re
 from .utils import transfer_db
 from .utils import tools
 from .sign import sign
-from .timedtasks.regular import *
+from .timedtasks import signcleanup
+from .timedtasks import timed_task
 matcher=on_message()
 cooldown_dicts = []
 
+signcleanup.clean()
+timed_task.run()
 # pip install pymysql-pool pymysql mcrcon pandas mcstatus psutil cryptography pillow
 # [正则, 方法, 冷却(s)]  (会默认调用status.py里面的 handle(bot, event) 方法)
 match_rules = [
@@ -28,7 +31,7 @@ match_rules = [
     ['^/{0,1}ban (.*)$', server.ban, 0],                         # 封禁玩家
     ['^/{0,1}unban (.*)$', server.unban, 0],                     # 解封玩家
     ['^/{0,1}whitelist update$', whitelist.update, 0],           # 将 在数据库 且 在qq群中 的账号全部添加到白名单
-    # ['^/whitelist sync$', whitelist.sync, 0],                 # 同步minecraft官方的白名单
+    # ['^/whitelist sync$', whitelist.sync, 0],                  # 同步minecraft官方的白名单
     ['^/{0,1}whitelist load$', whitelist.load, 0],               # 从 excels 文件夹加载审核结果
     ['^/{0,1}whitelist remove .*$', whitelist.remove, 0],        # 从白名单移除玩家
     ['^/{0,1}whitelist add .*$', whitelist.add, 0],              # 添加玩家到白名单

@@ -14,4 +14,3 @@ def clean():
     secs = (y-x).total_seconds()
         
     threading.Timer(secs, clean).start()    # 每隔secs秒执行一次
-clean()
