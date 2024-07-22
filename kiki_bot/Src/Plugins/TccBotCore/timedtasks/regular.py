@@ -4,6 +4,8 @@ from nonebot.adapters.onebot.v11 import MessageSegment
 mess1 = require("nonebot_plugin_apscheduler").scheduler
 
 print("-------------regular----------------")
+
+
 @mess1.scheduled_job("cron", hour='00', minute='00', id="messages")
 async def messages():
     bot, = get_bots().values()
