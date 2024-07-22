@@ -5,7 +5,7 @@ rcon_password: '8888'     # minecraft rcon 密码
 db_host: "localhost"      # mysql地址
 db_port: 3360             # mysql端口
 db_user: "tcc"              # mysql用户名
-db_passwd: "TccServer2024@"   # mysql密码
+db_passwd: "rver2024@"   # mysql密码
 db_database: "tcc"        # 所用数据库
 auth_group_list:          # bot工作qq群, 这些群里的人必须都是服务器玩家
   - '29647292'
