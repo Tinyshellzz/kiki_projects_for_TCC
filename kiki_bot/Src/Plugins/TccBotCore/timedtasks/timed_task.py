@@ -1,7 +1,7 @@
 import threading
 from ..database.UserMapper import UserMapper
 from datetime import datetime, timedelta
-from .server import *
+from ..core.server import *
 from nonebot import get_bots
 import asyncio
 
@@ -27,3 +27,4 @@ def run():
     secs = (y-x).total_seconds()
         
     threading.Timer(10, run).start()    # 每隔10秒执行一次
+run()

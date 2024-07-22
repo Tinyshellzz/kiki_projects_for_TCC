@@ -17,5 +17,6 @@ device.json
 .vscode
 .idea
 .venv
+.prettierignore
 KiKi_Bot服务.lnk
 Lagrange服务.lnk

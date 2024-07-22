@@ -14,12 +14,10 @@ from .core import server
 import re
 from .utils import transfer_db
 from .utils import tools
-from .core import timed_task
 from .sign import sign
-from .core.regular import *
+from .timedtasks.regular import *
 matcher=on_message()
 cooldown_dicts = []
-timed_task.run()
 
 # pip install pymysql-pool pymysql mcrcon pandas mcstatus psutil cryptography pillow
 # [正则, 方法, 冷却(s)]  (会默认调用status.py里面的 handle(bot, event) 方法)
@@ -46,7 +44,7 @@ match_rules = [
     ['^/{0,1}sign$', sign, 0],                                      # 签到功能
     ['^online$', replies.online, 0],                                # 查看在线晚间
     ['^.*' + code_prefix + '[0-9a-zA-Z]{6}.*$', whitelist.code, 10],   # 白名单验证码
-    ['(3975252362|3624128565)', replies.at_self, 10],   # 艾特回复
+    ['(3975252362)', replies.at_self, 10],                      # 艾特回复
     ['(怎么进服|服务器地址|怎么玩)', replies.ip, 10],
     ['(未知主机|连接超时|dns|连不上|连接失败|连不了)', replies.dns, 10], #DNS
     ['(怎么飞|飞行)', replies.fly, 10],
