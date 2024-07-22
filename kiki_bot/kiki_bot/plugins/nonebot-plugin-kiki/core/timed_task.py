@@ -2,6 +2,9 @@ import threading
 from ..database.UserMapper import UserMapper
 from datetime import datetime, timedelta
 from .server import *
+from ..ObjectPool import *
+from nonebot import get_bots
+import asyncio
 
 def run():
     rcon = mcrcon.MCRcon(server_ip, rcon_password, rcon_port, timeout=2)
