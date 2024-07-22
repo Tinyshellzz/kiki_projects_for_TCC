@@ -23,7 +23,7 @@ async def handle(bot: Bot, event: Event):
                 "data": {
                     "name": "KiKi机器人",
                     "uin": "3975252362",
-                    "content": [MessageSegment.text(f"【提嘻嘻每日签到喵!】\n-----------\n你是今日内第{sign_rank}个签到的\n这个月共签到了{sign_day+1}次\n您的兑换码是{code}!\n在游戏内输入下列指令兑换\n【 /red {code} 】\n-----------\n本次由用户【{user_id}】唤起!\n注意:兑换码与你的游戏ID绑定,他人无法使用\n每天给Bot的主页点10个赞可以增加中奖概率!\n快来玩Tcc谢谢喵!!!\n-----------")],
+                    "content": [MessageSegment.text(f"【提嘻嘻每日签到喵!】\n-----------\n你是今日内第{sign_rank}个签到的\n这个月共签到了{sign_day+1}次\n您的兑换码是{code}!\n在游戏内输入下列指令兑换\n【 /redeem {code} 】\n-----------\n本次由用户【{user_id}】唤起!\n注意:兑换码与你的游戏ID绑定,他人无法使用\n每天给Bot的主页点10个赞可以增加中奖概率!\n快来玩Tcc谢谢喵!!!\n-----------")],
                 },
             }
         ]
