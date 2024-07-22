@@ -3,6 +3,7 @@
 *.jpg
 !dns_win11.png
 !dns_win10.png
+!status.png
 *.log
 keystore.json
 __pycache__/
