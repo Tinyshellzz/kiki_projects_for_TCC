@@ -1,3 +1,3 @@
 title start_all
-cd "Lagrange.OneBot"
+cd "LagrangeService"
 start /min "Lagrange" "Lagrange.OneBot.exe" -i
