@@ -14,9 +14,9 @@ from .core import server
 import re
 from .utils import transfer_db
 from .utils import tools
-from .core import timed_task
+from .timedtasks import timed_task
 from .sign import sign
-from .core.regular import *
+from .timedtasks.regular import *
 matcher=on_message()
 cooldown_dicts = []
 timed_task.run()

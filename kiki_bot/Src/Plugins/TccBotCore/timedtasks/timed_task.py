@@ -1,7 +1,7 @@
 import threading
 from ..database.UserMapper import UserMapper
 from datetime import datetime, timedelta
-from .server import *
+from ..core.server import *
 from nonebot import get_bots
 import asyncio
 
