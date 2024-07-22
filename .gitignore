@@ -1,6 +1,9 @@
 *.db
 *.png
 *.jpg
+*.xlsx
+*.xls
+!example.xlsx
 !dns_win11.png
 !dns_win10.png
 !status.png

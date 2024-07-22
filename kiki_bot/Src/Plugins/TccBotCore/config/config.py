@@ -1,6 +1,7 @@
 import logging
 from pathlib import Path
 import yaml
+from shutil import copyfile
 
 # create logger with 'kiki_bot'
 logger = logging.getLogger('kiki_bot')
@@ -23,7 +24,10 @@ rootLogger.addHandler(consoleHandler)
 # 加载配置文件
 data = None
 project_dir = str(Path(__file__).resolve().parents[5])
-with open(project_dir + '/config.yml', 'r', encoding='utf8') as f:
+config_file = Path(project_dir, 'config/config.yml')
+if not config_file.is_file():
+    copyfile(Path(project_dir, 'config/config-example.yml'),  config_file)
+with open(config_file, 'r', encoding='utf8') as f:
     data = yaml.load(f, Loader=yaml.FullLoader)
 
 db_host=data['db_host']
