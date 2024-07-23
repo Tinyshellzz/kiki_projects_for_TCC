@@ -32,7 +32,10 @@ async def send_picture(bot: Bot, event: Event):
     _current_time = current_time.strftime("%Y-%m-%d %H:%M:%S")
 
     # 获取minecraft状态, 并计算用时
-    mc = json.loads(requests.get("http://222.187.239.88:8000/mcstatus/").text)
+    try:
+        mc = json.loads(requests.get("http://222.187.239.88:8000/mcstatus/").text)
+    except:
+        mc = json.loads(requests.get("http://127.0.0.1:8000/mcstatus/").text)
     print(mc)
     program_elapsed_time = round((datetime.now() - current_time).total_seconds() * 1000, 2)
 
