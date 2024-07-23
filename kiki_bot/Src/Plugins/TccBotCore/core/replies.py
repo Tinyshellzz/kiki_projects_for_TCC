@@ -52,7 +52,7 @@ class dns:
         user_id = str(event.get_user_id())
 
         msg = (f"[CQ:at,qq={user_id}]\n" +
-               "下面是Win10的教程\n" +
+               "下面是Win10修改dns的教程\n" +
                f"[CQ:image,file={plugin_dir}/resources/dns_win10.png]" +
                "下面是Win11的教程\n" +
                f"[CQ:image,file={plugin_dir}/resources/dns_win11.png]"
@@ -79,8 +79,10 @@ class help:
 class online:
     async def handle(bot: Bot, event: Event):
         user_id = str(event.get_user_id())
-
-        response = json.loads(requests.get("http://127.0.0.1:8000/mcstatus/online/").text)
+        try:
+            response = json.loads(requests.get("http://222.187.239.88:8000/mcstatus/online/").text)
+        except:
+            response = json.loads(requests.get("http://127.0.0.1:8000/mcstatus/online/").text)
         print(response)
         msg = response['online']
 
