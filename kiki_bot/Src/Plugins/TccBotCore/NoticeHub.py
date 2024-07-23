@@ -71,7 +71,7 @@ class GroupDecreaseNotice:
         # await bot.send_group_msg(group_id=group_id, message=Message(f"qq={event.user_id}] 退出群聊"))
 
         # 删除白名单
-        # mc_user = UserMCMapper.get(str(event.get_user_id()))
-        # if mc_user != None: UserMCMapper.remove_whitelist(mc_user.id)
+        mc_user = UserMCMapper.get(str(event.get_user_id()))
+        if mc_user != None: UserMCMapper.remove_whitelist(mc_user.id)
 
 
