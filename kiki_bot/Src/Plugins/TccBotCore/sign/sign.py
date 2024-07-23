@@ -11,7 +11,7 @@ async def handle(bot: Bot, event: Event):
     user_id = event.get_user_id()
     
     if SignMapper.is_signed(user_id):
-        await bot.send(event, f"[CQ:at,qq={user_id}] 您今天已经签到过了喵\n请明天凌晨00.00后再次签到")
+        await bot.send(event, Message(f"[CQ:at,qq={user_id}] 您今天已经签到过了喵\n请明天凌晨00.00后再次签到"))
     else:
         code = SignMapper.generate_code(user_id)
         SignMapper.insert(SignUser(user_id, code))
