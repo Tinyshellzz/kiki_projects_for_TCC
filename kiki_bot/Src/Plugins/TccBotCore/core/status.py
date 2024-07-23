@@ -14,6 +14,7 @@ import uuid
 plugin_dir = str(Path(__file__).resolve().parents[1])
 last_url = None
 
+
 # 入口函数
 async def handle(bot: Bot, event: Event):
     # 进行权限验证
@@ -23,6 +24,7 @@ async def handle(bot: Bot, event: Event):
     # 发送图片
     await send_picture(bot, event)
 
+
 async def send_picture(bot: Bot, event: Event):
     global last_url
     user_id = event.get_user_id()
@@ -30,9 +32,9 @@ async def send_picture(bot: Bot, event: Event):
     _current_time = current_time.strftime("%Y-%m-%d %H:%M:%S")
 
     # 获取minecraft状态, 并计算用时
-    mc = json.loads(requests.get("http://127.0.0.1:8000/mcstatus/").text)
+    mc = json.loads(requests.get("http://222.187.239.88:8000/mcstatus/").text)
     print(mc)
-    program_elapsed_time = round((datetime.now()-current_time).total_seconds()*1000, 2)
+    program_elapsed_time = round((datetime.now() - current_time).total_seconds() * 1000, 2)
 
     # 要画的文本
     text_lines = [
@@ -49,8 +51,8 @@ async def send_picture(bot: Bot, event: Event):
         f"本次指令由“{user_id}”唤起",
         f"唤起时间: {_current_time}",
     ]
-    
+
     url = tools.draw_text_lines('status', text_lines)
-    
+
     # 发送图片
     await bot.send(event, Message(f"[CQ:image,file={url}]"))
