@@ -20,19 +20,32 @@ try:
 except:
     pass
 
+
 class SignUser:
-    def __init__(self, qq_num, code, timestamp = datetime.datetime.now(), redeemed = 0):
+    def __init__(self, qq_num, code, timestamp=datetime.datetime.now(), redeemed=0):
         self.qq_num = qq_num
         self.code = code
         self.timestamp = timestamp.__str__()[:19]
         self.redeemed = redeemed
 
+
 class SignMapper:
     def insert(user: SignUser):
         with connect() as db:
             with db.cursor() as c:
-                c.execute("INSERT INTO signdata VALUES (%s, %s, %s, %s)", (user.qq_num, user.code, user.timestamp, user.redeemed))
+                c.execute("INSERT INTO signdata VALUES (%s, %s, %s, %s)",
+                          (user.qq_num, user.code, user.timestamp, user.redeemed))
                 db.commit()
+
+    # 查询用户兑换码 24.7.24 by KiKi
+    def get_sign_code(qq_num):
+        res = None
+        with connect() as db:
+            with db.cursor() as c:
+                c.execute("SELECT code FROM signdata WHERE qq_num = %s", (qq_num))
+                res = c.fetchone()
+                db.commit()
+        return res[0] if res else None
 
     def get_sign_rank(qq_num):
         res = None
@@ -46,7 +59,7 @@ class SignMapper:
                 res = c.fetchall()
 
         return res[0][0]
-    
+
     def is_signed(qq_num):
         res = None
         now = datetime.datetime.now()
@@ -58,8 +71,8 @@ class SignMapper:
                 c.execute("SELECT * FROM signdata WHERE qq_num=%s AND timestamp>=%s", (qq_num, today))
                 res = c.fetchall()
 
-        return len(res)!=0
-    
+        return len(res) != 0
+
     def get_sign_day(qq_num):
         res = None
         now = datetime.datetime.now()
@@ -87,8 +100,8 @@ class SignMapper:
                 db.commit()
                 res = c.fetchall()
 
-        return len(res)!=0
-    
+        return len(res) != 0
+
     def clean_up():
         now = datetime.datetime.now()
 
