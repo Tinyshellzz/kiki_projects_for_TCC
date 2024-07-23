@@ -35,7 +35,7 @@ match_rules = [
     ['^/{0,1}whitelist load$', whitelist.load, 0],               # 从 excels 文件夹加载审核结果
     ['^/{0,1}whitelist remove .*$', whitelist.remove, 0],        # 从白名单移除玩家
     ['^/{0,1}whitelist add .*$', whitelist.add, 0],              # 添加玩家到白名单
-    # ['^/{0,1}mcuser (insert|bind) .*$', whitelist.insert, 0],    # 将玩家插入数据库
+    # ['^/{0,1}mcuser (insert|bind) .*$', whitelist.insert, 0],   # 将玩家插入数据库
     ['^/{0,1}user delete .*$', userService.delete, 0],            # 从数据库将玩家删除
     ['^/{0,1}(找人|search).*$', whitelist.get, 0],                # 万能查询
     ['^/{0,1}(备注|remarke).+$', whitelist.remarke, 0],            # 添加备注
