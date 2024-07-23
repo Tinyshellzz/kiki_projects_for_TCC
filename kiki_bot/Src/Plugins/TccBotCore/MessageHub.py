@@ -39,7 +39,7 @@ match_rules = [
     ['^/{0,1}user delete .*$', userService.delete, 0],            # 从数据库将玩家删除
     ['^/{0,1}(找人|search).*$', whitelist.get, 0],                # 万能查询
     ['^/{0,1}(备注|remarke).+$', whitelist.remarke, 0],            # 添加备注
-    ['^/{0,1}(邀请|invite).+$', whitelist.invite, 0],               # 邀请自己的好友, 封禁的时候会一起封禁, 一个人只能邀请3人
+    ['^/{0,1}(邀请|invite).+$', whitelist.invite, 0],              # 邀请自己的好友, 封禁的时候会一起封禁, 一个人只能邀请3人
     ['^/{0,1}(relation).+$', whitelist.relation, 0],               # 查看邀请关系
     ['^/{0,1}(添加关系).+$', whitelist.add_relation, 0],             # 添加邀请关系
     # ['^/{0,1}(踢|kick).+$', group.kick, 0],                       # 移出群聊
