@@ -1,7 +1,7 @@
 import nonebot
 from nonebot.adapters.onebot.v11 import Adapter as ONEBOT_V11Adapter
 
-nonebot.init(host='0.0.0.0', port=8080)
+nonebot.init(host='127.0.0.1', port=8080)
 
 nonebot.init()
 
