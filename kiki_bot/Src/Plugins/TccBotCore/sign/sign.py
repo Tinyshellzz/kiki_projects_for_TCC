@@ -12,7 +12,12 @@ async def handle(bot: Bot, event: Event):
     
     if SignMapper.is_signed(user_id):
         code = SignMapper.get_sign_code(user_id)
-        await bot.send(event, Message(f"[CQ:at,qq={user_id}] 您今天已经签到过了喵\n请明天凌晨00.00后再次签到\n你今天的兑换码是:{code}"))
+        
+        # 2024.7.24 优化回复 by tinyshellzz
+        if code != None:
+            await bot.send(event, Message(f"[CQ:at,qq={user_id}] 您今天已经签到过了喵\n请明天凌晨00.00后再次签到\n你的可用兑换码是:{code}"))
+        else:
+            await bot.send(event, Message(f"[CQ:at,qq={user_id}] 您今天已经签到过了喵\n请明天凌晨00.00后再次签到\n"))
     else:
         code = SignMapper.generate_code(user_id)
         SignMapper.insert(SignUser(user_id, code))

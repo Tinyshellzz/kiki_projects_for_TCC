@@ -38,14 +38,16 @@ class SignMapper:
                 db.commit()
 
     # 查询用户兑换码 24.7.24 by KiKi
+    # 2024.7.24 优化代码 by tinyshellzz
     def get_sign_code(qq_num):
         res = None
         with connect() as db:
             with db.cursor() as c:
-                c.execute("SELECT code FROM signdata WHERE qq_num = %s", (qq_num))
-                res = c.fetchone()
                 db.commit()
-        return res[0] if res else None
+                c.execute("SELECT code FROM signdata WHERE qq_num = %s AND redeemed=0", (qq_num))
+                res = c.fetchall()
+        if len(res) == 0: return None
+        return res[0][0]
 
     def get_sign_rank(qq_num):
         res = None
