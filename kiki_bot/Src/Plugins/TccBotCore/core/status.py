@@ -32,9 +32,15 @@ async def send_picture(bot: Bot, event: Event):
     _current_time = current_time.strftime("%Y-%m-%d %H:%M:%S")
 
     # 获取minecraft状态, 并计算用时
+<<<<<<< HEAD
+    #API冗余
+    try:
+        mc = json.loads(requests.get("http://222.187.238.138:8000/mcstatus/").text)
+=======
     # 添加API冗余功能 24.7.24 by KiKi
     try:
         mc = json.loads(requests.get("http://service.api.tcc-mc.com:8000/mcstatus/").text)
+>>>>>>> 8f1cdf17cf538c3303659457ac13099dff8d51a1
     except:
         mc = json.loads(requests.get("http://127.0.0.1:8000/mcstatus/").text)
     print(mc)
