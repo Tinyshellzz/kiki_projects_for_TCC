@@ -5,17 +5,17 @@ from nonebot.adapters.onebot.v11.message import Message, MessageSegment
 from .SignMapper import SignMapper, SignUser
 
 
-
 async def handle(bot: Bot, event: Event):
     print("----------sign start------------")
     user_id = event.get_user_id()
-    
+
     if SignMapper.is_signed(user_id):
         code = SignMapper.get_sign_code(user_id)
-        
+
         # 2024.7.24 优化回复 by tinyshellzz
         if code != None:
-            await bot.send(event, Message(f"[CQ:at,qq={user_id}] 您今天已经签到过了喵\n请明天凌晨00.00后再次签到\n你的可用兑换码是:{code}"))
+            await bot.send(event, Message(
+                f"[CQ:at,qq={user_id}] 您今天已经签到过了喵\n请明天凌晨00.00后再次签到\n你的可用兑换码是:{code}"))
         else:
             await bot.send(event, Message(f"[CQ:at,qq={user_id}] 您今天已经签到过了喵\n请明天凌晨00.00后再次签到\n"))
     else:
@@ -29,7 +29,8 @@ async def handle(bot: Bot, event: Event):
                 "data": {
                     "name": "KiKi机器人",
                     "uin": "3975252362",
-                    "content": [MessageSegment.text(f"【提嘻嘻每日签到喵!】\n-----------\n你是今日内第{sign_rank}个签到的\n这个月共签到了{sign_day+1}次\n您的兑换码是{code}!\n在游戏内输入下列指令兑换\n【 /redeem {code} 】\n-----------\n本次由用户【{user_id}】唤起!\n注意:兑换码与你的游戏ID绑定,他人无法使用\n每天给Bot的主页点10个赞可以增加中奖概率!\n快来玩Tcc谢谢喵!!!\n-----------")],
+                    "content": [MessageSegment.text(
+                        f"【提嘻嘻每日签到喵!】\n-----------\n你是今日内第{sign_rank}个签到的\n这个月共签到了{sign_day + 1}次\n您的兑换码是{code}!\n在游戏内输入下列指令兑换\n【 /redeem {code} 】\n-----------\n本次由用户【{user_id}】唤起!\n注意:兑换码与你的游戏ID绑定,他人无法使用\n每天给Bot的主页点10个赞可以增加中奖概率!\n快来玩Tcc谢谢喵!!!\n-----------")],
                 },
             }
         ]
