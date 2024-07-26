@@ -44,13 +44,13 @@ match_rules = [
     ['^/{0,1}(添加关系).+$', whitelist.add_relation, 0],             # 添加邀请关系
     # ['^/{0,1}(踢|kick).+$', group.kick, 0],                       # 移出群聊
     ['^川川$', heChuan.hi, 0],                                      # 川川
-    ['^/{0,1}sign$', sign, 0],                                      # 签到功能
-    ['^online$', replies.online, 0],                                # 查看在线晚间
+    ['^/{0,1}sign$', sign, 10],                                      # 签到功能
+    ['^online$', replies.online, 10],                                # 查看在线晚间
     ['^.*' + code_prefix + '[0-9a-zA-Z]{6}.*$', whitelist.code, 10],   # 白名单验证码
     ['(3975252362)', replies.at_self, 10],                      # 艾特回复
-    ['(怎么进服|服务器地址|怎么玩)', replies.ip, 10],
-    ['(未知主机|连接超时|dns|连不上|连接失败|连不了)', replies.dns, 10], #DNS
-    ['(怎么飞|飞行)', replies.fly, 10],
+    ['(怎么进服|服务器地址|怎么玩)', replies.ip, 60],
+    ['(未知主机|连接超时|dns|连不上|连接失败|连不了)', replies.dns, 60], #DNS
+    ['(怎么飞|飞行)', replies.fly, 60],
 ]
 
 
