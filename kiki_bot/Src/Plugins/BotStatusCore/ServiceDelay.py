@@ -1,3 +1,4 @@
+import time
 from datetime import datetime
 from nonebot.adapters.onebot.v11 import MessageEvent, Bot, MessageSegment
 from nonebot.plugin import on_command
@@ -31,20 +32,25 @@ async def handle_status(bot: Bot, event: MessageEvent):
             return int(response * 1000)
         else:
             return None
-    message = (
-        f"【Tcc服务器延迟喵】\n"
-        f"-----------\n"
-        f"第一次测试:{ping_host()}ms\n"
-        f"第二次测试:{ping_host()}ms\n"
-        f"第三次测试:{ping_host()}ms\n"
-        f"第四次测试:{ping_host()}ms\n"
-        f"-----------\n"
-        f"如果本Ki还活着,此消息一定会出来的\n"
-        f"使用/ping回复None就是Tcc炸了\n"
-        f"-----------"
-    )
-
-    await bot.send(event, MessageSegment.text(message))
-
+    delay1=ping_host()
+    time.sleep(0.1)
+    delay2=ping_host()
+    time.sleep(0.1)
+    delay3=ping_host()
+    time.sleep(0.1)
+    delay4=ping_host()
+    messages = [
+        {
+            "type": "node",
+            "data": {
+                "name": "KiKi机器人",
+                "uin": "3975252362",
+                "content": [MessageSegment.text(
+                    f"【Tcc服务器延迟喵!】\n-----------\n第一次测试:{delay1}ms\n第二次测试:{delay2}ms\n第三次测试:{delay3}ms\n第四次测试:{delay4}ms\n-----------\n使用/ping回复None就是Tcc炸了\n-----------")],
+            },
+        }
+    ]
+    res_id = await bot.call_api("send_forward_msg", group_id=event.group_id, messages=messages)
+    await bot.send(event, MessageSegment.forward(res_id))
     # 如果用户不在冷却时间内，更新最后调用时间为当前时间
     cooldown_dict[user_id] = now
