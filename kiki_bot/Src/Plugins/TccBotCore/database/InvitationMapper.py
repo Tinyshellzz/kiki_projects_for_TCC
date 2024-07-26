@@ -48,7 +48,7 @@ class InvitationMapper:
                 c.execute("SELECT * FROM invitations WHERE id=%s", id)
                 res = c.fetchall()
         
-        return len(res[0]) > 0
+        return len(res) > 0
     
     def delete_by_id(id): 
         with connect() as db:
