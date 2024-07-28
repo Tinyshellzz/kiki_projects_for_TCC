@@ -83,9 +83,9 @@ class online:
         user_id = str(event.get_user_id())
         # 添加API冗余功能 24.7.24 by KiKi
         try:
-            response = json.loads(requests.get("http://110.42.32.42:8000/mcstatus/online/").text)
+            response = json.loads(requests.get(f"http://{server_ip}:8000/mcstatus/online/").text)
         except:
-            response = json.loads(requests.get("http://127.0.0.1:8000/mcstatus/online/").text)
+            response = json.loads(requests.get(f"http://{server_ip}:8000/mcstatus/online/").text)
         print(response)
         msg = response['online']
 
