@@ -24,9 +24,11 @@ https://github.com/TinyShellzz/KikiWhitelist
 ## 5.登录你的QQ
 第一次运行, 需要扫Lagrange.OneBot文件夹里的r-0.png.png
 
-## 6.查看服务器 status
+## 6.修改配置文件 config/config.yml
+
+## 7.查看服务器 status
 方法1: 输入网址 http://127.0.0.1:8000/mcstatus/  
 方法2: QQ群内输入 status
 
-## 7.bot的其他使用方法
+## 8.bot的其他使用方法
 帮助文档：在qq中发送消息 help 
