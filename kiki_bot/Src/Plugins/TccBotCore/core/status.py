@@ -34,7 +34,7 @@ async def send_picture(bot: Bot, event: Event):
     # 获取minecraft状态, 并计算用时
     # 添加API冗余功能 24.7.24 by KiKi
     try:
-        mc = json.loads(requests.get("http://110.42.32.42:8000/mcstatus/", timeout=2).text)
+        mc = json.loads(requests.get(f"http://{server_ip}:8000/mcstatus/", timeout=2).text)
     except:
         mc = json.loads(requests.get("http://127.0.0.1:8000/mcstatus/").text)
     print(mc)

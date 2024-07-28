@@ -17,3 +17,4 @@ auth_qq_list:             # 授权的qq号 (例如 /whitelist update 权限)
   - '1120'
   - '3671'
 code_prefix: '我是爱坤我{0,1}不[是做]小黑子'     # 白名单验证码前缀, 与服务器要一致
+self_qq: 39752           # bot自己的qq号

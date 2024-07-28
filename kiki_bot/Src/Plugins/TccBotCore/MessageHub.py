@@ -47,7 +47,7 @@ match_rules = [
     ['^/{0,1}sign$', sign, 10],                                      # 签到功能
     ['^online$', replies.online, 10],                                # 查看在线晚间
     ['^.*' + code_prefix + '[0-9a-zA-Z]{6}.*$', whitelist.code, 10],   # 白名单验证码
-    ['(3975252362)', replies.at_self, 10],                      # 艾特回复
+    [f'({self_qq})', replies.at_self, 10],                      # 艾特回复
     ['(怎么进服|服务器地址|怎么玩)', replies.ip, 60],
     ['(未知主机|连接超时|dns|连不上|连接失败|连不了)', replies.dns, 60], #DNS
     ['(怎么飞|飞行)', replies.fly, 60],

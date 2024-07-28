@@ -85,7 +85,7 @@ class online:
         try:
             response = json.loads(requests.get(f"http://{server_ip}:8000/mcstatus/online/").text)
         except:
-            response = json.loads(requests.get(f"http://{server_ip}:8000/mcstatus/online/").text)
+            response = json.loads(requests.get(f"http://127.0.0.1:8000/mcstatus/online/").text)
         print(response)
         msg = response['online']
 

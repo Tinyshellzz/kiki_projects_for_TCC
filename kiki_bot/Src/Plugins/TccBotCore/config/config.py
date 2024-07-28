@@ -37,6 +37,7 @@ db_passwd=data['db_passwd']
 db_database=data['db_database']
 server_ip=data['server_ip']
 rcon_port=data['rcon_port']
+self_qq=data['self_qq']
 rcon_password=data['rcon_password']
 auth_group_list = data['auth_group_list']       # bot工作qq群, 这些群里的人必须都是服务器玩家
 auth_qq_list = data['auth_qq_list']             # 部分命令允许的 qq号 (例如 /whitelist update)
