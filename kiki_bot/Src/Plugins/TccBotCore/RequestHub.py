@@ -23,6 +23,7 @@ class GroupRequest:
         # 不在目标群
         group_id = event.group_id
         if not (str(group_id) in auth_group_list): return
+        print("-----------------GroupRequest start-------------------")
         
         # 入群验证的答案
         answer = re.search(".*答案：(.*)", event.comment)
@@ -31,7 +32,7 @@ class GroupRequest:
         # 申请者的QQ号
         user_id = str(event.get_user_id())
         # QQ号再数据库中
-        if UserMCMapper.exists_qq_id(user_id):
+        if UserMCMapper.exists_qq_num(user_id):
             user = UserMCMapper.get(user_id)
             # 拒绝, 被封禁的玩家
             if BanlistMapper.exists_mc_uuid(user.mc_uuid):
