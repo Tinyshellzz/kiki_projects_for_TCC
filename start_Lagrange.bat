@@ -1,3 +1,4 @@
-title start_all
+@echo off
+title Lagrange
 cd "LagrangeService"
-start /min "Lagrange" "Lagrange.OneBot.exe" -i
+Lagrange.OneBot.exe
