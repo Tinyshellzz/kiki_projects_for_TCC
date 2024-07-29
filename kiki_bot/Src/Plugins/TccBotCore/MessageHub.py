@@ -21,7 +21,7 @@ matcher=on_message()
 cooldown_dicts = []
 
 signcleanup.clean()
-timed_task.run()
+# timed_task.run()
 # pip install pymysql-pool pymysql mcrcon pandas mcstatus psutil cryptography pillow
 # [正则, 方法, 冷却(s)]  (会默认调用status.py里面的 handle(bot, event) 方法)
 match_rules = [
