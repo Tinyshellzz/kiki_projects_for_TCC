@@ -21,7 +21,7 @@ import datetime
 async def dispaly_user(bot: Bot, event: Event, user: MCUser):
     user_id = str(event.get_user_id())
     ban_user: BanlistUser = BanlistMapper.get_user_by_mc_uuid(user.mc_uuid)
-    if ban_user != None and ban_user.unban_date > datetime.datetime.now():
+    if ban_user != None and ban_user.unban_date > datetime.datetime.now().__str__()[:17]:
         messages = [tools.to_msg_node(f"qq: {user.qq_num}\n游戏昵称: {user.display_name}\n上次登录: {user.last_login_time}\n封禁理由: {ban_user.reason}\n解封时间: {ban_user.unban_date}")]
         await tools.send_forward_msg(bot, event, messages)
     else:
