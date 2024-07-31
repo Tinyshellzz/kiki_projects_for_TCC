@@ -27,7 +27,7 @@ signcleanup.clean()
 match_rules = [
     ['^test$', tools.no_action, 0],
     ['^/{0,1}(help|帮助)$', replies.help, 10],                   # 帮助
-    # ['^/{0,1}status$', status, 10],                              # 查看服务器状态
+    ['^/{0,1}status$', status, 10],                              # 查看服务器状态
     ['^/{0,1}ban (.*)$', server.ban, 0],                         # 封禁玩家
     ['^/{0,1}unban (.*)$', server.unban, 0],                     # 解封玩家
     ['^/{0,1}whitelist update$', whitelist.update, 0],           # 将 在数据库 且 在qq群中 的账号全部添加到白名单
