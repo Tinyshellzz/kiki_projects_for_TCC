@@ -10,6 +10,7 @@ from ..database.UserMCMapper import MCUser, UserMCMapper
 from ..database.BanlistMapper import BanlistMapper, BanlistUser
 from ..database.InvitationMapper import InvitationMapper
 from ..service.InvitationService import InvitationService
+from ..service.UserService import UserService
 from ..database.ReadExcel import *
 from ..utils import tools
 import json
@@ -310,13 +311,19 @@ class add_relation:
         if len(args) < 3:
             await bot.send(event, Message("参数不足"))
             return
-        user_name_1 = args[1]
-        user_name_2 = args[2]
-        print(user_name_1)
-        print(user_name_2)
-
+        key_1 = args[1]
+        key_2 = args[2]
+        user_1 = UserService.get_by_qq_or_name(key_1)
+        user_2 = UserService.get_by_qq_or_name(key_2)
+        if(user_1 == None):
+            await bot.send(event, key_1 + " 不存在")
+            return
+        if(user_2 == None): 
+            await bot.send(event, key_2 + " 不存在")
+            return
+    
         try:
-            InvitationService.add_relation(user_name_1, user_name_2)
+            InvitationService.add_relation(user_1.user_name, user_2.user_name)
         except Exception as e:
             await bot.send(event, e.__str__())
             return
