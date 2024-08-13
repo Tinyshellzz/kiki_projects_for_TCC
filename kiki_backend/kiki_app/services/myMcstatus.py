@@ -51,9 +51,10 @@ def get_mc_status():
         server = JavaServer.lookup('{0}:{1}'.format(server_ip, server_port), 200)
         serstatus = server.status()
         onlinePlayers = serstatus.players.online
+        maxPlayers = serstatus.players.max
         queryLatency = round(serstatus.latency, 3)  # 保留三位小数
         version = serstatus.version.name.replace(' ', '-')
-        return {'onlinePlayers': onlinePlayers, 'queryLatency': queryLatency, 'version': version}
+        return {'onlinePlayers': str(onlinePlayers) + "/" + str(maxPlayers), 'queryLatency': queryLatency, 'version': version}
     except Exception as e:
         logger.warning(e)
     
