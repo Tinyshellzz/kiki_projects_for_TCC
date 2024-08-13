@@ -10,8 +10,8 @@
 *.log
 keystore.json
 __pycache__/
-config - 副本.yml
-config.yml
+*.yml
+!config-example.yml
 appsettings.json
 device.json
 .vscode
