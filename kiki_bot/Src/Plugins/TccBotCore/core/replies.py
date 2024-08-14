@@ -104,7 +104,7 @@ class online2:
         print(response)
         msg = response['onlinePlayers']
 
-        await tools.send_forward_msg(bot, event, Message(msg))
+        await bot.send(event, Message(msg))
 
 
 at_self_replies = [
