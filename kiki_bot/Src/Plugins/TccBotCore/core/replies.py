@@ -93,6 +93,19 @@ class online:
         messages.append(tools.to_msg_node(msg))
         await tools.send_forward_msg(bot, event, messages)
 
+class online2:
+    async def handle(bot: Bot, event: Event):
+        user_id = str(event.get_user_id())
+        # 添加API冗余功能 24.7.24 by KiKi
+        try:
+            response = json.loads(requests.get(f"http://{server_ip}:8000/mcstatus/").text)
+        except:
+            response = json.loads(requests.get(f"http://127.0.0.1:8000/mcstatus/").text)
+        print(response)
+        msg = response['onlinePlayers']
+
+        await tools.send_forward_msg(bot, event, Message(msg))
+
 
 at_self_replies = [
     "Ciallo～(∠・ω<)⌒🔥",
