@@ -1,13 +1,14 @@
 import time
 from datetime import datetime
 from nonebot.adapters.onebot.v11 import MessageEvent, Bot, MessageSegment
-from nonebot.plugin import on_command
+from nonebot.plugin import on_command, on_keyword
 from ping3 import ping
+from .config.config import *
 
 start_time = datetime.now()
 
 cooldown_dict = {}
-botstatus = on_command("ping")
+botstatus = on_keyword({"ping", "测测土豆"})
 
 
 @botstatus.handle()
@@ -26,10 +27,10 @@ async def handle_status(bot: Bot, event: MessageEvent):
 
     def ping_host():
         # 固定的 IP 地址
-        ip_address = 'service.mc.tcc-mc.com'
+        ip_address = server_ip
         response = ping(ip_address)
         if response is not None:
-            return int(response * 1000)
+            return round(response * 1000, 3)
         else:
             return None
     delay1=ping_host()

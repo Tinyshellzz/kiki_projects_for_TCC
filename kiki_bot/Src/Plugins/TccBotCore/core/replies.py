@@ -103,8 +103,11 @@ class online2:
             response = json.loads(requests.get(f"http://127.0.0.1:8000/mcstatus/").text)
         print(response)
         msg = response['onlinePlayers']
+        splite = msg.splite('/')
+        player_num = splite[0]
+        max_player = splite[1]
 
-        await bot.send(event, Message(msg))
+        await bot.send(event, Message(f"现有{player_num}名玩家/n可容纳{max_player}名玩家"))
 
 
 at_self_replies = [
