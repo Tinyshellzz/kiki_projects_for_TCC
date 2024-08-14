@@ -45,7 +45,7 @@ match_rules = [
     # ['^/{0,1}(踢|kick).+$', group.kick, 0],                       # 移出群聊
     ['^川川$', heChuan.hi, 0],                                      # 川川
     ['^/{0,1}(sign|签到)$', sign, 10],                                      # 签到功能
-    ['^(online|在线人数)$', replies.online2, 10],                                # 查看在线晚间
+    ['^(online|在线人数|在线玩家)$', replies.online2, 10],                                # 查看在线晚间
     ['^.*' + code_prefix + '[0-9a-zA-Z]{6}.*$', whitelist.code, 10],   # 白名单验证码
     [f'({self_qq})', replies.at_self, 10],                      # 艾特回复
     ['(怎么进服|服务器地址|怎么玩)', replies.ip, 60],
